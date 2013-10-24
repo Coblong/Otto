@@ -1,0 +1,4 @@
+# Otto version 1.0
+
+This is the One To Thirty One application for managing rightmove properties
+by [Paul Cobley]
