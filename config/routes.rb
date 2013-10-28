@@ -1,5 +1,10 @@
 Otto::Application.routes.draw do
+  resources :sausages
+
   resources :users
+  resources :estate_agents do
+    resources :agents
+  end
   resources :sessions, only: [:new, :create, :destroy]
 
   get "static_pages/home"

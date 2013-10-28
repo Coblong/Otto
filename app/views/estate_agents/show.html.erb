@@ -1,0 +1,19 @@
+<% provide(:title, @estate_agent.name) %>
+<div class="row">
+  <aside class="span4">
+    <section>
+      <h1>
+        <%= @estate_agent.name %>
+      </h1>
+    </section>
+    <%= link_to "Add agent", new_estate_agent_agent_path(estate_agent_id: @estate_agent.id), class: "btn btn-small btn-primary" %>
+  </aside>
+  <div class="span8">
+    <h3>Agents (<%= @estate_agent.agents.count %>)</h3>
+    <% if @estate_agent.agents.any? %>      
+      <ol class="agents">
+        <%= render @estate_agent.agents %>
+      </ol>
+    <% end %>
+  </div>  
+</div>

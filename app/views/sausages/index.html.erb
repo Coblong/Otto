@@ -1,0 +1,25 @@
+<h1>Listing sausages</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @sausages.each do |sausage| %>
+      <tr>
+        <td><%= link_to 'Show', sausage %></td>
+        <td><%= link_to 'Edit', edit_sausage_path(sausage) %></td>
+        <td><%= link_to 'Destroy', sausage, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Sausage', new_sausage_path %>

@@ -1,0 +1,12 @@
+<% if @estate_agent.errors.any? %>
+  <div id="error_explanation">
+    <div class="alert alert-error">
+      The form contains <%= pluralize(@estate_agent.errors.count, "error") %>.
+    </div>
+    <ul>
+    <% @estate_agent.errors.full_messages.each do |msg| %>
+      <li>* <%= msg %></li>
+    <% end %>
+    </ul>
+  </div>
+<% end %>
