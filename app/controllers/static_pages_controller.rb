@@ -7,7 +7,12 @@ class StaticPagesController < ApplicationController
       if !params[:estate_agent_id].nil?
         @estate_agent = EstateAgent.find(params[:estate_agent_id])
         @branches = @estate_agent.branches
-        @agents = @estate_agent.agents
+        if @branches.size.to_i == 1
+          @branch = @branches.first
+          @agents = @estate_agent.agents
+        else
+          @agents = @estate_agent.agents
+        end
       end
       if !params[:branch_id].nil?
         @branch = Branch.find(params[:branch_id])
