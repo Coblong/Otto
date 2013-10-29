@@ -5,13 +5,9 @@ class AgentsController < ApplicationController
     @agents = Agent.all
   end
 
-  def show
-    @agent = Agent.find(params[:id])
-  end
-
   def new
-    @estate_agent = EstateAgent.find(params[:estate_agent_id])
-    @agent = @estate_agent.agents.build
+    @branch = Branch.find(params[:branch_id])
+    @agent = @branch.agents.build
   end
 
   def edit
@@ -19,15 +15,15 @@ class AgentsController < ApplicationController
   end
 
   def create
-    puts 'here we are in the agents createmethod'
-    @estate_agent = EstateAgent.find(params[:estate_agent_id])
-    @agent = @estate_agent.agents.create(agent_params)
-    puts @agent.to_yaml
+    puts 'creating a new agent'
+    @branch = Branch.find(params[:branch_id])
+    @agent = @branch.agents.build(agent_params)
+    @agent.estate_agent = @branch.estate_agent
     if @agent.save
       flash[:success] = "Agent created!"
-      redirect_to @estate_agent
+      redirect_to @branch
     else
-      render 'home'
+      redirect_to @branch
     end
   end
 

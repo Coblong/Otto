@@ -1,0 +1,10 @@
+<% provide(:title, @agent.name) %>
+<div class="row">
+  <aside class="span4">
+    <section>
+      <h1>
+        <%= link_to @agent.branch.estate_agent.name, @agent.branch.estate_agent %> / <%= link_to @agent.branch.name, @agent.branch %> / <%= @agent.name %>
+      </h1>      
+    </section>    
+  </aside>
+</div>

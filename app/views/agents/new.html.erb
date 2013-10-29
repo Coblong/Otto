@@ -1,9 +1,9 @@
 <% provide(:title, 'New Agent') %>
-<h1>New <%= @agent.estate_agent.name %> Agent</h1>
+<h1>New <%= @agent.branch.estate_agent.name %> - <%= @agent.branch.name %> Agent</h1>
 
 <div class="row">
   <div class="span6 offset3">
-    <%= form_for(@agent, url: estate_agent_agents_path, html: { :method => :post }) do |f| %>
+    <%= form_for(@agent, url: branch_agents_path, html: { :method => :post }) do |f| %>
       <%= render 'shared/agent_error_messages' %>
       
       <%= f.label :name %>

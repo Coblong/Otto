@@ -1,7 +1,57 @@
 <div class="center">
-  <h1>Welcome</h1>
-  <div class="well">
-      
-  </div>
-
+  <% if signed_in? %>
+    <div class="row">
+      <div class="well span2">
+        <ul class="users">
+          <% @estate_agents.each do |estate_agent| %>
+            <li>
+              <% if defined? @estate_agent and @estate_agent.id == estate_agent.id %>
+              <b><%= link_to estate_agent.name, root_path(estate_agent_id: estate_agent.id) %></b>
+              <% else %>
+              <%= link_to estate_agent.name, root_path(estate_agent_id: estate_agent.id) %>
+              <% end %>
+            </li>
+          <% end %>
+        </ul>
+      </div>      
+    </div>
+    <% if @branches %>
+    <div class="row">
+      <div class="well span2">
+        <ul class="users">
+          <% @branches.each do |branch| %>
+            <li>
+              <% if defined? @branch and @branch.id == branch.id %>
+                <b><%= link_to branch.name, root_path(estate_agent_id: branch.estate_agent.id, branch_id: branch.id) %></b>
+              <% else %>
+                <%= link_to branch.name, root_path(estate_agent_id: branch.estate_agent.id, branch_id: branch.id) %>
+              <% end %>
+            </li>
+          <% end %>
+        </ul>
+      </div>      
+    </div>
+    <% end %>
+    <% if @agents %>
+    <div class="row">
+      <div class="well span2">
+        <ul class="users">
+          <% @agents.each do |agent| %>
+            <li>
+              <% if defined? @agent and @agent.id == agent.id %>
+                <b><%= link_to agent.name, root_path(estate_agent_id: agent.branch.estate_agent.id, branch_id: agent.branch.id, agent_id: agent.id) %></b>
+              <% else %>
+                <%= link_to agent.name, root_path(estate_agent_id: agent.branch.estate_agent.id, branch_id: agent.branch.id, agent_id: agent.id) %>
+              <% end %>
+            </li>
+          <% end %>
+        </ul>
+      </div>      
+    </div>
+    <% end %>
+  <% else %>
+    <h1>Welcome to Otto</h1>
+    <p>The One To Thirty One property management tool.</p>
+    <p>New user? <%= link_to "Sign up now!", signup_path %></p>    
+  <% end %>
 </div>

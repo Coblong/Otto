@@ -7,5 +7,6 @@ class CreateBranches < ActiveRecord::Migration
 
       t.timestamps
     end
+    add_index :branches, [:estate_agent_id, :created_at]
   end
 end

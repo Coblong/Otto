@@ -1,0 +1,19 @@
+<% provide(:title, @branch.name) %>
+<div class="row">
+  <aside class="span4">
+    <section>
+      <h1>
+        <%= link_to @branch.estate_agent.name, @branch.estate_agent %> / <%= @branch.name %>&nbsp;
+        <%= link_to "Add agent", new_branch_agent_path(branch_id: @branch.id), class: "btn btn-small" %>
+      </h1>      
+    </section>    
+    <section>
+      <h2>Agents (<%= @branch.agents.count %>)</h2>
+      <% if @branch.agents.any? %>      
+        <ol class="agents">
+          <%= render @branch.agents %>
+        </ol>
+      <% end %>
+    </section>    
+  </aside>
+</div>

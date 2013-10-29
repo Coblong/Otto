@@ -11,9 +11,21 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131027203924) do
+ActiveRecord::Schema.define(version: 20131029083128) do
 
   create_table "agents", force: true do |t|
+    t.string   "name"
+    t.string   "comment"
+    t.integer  "branch_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "estate_agent_id"
+  end
+
+  add_index "agents", ["branch_id", "created_at"], name: "index_agents_on_branch_id_and_created_at"
+  add_index "agents", ["estate_agent_id", "created_at"], name: "index_agents_on_estate_agent_id_and_created_at"
+
+  create_table "branches", force: true do |t|
     t.string   "name"
     t.string   "comment"
     t.integer  "estate_agent_id"
@@ -21,19 +33,17 @@ ActiveRecord::Schema.define(version: 20131027203924) do
     t.datetime "updated_at"
   end
 
-  add_index "agents", ["estate_agent_id", "created_at"], name: "index_agents_on_estate_agent_id_and_created_at"
+  add_index "branches", ["estate_agent_id", "created_at"], name: "index_branches_on_estate_agent_id_and_created_at"
 
   create_table "estate_agents", force: true do |t|
     t.string   "name"
     t.string   "comment"
+    t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  create_table "sausages", force: true do |t|
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
+  add_index "estate_agents", ["user_id", "created_at"], name: "index_estate_agents_on_user_id_and_created_at"
 
   create_table "users", force: true do |t|
     t.string   "name"
