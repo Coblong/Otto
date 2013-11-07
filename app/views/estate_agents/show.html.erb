@@ -1,19 +1,52 @@
 <% provide(:title, @estate_agent.name) %>
-<div class="row">
-  <aside class="span4">
-    <section>
-      <h1>
-        <%= @estate_agent.name %>&nbsp;
-        <%= link_to "Add banch", new_estate_agent_branch_path(estate_agent_id: @estate_agent.id), class: "btn btn-small" %>
-      </h1>      
-    </section>    
-    <section>
-      <h2>Branches (<%= @estate_agent.branches.count %>)</h2>
+<div class="container">
+  <%= render 'shared/properties' %>
+  <div class="main-box">
+    <div class="details-box">
+      <b><%= @estate_agent.name %></b><p>
+      <%= @estate_agent.comment %><p>        
       <% if @estate_agent.branches.any? %>      
-        <ol class="agents">
-          <%= render @estate_agent.branches %>
-        </ol>
+        <table class="children">
+          <tr>
+            <th>Branch</th>
+            <th>Agent</th>            
+            <th>Properties</th>
+          </tr>          
+        <% @estate_agent.branches.each do |branch| %>
+            <tr class="dark">
+              <td><%= branch.name %></td>
+              <td></td>
+              <td><%= branch.properties.count %></td>
+            </tr>
+          <% branch.agents.each do |agent| %>
+              <tr class="light">
+                <td></td>
+                <td><%= agent.name %></td>                
+                <td><%= agent.properties.count %></td>
+              </tr>
+          <% end %>  
+        <% end %>  
+        </table>
       <% end %>
-    </section>    
-  </aside>
+      <p>
+      <% if @estate_agent.properties.any? %>      
+        <table class="children">
+          <tr>
+            <th>Property</th>
+            <th>Agent</th>            
+            <th>Branch</th>
+          </tr>          
+        <% @estate_agent.properties.each do |property| %>
+            <tr class="light">
+              <td><%= property.address %></td>
+              <td><%= property.agent.name %></td>
+              <td><%= property.branch.name %></td>
+            </tr>
+        <% end %>  
+        </table>
+      <% end %>
+      </ul>
+    </div>
+  </div>
 </div>
+

@@ -1,6 +1,4 @@
-<li>
-  <span class="content"><%= link_to branch.name, branch %></span>
-  <span class="timestamp">
-    Added <%= time_ago_in_words(branch.created_at) %> ago.
-  </span>
-</li>
+<% provide(:title, @branch.name) %>
+<div class="details">
+  <%= link_to @branch.estate_agent.name, @branch.estate_agent %> / <%= link_to @branch.name, @branch %>
+</div>

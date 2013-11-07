@@ -1,33 +1,55 @@
 class StaticPagesController < ApplicationController
+  before_action :set_lists, only: [:home, :hunt]
 
   def home
-    puts 'home'
-    if signed_in?
-      @estate_agents = current_user.estate_agents
-      if !params[:estate_agent_id].nil?
-        @estate_agent = EstateAgent.find(params[:estate_agent_id])
-        @branches = @estate_agent.branches
-        if @branches.size.to_i == 1
-          @branch = @branches.first
-          @agents = @estate_agent.agents
-        else
-          @agents = @estate_agent.agents
-        end
-      end
-      if !params[:branch_id].nil?
-        @branch = Branch.find(params[:branch_id])
-        @agents = @branch.agents
-      end
-      if !params[:agent_id].nil?
-        @agent = Agent.find(params[:agent_id])
+    puts 'home called'
+    if params[:estate_agent_id].nil?
+      set_hunting_mode(false)
+    else
+      puts 'hunting mode is currently set to ' + hunting?.to_s
+      if hunting?
+        puts 'redirecting to hunt'
+        redirect_to hunt_path params
       end
     end
   end
 
-  def help
-    puts 'help'
+  def hunt
+    puts 'hunt called'
+    if params[:estate_agent_id].nil?
+      set_hunting_mode(true)
+      else
+        puts 'hunting mode is currently set to ' + hunting?.to_s
+        if !hunting?
+          puts 'redirecting to home'
+          redirect_to home
+        end
+      end
   end
 
-	def about
-  end
+  private
+
+    def set_lists
+      if signed_in?
+        @estate_agents = current_user.estate_agents        
+        @properties = Property.all
+
+        if !params[:estate_agent_id].nil?
+          @estate_agent = EstateAgent.find(params[:estate_agent_id])
+          @branches = @estate_agent.branches
+          @agents = @estate_agent.agents        
+          @properties = @estate_agent.properties
+        end
+        if !params[:branch_id].nil?
+          @branch = Branch.find(params[:branch_id])          
+          @agents = @branch.agents
+          @properties = @branch.properties
+        end
+        if !params[:agent_id].nil?
+          @agent = Agent.find(params[:agent_id])
+          @properties = @agent.properties
+        end
+      end
+    end
+
 end

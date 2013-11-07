@@ -44,4 +44,16 @@ module SessionsHelper
   def store_location
     session[:return_to] = request.url if request.get?
   end
+
+  def home?
+    session[:hunting_mode]
+  end
+
+  def hunting?
+    session[:hunting_mode]
+  end
+
+  def set_hunting_mode(mode)
+    session[:hunting_mode] = mode
+  end
 end

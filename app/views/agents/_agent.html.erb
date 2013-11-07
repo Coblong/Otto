@@ -1,6 +1,4 @@
-<li>
-  <span class="content"><%= agent.name %></span>
-  <span class="timestamp">
-    Added <%= time_ago_in_words(agent.created_at) %> ago.
-  </span>
-</li>
+<% provide(:title, @agent.name) %>
+<div class="details">
+  <%= link_to @agent.branch.estate_agent.name, @agent.branch.estate_agent %> / <%= link_to @agent.branch.name, @agent.branch %> / <%= link_to @agent.name, @agent %>
+</div>

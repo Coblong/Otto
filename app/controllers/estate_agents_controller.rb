@@ -6,7 +6,9 @@ class EstateAgentsController < ApplicationController
   end
 
   def show
+    puts 'showing estate agent ' + params[:id]
     @estate_agent = EstateAgent.find(params[:id])
+    @properties = @estate_agent.properties
   end
 
   def new
@@ -22,7 +24,7 @@ class EstateAgentsController < ApplicationController
 
     if @estate_agent.save
       flash[:success] = "Estate Agent created!"
-      redirect_to @estate_agent
+      redirect_to root_path estate_agent_id: @estate_agent.id
     else
       render 'new'
     end
@@ -31,7 +33,11 @@ class EstateAgentsController < ApplicationController
   private
 
     def set_estate_agent
-      @estate_agent = EstateAgent.find(params[:id])
+      @estate_agent = EstateAgent.find(params[:id])      
+      @estate_agents = current_user.estate_agents
+      @branches = @estate_agent.branches
+      @agents = @estate_agent.agents
+      @properties = @estate_agent.properties
     end
 
     def estate_agent_params

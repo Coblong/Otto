@@ -12,7 +12,7 @@ class BranchesController < ApplicationController
 
     if @branch.save
       flash[:success] = "Branch created!"
-      redirect_to @branch.estate_agent
+      redirect_to root_path estate_agent_id: @estate_agent.id, branch_id: @branch.id
     else
       render 'new'
     end
@@ -22,6 +22,12 @@ class BranchesController < ApplicationController
 
     def set_branch
       @branch = Branch.find(params[:id])
+      
+      @estate_agents = current_user.estate_agents
+      @estate_agent = @branch.estate_agent 
+      @branches = @estate_agent.branches
+      @agents = @branch.agents
+      @properties = @branch.properties
     end
 
     def branch_params

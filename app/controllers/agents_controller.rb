@@ -21,9 +21,9 @@ class AgentsController < ApplicationController
     @agent.estate_agent = @branch.estate_agent
     if @agent.save
       flash[:success] = "Agent created!"
-      redirect_to @branch
+      redirect_to root_path estate_agent_id: @branch.estate_agent.id, branch_id: @branch.id, agent_id: @agent.id
     else
-      redirect_to @branch
+      redirect_to "new"
     end
   end
 

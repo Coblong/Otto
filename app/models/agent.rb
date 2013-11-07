@@ -1,6 +1,7 @@
 class Agent < ActiveRecord::Base
   belongs_to :branch
   belongs_to :estate_agent
+  has_many :properties, dependent: :destroy
   validates :branch_id, presence: true
   validates :estate_agent_id, presence: true
   validates :name, presence: true, length: { maximum: 100 }
