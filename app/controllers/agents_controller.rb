@@ -15,7 +15,6 @@ class AgentsController < ApplicationController
   end
 
   def create
-    puts 'creating a new agent'
     @branch = Branch.find(params[:branch_id])
     @agent = @branch.agents.build(agent_params)
     @agent.estate_agent = @branch.estate_agent
@@ -31,6 +30,13 @@ class AgentsController < ApplicationController
 
     def set_agent
       @agent = Agent.find(params[:id])
+      
+      @estate_agents = current_user.estate_agents
+      @estate_agent = @agent.branch.estate_agent 
+      @branches = @estate_agent.branches
+      @branch = @agent.branch
+      @agents = @branch.agents
+      @properties = @agent.properties
     end
 
     def agent_params

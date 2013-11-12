@@ -1,75 +1,42 @@
-  <div class="navbar">
-    <% if signed_in? %>
-    <ul class="navbar-inner">      
+<div class="navbar">
+  <div class="filters">    
+    <% if signed_in? %>  
+      <%= form_tag(root_path, method: "get") do %>
       <% if defined? @estate_agent %>
-      <li><a href="#"><%= @estate_agent.name %> <b class="caret"></b></a>
+        <%= select_tag "estate_agent_id", options_from_collection_for_select(@estate_agents, "id", "name", @estate_agent.id), 
+          prompt: "Estate Agent" %>
       <% else %>
-      <li><a href="#">Estate Agent <b class="caret"></b></a>
+        <%= select_tag "estate_agent_id", options_from_collection_for_select(@estate_agents, "id", "name"), 
+          prompt: "Estate Agent" %>
       <% end %>
-        <ul>
-      <% if !hunting? %>    
-          <li><%= link_to "All Estate Agents", root_path %></li>
-      <% end %>
-      <% @estate_agents.each do |estate_agent| %>
-          <li><%= link_to estate_agent.name, root_path(estate_agent_id: estate_agent.id) %></li>
-      <% end %>     
-          <li><%= link_to "+", new_estate_agent_path, class: "center" %></li>
-        </ul>      
-      </li>
-
       <% if defined? @branches %>
         <% if defined? @branch %>
-      <li><a href="#"><%= @branch.name %> <b class="caret"></b></a>
+          <%= select_tag "branch_id", options_from_collection_for_select(@branches, "id", "name", @branch.id),
+            prompt: "Branch" %>
         <% else %>
-      <li><a href="#">All Branches <b class="caret"></b></a>
+          <%= select_tag "branch_id", options_from_collection_for_select(@branches, "id", "name"),
+            prompt: "Branch" %>
         <% end %>
-        <ul>
-          <li><%= link_to "All Branches", root_path(estate_agent_id: @estate_agent.id) %></li>
-        <% @branches.each do |branch| %>
-          <li><%= link_to branch.name, root_path(estate_agent_id: branch.estate_agent.id, branch_id: branch.id) %></li>
-        <% end %>     
-          <li><%= link_to "+", new_estate_agent_branch_path(estate_agent_id: @estate_agent.id), class: "center" %></li>
-        </ul>      
-      </li>
-      <% end %>
-        
-      <% if defined? @agents %>
-        <% if defined? @agent %>
-      <li><a href="#"><%= @agent.name %> <b class="caret"></b></a>
-        <% else %>
-      <li><a href="#">All Agents <b class="caret"></b></a>
+        <% if defined? @agents %>
+          <% if defined? @agent %>
+            <%= select_tag "agent_id", options_from_collection_for_select(@agents, "id", "name", @agent.id),
+              prompt: "Agent" %>
+          <% else %>
+            <%= select_tag "agent_id", options_from_collection_for_select(@agents, "id", "name"), 
+              prompt: "Agent" %>
+          <% end %>
         <% end %>
-        <ul>
-        <% if defined? @branch %>
-          <li><%= link_to "All Agents", root_path(estate_agent_id: @estate_agent.id, branch_id: @branch.id) %></li>
-        <% else %>
-          <li><%= link_to "All Agents", root_path(estate_agent_id: @estate_agent_id) %></li>
-        <% end %>
-        <% @agents.each do |agent| %>
-          <li><%= link_to agent.name, root_path(estate_agent_id: agent.branch.estate_agent_id, branch_id: agent.branch.id, agent_id: agent.id) %></li>
-        <% end %>     
-        <% if defined? @branch %>
-          <li><%= link_to "+", new_branch_agent_path(branch_id: @branch.id), class: "center" %></li>
-        <% end %>     
-        </ul>      
-      </li>
       <% end %>
-      <% if hunting? %>    
-        <li><%= link_to "Save", root_path %></li>
       <% end %>
-    </ul>    
-    <% end %>
-
-    <ul class="navbar-inner pull-right">
+    <% end %>  
+  </div>
+  <div class="menus">
+    <ul>
       <li><%= link_to "Home", root_path %></li>
       <% if signed_in? %>
         <li><%= link_to "Hunt", hunt_path %></li>
-        <li>
-          <a href="#">
-            Account <b class="caret"></b>
-          </a>
+        <li><%= link_to current_user.name, current_user %>&nbsp;&nbsp;<b class="caret"></b>&nbsp;
           <ul>
-            <li><%= link_to "Profile", current_user %></li>
             <li><%= link_to "Settings", edit_user_path(current_user) %></li>
             <li>
               <%= link_to "Sign out", signout_path, method: "delete" %>
@@ -79,5 +46,24 @@
       <% else %>
         <li><%= link_to "Sign in", signin_path %></li>
       <% end %>
-    </ul>
+    </ul> 
+  </div>
 </div>
+<script type="text/javascript">
+  $('#estate_agent_id').change(change_estate_agent);
+  $('#branch_id').change(change_branch);
+  $('#agent_id').change(change_agent);
+
+  function change_estate_agent(){
+    $("#branch_id").val("");
+    $("#agent_id").val("");
+    $('form').submit();
+  }
+  function change_branch(){
+    $("#agent_id").val("");
+    $('form').submit();
+  }
+  function change_agent(){
+    $('form').submit();
+  }
+</script>

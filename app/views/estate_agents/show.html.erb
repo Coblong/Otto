@@ -3,50 +3,53 @@
   <%= render 'shared/properties' %>
   <div class="main-box">
     <div class="details-box">
-      <b><%= @estate_agent.name %></b><p>
-      <%= @estate_agent.comment %><p>        
-      <% if @estate_agent.branches.any? %>      
-        <table class="children">
-          <tr>
-            <th>Branch</th>
-            <th>Agent</th>            
-            <th>Properties</th>
-          </tr>          
-        <% @estate_agent.branches.each do |branch| %>
-            <tr class="dark">
-              <td><%= branch.name %></td>
-              <td></td>
-              <td><%= branch.properties.count %></td>
-            </tr>
-          <% branch.agents.each do |agent| %>
-              <tr class="light">
+        <div class="details"> 
+          <div class="breadcrumbs">
+            <%= @estate_agent.name %>
+          </div>
+          <%= @estate_agent.comment %><p>        
+        <% if @estate_agent.branches.any? %>      
+          <table class="children">
+            <tr>
+              <th>Branch</th>
+              <th>Agent</th>            
+              <th>Properties</th>
+            </tr>          
+          <% @estate_agent.branches.each do |branch| %>
+              <tr class="dark">
+                <td><%= link_to branch.name, branch %></td>
                 <td></td>
-                <td><%= agent.name %></td>                
-                <td><%= agent.properties.count %></td>
+                <td><%= branch.properties.count %></td>
+              </tr>
+            <% branch.agents.each do |agent| %>
+                <tr class="light">
+                  <td></td>
+                  <td><%= link_to agent.name, agent %></td>                
+                  <td><%= agent.properties.count %></td>
+                </tr>
+            <% end %>  
+          <% end %>  
+          </table>
+        <% end %>
+        <p>
+        <% if @estate_agent.properties.any? %>      
+          <table class="children">
+            <tr>
+              <th>Property</th>
+              <th>Agent</th>            
+              <th>Branch</th>
+            </tr>          
+          <% @estate_agent.properties.each do |property| %>
+              <tr class="light">
+                <td><%= link_to property.address, property %></td>
+                <td><%= link_to property.agent.name, property.agent  %></td>
+                <td><%= link_to property.branch.name, property.branch %></td>
               </tr>
           <% end %>  
-        <% end %>  
-        </table>
-      <% end %>
-      <p>
-      <% if @estate_agent.properties.any? %>      
-        <table class="children">
-          <tr>
-            <th>Property</th>
-            <th>Agent</th>            
-            <th>Branch</th>
-          </tr>          
-        <% @estate_agent.properties.each do |property| %>
-            <tr class="light">
-              <td><%= property.address %></td>
-              <td><%= property.agent.name %></td>
-              <td><%= property.branch.name %></td>
-            </tr>
-        <% end %>  
-        </table>
-      <% end %>
-      </ul>
+          </table>
+        <% end %>
+        </ul>
+      </div>
     </div>
   </div>
 </div>
-

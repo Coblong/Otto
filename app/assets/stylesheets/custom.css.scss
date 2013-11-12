@@ -1,16 +1,10 @@
-$dark: midnightblue;
-$light: mintcream;
-$navbar-colour: black;
-$navbar-bg-colour: lightblue;
-$navbar-hover-colour: honeydew;
-$navbar-hover-bg-colour: white;
-$line-colour: lightblue;
-$dropdown-hover-bg-colour: mintcream;
-$dropdown-bg-colour: mintcream;
-$well-colour: white;
-$bg-colour: lightgray;
-$light-well-colour: mintcream;
-$dark-well-colour: lightblue;
+$bg1: lightgray;
+$bg2: lightblue;
+$colour: midnightblue;
+$highlight-colour: black;
+$highlight-bg: white;
+$well-colour: mintcream;
+$dark-well-colour: honeydew;
 
 @mixin box_sizing {
   -moz-box-sizing: border-box;
@@ -19,13 +13,18 @@ $dark-well-colour: lightblue;
 }
 
 html {
-  overflow-y: scroll;
+  background-color: $bg1;
+  margin: 0px;
+  height: 100%;
+  width: 100%;
 }
 
 body {
+  background-color: $bg1;
   margin: 0px;
-  padding: 0px;
-  width:100%;;
+  height: 100%;
+  min-height: 100%;
+  width: 100%;
 }
 
 section {
@@ -49,12 +48,20 @@ textarea {
   float: right;
 }
 
+.left {
+  text-aign: left;
+}
+
+.right {
+  text-align: right;
+}
+
 .center {
   text-align: center;
 }
 
 .caret {
-  border-color: $navbar-colour transparent transparent transparent;
+  border-color: $colour transparent transparent transparent;
   border-width:4px;
   border-style:solid;
   content: "";
@@ -62,88 +69,125 @@ textarea {
 }
 
 .navbar {
-  background-color: $navbar-bg-colour;
-  width: 100%;
-  height: 55px;
-  position:relative;    
-  z-index:1000;
-}
-
-.navbar-inner {
-  list-style:none;
-  display:inline-block;  
-
-  li {
-    float:left;
-    margin-right:10px;
-    position:relative;
-    padding: 5px;
-    padding-right:10px;
-
-    &:hover ul { 
-      left:-40px;
-      top: 25px;
+  background-color: $bg2;
+  height:50px;
+  .filters {
+    display:inline-block;
+    padding:10px;
+    select {
+      padding:5px;
+      margin: 0;
+      width: 200px;
+      border-radius:4px;
+      -webkit-box-shadow: 
+          0 0px 0 #ccc,
+          0 0px #fff inset;
+      background: url('http://i45.tinypic.com/309nb74.png') no-repeat right, -moz-linear-gradient(top, #FBFBFB 0%, #E9E9E9 100%);
+      background: url('http://i45.tinypic.com/309nb74.png') no-repeat right, -webkit-gradient(linear, left top, left bottom, color-stop(0%,#FBFBFB), color-stop(100%,#E9E9E9));
+      color:black;
+      border:none;
+      outline:none;
+      display: inline-block;
+      -webkit-appearance:none; 
+      cursor:pointer;
+      border: 1px solid $bg2;
     }
   }
 
-  a {
-    display:block;    
-    color:$navbar-colour;
-    background:$navbar-bg-colour;
-    text-decoration:none;
-
-    &:hover { 
-      color:$navbar-hover-colour;
-      background:$navbar-bg-colour;
-      text-decoration:underline;
-    }
-  }
-
-  ul {
-    list-style:none;
-    position:absolute;
-    left:-9999px;    
-
-    li{
-      float:none;
-      -webkit-box-shadow: -2px -2px 2px -2px $line-colour; /* Android 2.3+, iOS 4.0.2-4.2, Safari 3-4 */
-      box-shadow: 0px 0px 3px 0px $line-colour;      
-      border-top: 1px solid $line-colour;
-      padding: 0px;
-      &:first-child {
-        -webkit-border-top-radius: 5px;
-      }
-      &:last-child {
-        -webkit-border-bottom-right-radius: 5px;
-        -webkit-border-bottom-left-radius: 5px;
-      }
-    }
+  .menus {
+    display:inline-block;
+    text-align: right;    
+    float:right;    
 
     a {
-      -webkit-border-radius: 5px;
-      white-space:nowrap;
-      padding: 5px;
-      padding-right:10px;
-      background-color: $dropdown-hover-bg-colour;
-      
-      &:hover { 
-        color:$navbar-colour;
-        background:$navbar-hover-colour;
-        text-decoration:underline;
+      text-decoration:none;
+      &:hover {
+        background: $highlight-bg;
+        color: $highlight-colour;
       }
+    }
+    ul {
+      text-align: left;
+      display: inline;
+      margin: 0;
+      padding: 15px 0px 17px 0;
+      list-style: none;
+      text-decoration:none;
+    }
+    ul li {
+      font: bold 12px/18px sans-serif;
+      display: inline-block;
+      margin-right: -4px;
+      position: relative;
+      padding: 15px 10px;
+      cursor: pointer;
+      -webkit-transition: all 0.2s;
+      -moz-transition: all 0.2s;
+      -ms-transition: all 0.2s;
+      -o-transition: all 0.2s;
+      transition: all 0.2s;      
+      border-bottom: 1px solid $bg2;
+    }
+    ul li:hover {
+      background: $highlight-bg;
+      color: $highlight-colour;
+    }
+    ul li ul {
+      padding: 0;
+      position: absolute;
+      top: 48px;
+      left: 0;
+      width: 150px;
+      display: none;
+      opacity: 0;
+      visibility: hidden;
+      -webkit-transiton: opacity 0.2s;
+      -moz-transition: opacity 0.2s;
+      -ms-transition: opacity 0.2s;
+      -o-transition: opacity 0.2s;
+      -transition: opacity 0.2s;
+      z-index: 999;
+    }
+    ul li ul li { 
+      background: $bg2;
+      color: $colour;
+      display: block; 
+    }
+    ul li ul li:hover { 
+      background: $highlight-bg; 
+    }
+    ul li:hover ul {
+      display: block;
+      opacity: 2;
+      visibility: visible;
     }
   }
 }
 
 .container {
-  background-color: $bg-colour;
-  position:relative;    
+  background-color: $bg1;
   width: 100%;
-  padding: 0px;
+  padding: 0px;  
 }
 
-.welcome {
+.welcome-inner {
+  border: solid 1px black;
+  position: fixed;
+  left: 50%;
+  top:100px;
   background-color: $well-colour;
+  height: 300px;  
+  width: 600px;
+  margin-left: -300px;
+  text-align: center;
+  form {
+    padding:50px;        
+  }
+  table {
+    margin-left: auto;
+    margin-right: auto;
+    width:60%;
+  }
 }
 
 .properties-nav {
@@ -152,17 +196,17 @@ textarea {
   background-color: $well-colour;
   margin: 10px 5px 10px 10px;
   width:15%;
-  -webkit-box-shadow: -2px -2px 2px -2px $line-colour; /* Android 2.3+, iOS 4.0.2-4.2, Safari 3-4 */
-  box-shadow: 0px 0px 3px 0px $line-colour;
+  -webkit-box-shadow: -2px -2px 2px -2px $bg2; /* Android 2.3+, iOS 4.0.2-4.2, Safari 3-4 */
+  box-shadow: 0px 0px 3px 0px $bg2;
   -webkit-border-radius: 5px;
 
   ul {
     list-style: none;
-    padding: 10px;
+    padding: 0px 10px;
     
     li {
       padding: 5px 10px;
-      border-top: 1px solid $line-colour;
+      border-top: 1px solid $bg2;
       &:first-child {
         border-top: 0px;
       }
@@ -176,20 +220,44 @@ textarea {
   width:100%;
   margin:0px;
   padding:0px;
-  -webkit-box-shadow: -2px -2px 2px -2px $line-colour; /* Android 2.3+, iOS 4.0.2-4.2, Safari 3-4 */
-  box-shadow: 0px 0px 3px 0px $line-colour;
+  -webkit-box-shadow: -2px -2px 2px -2px $bg2; /* Android 2.3+, iOS 4.0.2-4.2, Safari 3-4 */
+  box-shadow: 0px 0px 3px 0px $bg2;
   -webkit-border-radius: 5px;
 
-  table {
-    padding: 0px;      
-    text-align: left;      
-    border-collapse:collapse;
-    width: 95%;
-    tr {
-      &:first-child {
-        background-color: $dark;
-        color: $light;
+  .details {
+    padding: 10px;
+  }
+
+  .edit-details {
+    padding: 10px;
+    table {
+      td {
+        .fill {
+          width:80%;
+        }
+        select {
+          width:80%;
+        }
+        textarea {
+          width:90%;
+        }
+        &:nth-child(odd) {
+          width: 10%;
+        }
+        &:nth-child(even) {
+          width: 40%;
+        }
       }
+    }
+  }
+
+  table {
+    text-align: left;      
+    border: 1px solid $bg2;
+    -webkit-border-radius: 5px;
+    width: 100%;
+    th {
+      border-bottom:1px solid $bg2;      
     }
     td {
       width: 30%;
@@ -207,13 +275,50 @@ textarea {
   width:81%;
 }
 
-.details {
-  padding: 5px;
-}
-
 .dark {
   background-color: $dark-well-colour;
 }
 .light {
-  background-color: $light-well-colour;
+  background-color: $well-colour;
+}
+
+footer {
+  position:fixed;
+  left:0px;
+  bottom:0px;
+  height:30px;
+  width:100%;
+  background: $well-colour;
+  padding:5px 10px;
+  border-top: 1px solid $bg2;
+
+  a {
+    color: $well-colour;
+  }
+  small {
+    float: left;
+  }
+  ul {
+    float: right;
+    list-style: none;
+    li {
+      float: left;
+      margin-right: 20px;      
+    }
+  }
+}
+
+.debug_dump {
+  position:fixed;
+  left:50%;
+  bottom:0px;
+  
+  background: $well-colour;
+  padding:5px;
+  border: 1px dotted $bg2;
+
+  width: 600px;
+  margin-top: 45px;
+  margin-left: -300px;
+  @include box_sizing;
 }

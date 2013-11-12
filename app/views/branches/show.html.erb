@@ -1,19 +1,44 @@
 <% provide(:title, @branch.name) %>
-<div class="row">
-  <aside class="span4">
-    <section>
-      <h1>
-        <%= link_to @branch.estate_agent.name, @branch.estate_agent %> / <%= @branch.name %>&nbsp;
-        <%= link_to "Add agent", new_branch_agent_path(branch_id: @branch.id), class: "btn btn-small" %>
-      </h1>      
-    </section>    
-    <section>
-      <h2>Agents (<%= @branch.agents.count %>)</h2>
-      <% if @branch.agents.any? %>      
-        <ol class="agents">
-          <%= render @branch.agents %>
-        </ol>
-      <% end %>
-    </section>    
-  </aside>
+<div class="container">
+  <%= render 'shared/properties' %>
+  <div class="main-box">
+    <div class="details-box">
+        <div class="details"> 
+          <div class="breadcrumbs">
+            <%= link_to @branch.estate_agent.name, @branch.estate_agent %> / <%= @branch.name %>
+          </div>
+          <%= @branch.comment %><p>        
+        <% if @branch.agents.any? %>      
+          <table class="children">
+            <tr>
+              <th>Agent</th>            
+              <th>Properties</th>
+            </tr>          
+          <% @branch.agents.each do |agent| %>
+              <tr class="light">
+                <td><%= link_to agent.name, agent %></td>
+                <td><%= agent.properties.count %></td>
+              </tr>
+          <% end %>  
+          </table>
+        <% end %>
+        <p>
+        <% if @branch.properties.any? %>      
+          <table class="children">
+            <tr>
+              <th>Property</th>
+              <th>Agent</th>            
+            </tr>          
+          <% @branch.properties.each do |property| %>
+              <tr class="light">
+                <td><%= link_to property.address, property %></td>
+                <td><%= link_to property.agent.name, property.agent %></td>
+              </tr>
+          <% end %>  
+          </table>
+        <% end %>
+        </ul>
+      </div>
+    </div>
+  </div>
 </div>

@@ -1,10 +1,33 @@
 <% provide(:title, @agent.name) %>
-<div class="row">
-  <aside class="span4">
-    <section>
-      <h1>
-        <%= link_to @agent.branch.estate_agent.name, @agent.branch.estate_agent %> / <%= link_to @agent.branch.name, @agent.branch %> / <%= @agent.name %>
-      </h1>      
-    </section>    
-  </aside>
+<div class="container">
+  <%= render 'shared/properties' %>
+  <div class="main-box">
+    <div class="details-box">
+        <div class="details"> 
+          <div class="breadcrumbs">
+            <%= link_to @agent.estate_agent.name, @agent.estate_agent %> / <%= link_to @agent.branch.name, @agent.branch %> / <%= @agent.name %>
+          </div>
+          <%= @agent.comment %><p>        
+        <% if @agent.properties.any? %>      
+          <table class="children">
+            <tr>
+              <th>Address</th>
+              <th>Postcode</th>
+              <th>Asking Price</th>
+              <th>Status</th>
+            </tr>
+          <% @agent.properties.each do |property| %>
+            <tr class="light">
+              <td><%= link_to property.address, property %></td>  
+              <td><%= property.postcode %></td>  
+              <td><%= property.asking_price %></td>  
+              <td><%= property.status %></td>  
+            </tr>
+          <% end %>  
+          </table>
+        <% end %>
+        </ul>
+      </div>
+    </div>
+  </div>
 </div>

@@ -6,7 +6,6 @@ class EstateAgentsController < ApplicationController
   end
 
   def show
-    puts 'showing estate agent ' + params[:id]
     @estate_agent = EstateAgent.find(params[:id])
     @properties = @estate_agent.properties
   end

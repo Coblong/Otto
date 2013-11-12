@@ -1,5 +1,5 @@
-<% if signed_in? %>    
-  <div class="container">
+<div class="container">
+  <% if signed_in? %>    
     <%= render 'shared/properties' %>
     <div class="main-box">
       <div class="details-box">
@@ -9,14 +9,19 @@
           <%= render @branch %>
         <% elsif defined? @estate_agent %>
           <%= render @estate_agent %>
+        <% else %>
+          <div class="details">
+            &nbsp;
+          </div>
         <% end %>
       </div>
-      <p>
-      <iframe frameborder="0" width="100%" height="600" src="http://www.rightmove.co.uk/property-for-sale/property-27931962.html?premiumA=true&backListLink=%2Fproperty-for-sale%2Ffind.html%3FlocationIdentifier%3DUSERDEFINEDAREA%255E%257B%2522id%2522%253A1821557%257D%26sortType%3D1%26maxPrice%3D160000%26savedSearchId%3D10871423%26minBedrooms%3D2%26displayPropertyType%3Dhouses%26oldDisplayPropertyType%3Dhouses%26includeSSTC%3Dtrue%26_includeSSTC%3Don%26index%3D80&onetime_savedPropertyId=27931962#summary27931962"></iframe>    
+    </div>  
+  <% else %>
+    <div class="welcome-inner">
+      <h1>Welcome to the Ottor system</h1>
+      <%= image_tag("home.jpeg", width: 250, id: "home_image") %><br>
+      <h3>"Whaddayamean it's spelt wrong?"</h3>
     </div>
   </div>
-<% else %>
-  <div class="welcome">
-    Welcome to the Ottor system
-  </div>
-<% end %>
+  <% end %>
+</div>

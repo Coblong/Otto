@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131030215252) do
+ActiveRecord::Schema.define(version: 20131107230018) do
 
   create_table "agents", force: true do |t|
     t.string   "name"
@@ -47,12 +47,15 @@ ActiveRecord::Schema.define(version: 20131030215252) do
 
   create_table "properties", force: true do |t|
     t.string   "address"
-    t.string   "url"
+    t.string   "url",             limit: 1000
     t.integer  "estate_agent_id"
     t.integer  "branch_id"
     t.integer  "agent_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "postcode"
+    t.string   "asking_price"
+    t.string   "status"
   end
 
   add_index "properties", ["agent_id", "created_at"], name: "index_properties_on_agent_id_and_created_at"
