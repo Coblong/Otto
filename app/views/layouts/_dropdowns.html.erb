@@ -1,0 +1,40 @@
+  <div class="filters">    
+    <% if signed_in? %>  
+      <%= form_tag(root_path, method: "get") do %>
+      <% if defined? @estate_agent %>
+        <%= select_tag "estate_agent_id", options_from_collection_for_select(@estate_agents, "id", "name", @estate_agent.id), 
+          prompt: "Estate Agent" %>
+      <% else %>
+        <%= select_tag "estate_agent_id", options_from_collection_for_select(@estate_agents, "id", "name"), 
+          prompt: "Estate Agent" %>
+      <% end %>
+      <%= link_to "Add", new_user_estate_agent_path(user_id: current_user.id) %>
+
+      <% if defined? @branches %>
+        <% if defined? @branch %>
+          <%= select_tag "branch_id", options_from_collection_for_select(@branches, "id", "name", @branch.id),
+            prompt: "Branch" %>
+        <% else %>
+          <%= select_tag "branch_id", options_from_collection_for_select(@branches, "id", "name"),
+            prompt: "Branch" %>
+        <% end %>      
+        <% if defined? @estate_agent %>  
+          <%= link_to "Add", new_estate_agent_branch_path(estate_agent_id: @estate_agent.id) %>
+        <% end %>
+
+        <% if defined? @agents %>
+          <% if defined? @agent %>
+            <%= select_tag "agent_id", options_from_collection_for_select(@agents, "id", "name", @agent.id),
+              prompt: "Agent" %>
+          <% else %>
+            <%= select_tag "agent_id", options_from_collection_for_select(@agents, "id", "name"), 
+              prompt: "Agent" %>
+          <% end %>
+          <% if defined? @branch %>  
+            <%= link_to "Add", new_branch_agent_path(branch_id: @branch.id) %>
+          <% end %>
+        <% end %>
+      <% end %>
+      <% end %>
+    <% end %>  
+  </div>

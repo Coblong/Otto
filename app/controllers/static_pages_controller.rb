@@ -8,7 +8,6 @@ class StaticPagesController < ApplicationController
 
     def set_lists
       if signed_in?
-        puts params.to_yaml
         @estate_agents = current_user.estate_agents        
         @properties = Property.all
 

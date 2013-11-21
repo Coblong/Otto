@@ -1,18 +1,35 @@
 <% provide(:title, 'New Agent') %>
-<h1>New <%= @agent.branch.estate_agent.name %> - <%= @agent.branch.name %> Agent</h1>
-
-<div class="row">
-  <div class="span6 offset3">
-    <%= form_for(@agent, url: branch_agents_path, html: { :method => :post }) do |f| %>
-      <%= render 'shared/agent_error_messages' %>
-      
-      <%= f.label :name %>
-      <%= f.text_field :name %>
-
-      <%= f.label :comment %>
-      <%= f.text_field :comment %>      
-
-      <%= f.submit "Create agent", class: "btn btn-large btn-primary" %>
-    <% end %>
+<div class="container">
+  <%= render 'shared/properties' %>
+  <div class="main-box">
+    <div class="details-box">
+        <div class="details"> 
+          <div class="breadcrumbs">
+            Add a new agent
+          </div>
+          <%= form_for(@agent) do |f| %>
+            <%= f.hidden_field :branch_id %>
+          <table class="children">
+            <tr>
+              <td><%= render 'shared/agent_error_messages' %></td>
+            </tr>
+            <tr>
+              <td><%= f.label :name %></td>
+              <td><%= f.text_field :name %></td>
+            </tr>
+            <tr>
+              <td><%= f.label :comment %></td>
+              <td><%= f.text_field :comment %></td>
+            </tr>
+            <tr><td>&nbsp;</td></tr>
+            <tr>
+              <td></td>
+              <td><%= f.submit "Create agent", class: "btn btn-large btn-primary" %></td>
+            </tr>
+          </table>
+          <% end %>
+        </div>
+      </div>
+    </div>
   </div>
 </div>

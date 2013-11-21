@@ -6,8 +6,12 @@ class AgentsController < ApplicationController
   end
 
   def new
+    @estate_agents = current_user.estate_agents
     @branch = Branch.find(params[:branch_id])
+    @estate_agent = @branch.estate_agent
+    @branches = @estate_agent.branches
     @agent = @branch.agents.build
+    @properties = @branch.properties
   end
 
   def edit
@@ -15,7 +19,7 @@ class AgentsController < ApplicationController
   end
 
   def create
-    @branch = Branch.find(params[:branch_id])
+    @branch = Branch.find(params[:agent][:branch_id])
     @agent = @branch.agents.build(agent_params)
     @agent.estate_agent = @branch.estate_agent
     if @agent.save

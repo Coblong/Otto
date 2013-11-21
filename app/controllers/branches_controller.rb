@@ -2,12 +2,14 @@ class BranchesController < ApplicationController
   before_action :signed_in_user, :set_branch, only: [:show, :edit, :update, :destroy]
 
   def new
+    @estate_agents = current_user.estate_agents
     @estate_agent = EstateAgent.find(params[:estate_agent_id])
     @branch = @estate_agent.branches.build
+    @properties = @branch.properties
   end
 
   def create
-    @estate_agent = EstateAgent.find(params[:estate_agent_id])
+    @estate_agent = EstateAgent.find(params[:branch][:estate_agent_id])
     @branch = @estate_agent.branches.build(branch_params)
 
     if @branch.save
@@ -21,8 +23,9 @@ class BranchesController < ApplicationController
   private
 
     def set_branch
+    
       @branch = Branch.find(params[:id])
-      
+    
       @estate_agents = current_user.estate_agents
       @estate_agent = @branch.estate_agent 
       @branches = @estate_agent.branches

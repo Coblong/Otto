@@ -60,6 +60,16 @@ textarea {
   text-align: center;
 }
 
+.alert-error {
+  color: red;
+  text-align: center;
+}
+
+.alert-success {
+  color: green;
+  text-align: center;
+}
+
 .caret {
   border-color: $colour transparent transparent transparent;
   border-width:4px;
@@ -71,33 +81,12 @@ textarea {
 .navbar {
   background-color: $bg2;
   height:50px;
-  .filters {
-    display:inline-block;
-    padding:10px;
-    select {
-      padding:5px;
-      margin: 0;
-      width: 200px;
-      border-radius:4px;
-      -webkit-box-shadow: 
-          0 0px 0 #ccc,
-          0 0px #fff inset;
-      background: url('http://i45.tinypic.com/309nb74.png') no-repeat right, -moz-linear-gradient(top, #FBFBFB 0%, #E9E9E9 100%);
-      background: url('http://i45.tinypic.com/309nb74.png') no-repeat right, -webkit-gradient(linear, left top, left bottom, color-stop(0%,#FBFBFB), color-stop(100%,#E9E9E9));
-      color:black;
-      border:none;
-      outline:none;
-      display: inline-block;
-      -webkit-appearance:none; 
-      cursor:pointer;
-      border: 1px solid $bg2;
-    }
-  }
-
-  .menus {
-    display:inline-block;
+  .right {
     text-align: right;    
     float:right;    
+  }
+  .menus {
+    display:inline-block;
 
     a {
       text-decoration:none;
@@ -149,6 +138,7 @@ textarea {
       z-index: 999;
     }
     ul li ul li { 
+      padding: 10px;
       background: $bg2;
       color: $colour;
       display: block; 
@@ -160,6 +150,12 @@ textarea {
       display: block;
       opacity: 2;
       visibility: visible;
+    }
+    .separator {
+      background: $highlight-bg; 
+      border-left: 10px solid $bg2;
+      border-right: 10px solid $bg2;
+      padding: 1px;
     }
   }
 }
