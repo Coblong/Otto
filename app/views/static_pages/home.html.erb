@@ -1,27 +1,26 @@
-<div class="container">
-  <% if signed_in? %>        
+<% if signed_in? %>        
+  <div id="left-nav" class="tall">  
     <%= render 'shared/properties' %>
-    <div class="main-box">
-      <div class="details-box">
-        <% if defined? @agent %>
-          <%= render @agent %>
-        <% elsif defined? @branch %>
-          <%= render @branch %>
-        <% elsif defined? @estate_agent %>
-          <%= render @estate_agent %>
-        <% else %>
-          <div class="details">
-            &nbsp;
-          </div>
-        <% end %>
+  </div>
+  <div id="main"> 
+    <div id="main-top">   
+      <div id="main-top-details">
+<% if defined? @agent %>
+      <%= render @agent %>
+<% elsif defined? @branch %>
+      <%= render @branch %>
+<% elsif defined? @estate_agent %>
+      <%= render @estate_agent %>
+<% else %>
+      &nbsp;
+<% end %>
       </div>
-    </div>  
-  <% else %>
-    <div class="welcome-inner">
-      <h1>Welcome to the Ottor system</h1>
-      <%= image_tag("home.jpeg", width: 250, id: "home_image") %><br>
-      <h3>"Whaddayamean it's spelt wrong?"</h3>
     </div>
   </div>
-  <% end %>
-</div>
+<% else %>
+  <div class="welcome-inner">
+    <h1>Welcome to the Ottor system</h1>
+      <%= image_tag("ottor.png", width: 250, id: "home_image") %><br>
+      <h3>"Whaddayamean it's spelt wrong?"</h3>
+  </div>
+<% end %>

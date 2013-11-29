@@ -1,7 +1,26 @@
 class SessionsController < ApplicationController
   skip_before_filter :verify_authenticity_token
   
-  def new
+  def new    
+  end
+
+  def validate
+    if signed_in?
+      render json: current_user
+    else
+      render :nothing => true, :status => :service_unavailable
+    end
+  end
+
+  def quietly
+    puts 'Logging in with ' + params[:email].to_s + ' : ' + params[:pwd] 
+    user = User.find_by(email: params[:email].downcase)
+    if user && user.authenticate(params[:pwd])
+      sign_in user
+      render json: user
+    else
+      render :nothing => true, :status => :service_unavailable
+    end
   end
 
   def create

@@ -1,44 +1,27 @@
 <% provide(:title, @branch.name) %>
-<div class="container">
+<div id="left-nav" class="tall">  
   <%= render 'shared/properties' %>
-  <div class="main-box">
-    <div class="details-box">
-        <div class="details"> 
-          <div class="breadcrumbs">
-            <%= link_to @branch.estate_agent.name, @branch.estate_agent %> / <%= @branch.name %>
-          </div>
-          <%= @branch.comment %><p>        
-        <% if @branch.agents.any? %>      
-          <table class="children">
-            <tr>
-              <th>Agent</th>            
-              <th>Properties</th>
-            </tr>          
-          <% @branch.agents.each do |agent| %>
-              <tr class="light">
-                <td><%= link_to agent.name, agent %></td>
-                <td><%= agent.properties.count %></td>
-              </tr>
-          <% end %>  
-          </table>
-        <% end %>
-        <p>
-        <% if @branch.properties.any? %>      
-          <table class="children">
-            <tr>
-              <th>Property</th>
-              <th>Agent</th>            
-            </tr>          
-          <% @branch.properties.each do |property| %>
-              <tr class="light">
-                <td><%= link_to property.address, property %></td>
-                <td><%= link_to property.agent.name, property.agent %></td>
-              </tr>
-          <% end %>  
-          </table>
-        <% end %>
-        </ul>
-      </div>
+</div>
+<div id="main"> 
+  <div id="main-top">   
+    <div id="main-top-details">
+      <%= link_to @branch.estate_agent.name, @branch.estate_agent %> / <%= @branch.name %>
+      <%= @branch.comment %><p>        
+      <% if @branch.agents.any? %>      
+        <table class="children">
+          <tr>
+            <th>Agent</th>            
+            <th>Properties</th>
+          </tr>          
+        <% @branch.agents.each do |agent| %>
+            <tr class="light">
+              <td><%= link_to agent.name, agent %></td>
+              <td><%= agent.properties.count %></td>
+            </tr>
+        <% end %>  
+        </table>
+      <% end %>
     </div>
+  </div>
   </div>
 </div>

@@ -1,10 +1,13 @@
 $bg1:lightgray;
 $bg2: lightblue;
+$lightline: lightblue;
+$darkline: midnightblue;
+$highlight-colour: gray;
+$highlight-bg: #9CC2CF;
+$dropdown-bg: white;
 $colour: midnightblue;
-$highlight-colour: black;
-$highlight-bg: white;
 $well-colour: mintcream;
-$dark-well-colour: honeydew;
+$dark-well-colour: snow;
 
 @mixin box_sizing {
   -moz-box-sizing: border-box;
@@ -12,158 +15,232 @@ $dark-well-colour: honeydew;
   box-sizing: border-box;
 }
 
-html {
-  background-color: $bg1;
-  margin: 0px;
-  height: 100%;
-  width: 100%;
+html,body { 
+  height: 100%; 
+  margin: 0px; 
+  padding: 0px; 
 }
 
-body {
-  background-color: $bg1;
-  margin: 0px;
-  height: 100%;
-  min-height: 100%;
-  width: 100%;
-}
-
-section {
-  overflow: auto;
-}
-
-textarea {
-  resize: vertical;
-}
-
-.gravatar {
-  float: left;
-  margin-right: 10px;
-}
-
-.pull-left {
-  float: left;
-}
-
-.pull-right {
-  float: right;
-}
-
-.left {
-  text-aign: left;
+#navbar {
+  height: 40px;
+  width:100%;
+  background-color: $bg2;
+  border-bottom: 1px solid $darkline;  
 }
 
 .right {
-  text-align: right;
+  text-align: right;    
+  float:right; 
 }
 
-.center {
-  text-align: center;
-}
-
-.alert-error {
-  color: red;
-  text-align: center;
-}
-
-.alert-success {
-  color: green;
-  text-align: center;
-}
-
-.caret {
-  border-color: $colour transparent transparent transparent;
-  border-width:4px;
-  border-style:solid;
-  content: "";
+.navbar-menus {
   display:inline-block;
-}
-
-.navbar {
-  background-color: $bg2;
-  height:50px;
-  .right {
-    text-align: right;    
-    float:right;    
+  a {
+    text-decoration:none;
+    &:hover {
+      background: $highlight-bg;
+      color: $highlight-colour;
+    }
   }
-  .menus {
-    display:inline-block;
+  ul {
+    text-align: left;
+    display: inline;
+    margin: 0;
+    padding: 15px 0px 15px 0;
+    list-style: none;
+    text-decoration:none;
 
-    a {
-      text-decoration:none;
-      &:hover {
-        background: $highlight-bg;
-        color: $highlight-colour;
-      }
-    }
-    ul {
-      text-align: left;
-      display: inline;
-      margin: 0;
-      padding: 15px 0px 17px 0;
-      list-style: none;
-      text-decoration:none;
-    }
-    ul li {
-      font: bold 12px/18px sans-serif;
+    li {
       display: inline-block;
       margin-right: -4px;
       position: relative;
-      padding: 15px 10px;
+      padding: 11px 10px;
       cursor: pointer;
       -webkit-transition: all 0.2s;
       -moz-transition: all 0.2s;
       -ms-transition: all 0.2s;
       -o-transition: all 0.2s;
-      transition: all 0.2s;      
-      border-bottom: 1px solid $bg2;
-    }
-    ul li:hover {
-      background: $highlight-bg;
-      color: $highlight-colour;
-    }
-    ul li ul {
-      padding: 0;
-      position: absolute;
-      top: 48px;
-      left: 0;
-      width: 150px;
-      display: none;
-      opacity: 0;
-      visibility: hidden;
-      -webkit-transiton: opacity 0.2s;
-      -moz-transition: opacity 0.2s;
-      -ms-transition: opacity 0.2s;
-      -o-transition: opacity 0.2s;
-      -transition: opacity 0.2s;
-      z-index: 999;
-    }
-    ul li ul li { 
-      padding: 10px;
-      background: $bg2;
-      color: $colour;
-      display: block; 
-    }
-    ul li ul li:hover { 
-      background: $highlight-bg; 
-    }
-    ul li:hover ul {
-      display: block;
-      opacity: 2;
-      visibility: visible;
-    }
-    .separator {
-      background: $highlight-bg; 
-      border-left: 10px solid $bg2;
-      border-right: 10px solid $bg2;
-      padding: 1px;
+      transition: all 0.2s;                  
+
+      .separator {
+        background: $darkline; 
+        padding: 0.5px;
+      }
+
+      &:hover {
+        background: $highlight-bg;
+        color: $highlight-colour;
+        ul {
+          display: block;
+          opacity: 2;
+          visibility: visible;
+          border: 1px solid $darkline;
+        }
+      }
+
+      ul {
+        padding: 0;
+        position: absolute;
+        top: 40px;
+        left: 0;
+        width: 150px;
+        display: none;
+        opacity: 0;
+        visibility: hidden;        
+        -webkit-transiton: opacity 0.2s;
+        -moz-transition: opacity 0.2s;
+        -ms-transition: opacity 0.2s;
+        -o-transition: opacity 0.2s;
+        -transition: opacity 0.2s;
+        z-index: 999;        
+
+        li { 
+          font-weight: normal;
+          padding: 5px;
+          margin-right:1px;
+          background: $dropdown-bg;
+          color: $colour;
+          display: block; 
+          &:hover {           
+            background: $dropdown-bg;          
+          }
+          a {
+            &:hover {
+              background: $dropdown-bg;
+              colour: $highlight-bg;
+            }
+          }
+        }
+      }      
     }
   }
 }
 
 .container {
-  background-color: $bg1;
+  height: 100%;
+  padding:0px;
+  margin:0px;  
+}
+
+#left-nav {
+  display: inline-block;
+  float:left;
+  height: 100%;  
+  width:15%;
+  border-right: solid 1px $darkline;
+  ul {
+    list-style: none;
+    padding: 0px;
+    margin: 0px;
+    a {
+      text-decoration: none;
+      background: none;
+      &:hover {
+        background: none;
+        color: black;
+      }
+    }
+    li {
+      padding: 10px;
+      border-bottom: solid 1px $highlight-bg;
+      background: -webkit-gradient(linear, right top, left top, from($dark-well-colour), to($well-colour));      
+      &:hover {
+        background: -webkit-gradient(linear, left top, right top, from($dark-well-colour), to($well-colour));        
+        colour: red;
+      }
+    }    
+  }
+}
+
+#main  {
+  display: inline;
+  float:left;
+  margin:0px;
+  padding:0px;
+  height: 100%;      
+  width: 84%;
+  vertical-align: top; 
+}
+
+#main-top {  
+  margin:2px;
+  padding:0px;
+  min-height: 34px;  
+}
+
+#main-bottom {  
+  height: 100%;  
   width: 100%;
-  padding: 0px;  
+  border-top: solid 1px $lightline;
+}
+
+#main-bottom-iframe {
+  display: inline;      
+  iframe {
+    width: 60%;
+    height: 600px;    
+  }
+}
+
+#main-bottom-right {
+  height: 100%;  
+  display: inline-block;  
+  float:right;  
+  width: 35%;
+  vertical-align: top;   
+  border-left: solid 1px $lightline;
+  border-right: solid 1px $lightline;
+  table {
+    width: 100%;
+    text-align: left;      
+    background-color: $well-colour;
+    border-bottom: solid 1px $lightline;
+  }
+  ul {
+    list-style: none;
+    padding: 0px;
+    margin: 0px;
+    a {
+      text-decoration: none;
+      background: none;
+      &:hover {
+        background: none;
+        color: black;
+      }
+    }
+    li {
+      padding: 10px;
+      border-bottom: solid 1px $highlight-bg;
+      background: -webkit-gradient(linear, right top, left top, from($dark-well-colour), to($well-colour));      
+      &:hover {
+        background: -webkit-gradient(linear, left top, right top, from($dark-well-colour), to($well-colour));        
+        colour: red;
+      }
+    }    
+  }
+}
+
+#main-top-details {
+  padding:5px;
+  border-radius: 1px;
+  -moz-border-radius: 1px;
+
+  table {
+    text-align: left;      
+    border: 1px solid $bg2;
+    -webkit-border-radius: 5px;
+    width: 100%;
+    th {
+      font-weight: normal;
+      border-bottom:1px solid $bg2;      
+    }
+    td {
+      width: 30%;
+      &:first-child {
+        width: 40%;
+      }      
+    }
+  }
 }
 
 .welcome-inner {
@@ -184,98 +261,6 @@ textarea {
     margin-right: auto;
     width:60%;
   }
-}
-
-.properties-nav {
-  display:inline-block;
-  vertical-align: top;
-  background-color: $well-colour;
-  margin: 10px 5px 10px 10px;
-  width:15%;
-  -webkit-box-shadow: -2px -2px 2px -2px $bg2; /* Android 2.3+, iOS 4.0.2-4.2, Safari 3-4 */
-  box-shadow: 0px 0px 3px 0px $bg2;
-  -webkit-border-radius: 5px;
-
-  ul {
-    list-style: none;
-    padding: 0px 10px;
-    
-    li {
-      padding: 5px 10px;
-      border-top: 1px solid $bg2;
-      &:first-child {
-        border-top: 0px;
-      }
-    }
-  }
-}
-
-.details-box {
-  display:inline-block;
-  background-color: $well-colour;
-  width:100%;
-  margin:0px;
-  padding:0px;
-  -webkit-box-shadow: -2px -2px 2px -2px $bg2; /* Android 2.3+, iOS 4.0.2-4.2, Safari 3-4 */
-  box-shadow: 0px 0px 3px 0px $bg2;
-  -webkit-border-radius: 5px;
-
-  .details {
-    padding: 10px;
-  }
-
-  .edit-details {
-    padding: 10px;
-    table {
-      td {
-        .fill {
-          width:80%;
-        }
-        select {
-          width:80%;
-        }
-        textarea {
-          width:90%;
-        }
-        &:nth-child(odd) {
-          width: 10%;
-        }
-        &:nth-child(even) {
-          width: 40%;
-        }
-      }
-    }
-  }
-
-  table {
-    text-align: left;      
-    border: 1px solid $bg2;
-    -webkit-border-radius: 5px;
-    width: 100%;
-    th {
-      border-bottom:1px solid $bg2;      
-    }
-    td {
-      width: 30%;
-      &:first-child {
-        width: 40%;
-      }      
-    }
-  }
-}
-
-.main-box {
-  position:relative;
-  display:inline-block;
-  margin: 10px 0px 10px 5px;
-  width:81%;
-}
-
-.dark {
-  background-color: $dark-well-colour;
-}
-.light {
-  background-color: $well-colour;
 }
 
 footer {

@@ -1,4 +1,2 @@
 <% provide(:title, @branch.name) %>
-<div class="details">
-  <%= link_to @branch.estate_agent.name, @branch.estate_agent %> / <%= link_to @branch.name, @branch %>
-</div>
+<%= link_to @branch.estate_agent.name, @branch.estate_agent %> / <%= link_to @branch.name, @branch %>

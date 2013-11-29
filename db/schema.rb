@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131107230018) do
+ActiveRecord::Schema.define(version: 20131127230004) do
 
   create_table "agents", force: true do |t|
     t.string   "name"
@@ -25,6 +25,11 @@ ActiveRecord::Schema.define(version: 20131107230018) do
   add_index "agents", ["branch_id", "created_at"], name: "index_agents_on_branch_id_and_created_at"
   add_index "agents", ["estate_agent_id", "created_at"], name: "index_agents_on_estate_agent_id_and_created_at"
 
+  create_table "agents_properties", id: false, force: true do |t|
+    t.integer "agent_id"
+    t.integer "property_id"
+  end
+
   create_table "branches", force: true do |t|
     t.string   "name"
     t.string   "comment"
@@ -35,6 +40,11 @@ ActiveRecord::Schema.define(version: 20131107230018) do
 
   add_index "branches", ["estate_agent_id", "created_at"], name: "index_branches_on_estate_agent_id_and_created_at"
 
+  create_table "branches_properties", id: false, force: true do |t|
+    t.integer "branch_id"
+    t.integer "property_id"
+  end
+
   create_table "estate_agents", force: true do |t|
     t.string   "name"
     t.string   "comment"
@@ -44,6 +54,11 @@ ActiveRecord::Schema.define(version: 20131107230018) do
   end
 
   add_index "estate_agents", ["user_id", "created_at"], name: "index_estate_agents_on_user_id_and_created_at"
+
+  create_table "estate_agents_properties", id: false, force: true do |t|
+    t.integer "estate_agent_id"
+    t.integer "property_id"
+  end
 
   create_table "properties", force: true do |t|
     t.string   "address"
@@ -56,6 +71,7 @@ ActiveRecord::Schema.define(version: 20131107230018) do
     t.string   "postcode"
     t.string   "asking_price"
     t.string   "status"
+    t.string   "external_id"
   end
 
   add_index "properties", ["agent_id", "created_at"], name: "index_properties_on_agent_id_and_created_at"

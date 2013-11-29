@@ -1,39 +1,40 @@
-<% if signed_in? %>    
-  <div class="container">
-    <%= render 'shared/properties' %>
-    <div class="main-box">
-      <div class="details-box">
-        <div class="details">
-          <div class="breadcrumbs">
-            <%= link_to @property.estate_agent.name, @property.estate_agent %> / <%= link_to @property.branch.name, @property.branch %> / <%= link_to @property.agent.name, @property.agent %>
-          </div>
-          <p>
-          <table>
-            <tr>
-              <th>Address</th>
-              <th>Postcode</th>
-              <th>Asking Price</th>
-              <th>Status</th>
-            </tr>
-            <tr>
-              <td><%= link_to @property.address, edit_property_path %></td>  
-              <td><%= @property.postcode %></td>  
-              <td><%= @property.asking_price %></td>  
-              <td><%= @property.status %></td>  
-            </tr>
-          </table>
-          </div>
-      </div>
-      <p>
-      <iframe frameborder="0" width="100%" height="600" src="<%= @property.url %>"></iframe>    
+<div id="left-nav" class="tall">  
+  <%= render 'shared/properties' %>
+</div>
+<div id="main"> 
+  <div id="main-top">   
+    <div id="main-top-details">
+      <%= link_to @property.estate_agents.first.name, @property.estate_agents.first %> / <%= link_to @property.branches.first.name, @property.branches.first %>
     </div>
   </div>
-<% else %>
-  <div class="welcome">
-    <div class="welcome-inner">
-      <h1>Welcome to the Ottor system</h1>
-      <%= image_tag("home.jpeg", width: 250, id: "home_image") %><br>
-      <h3>"Whaddayamean it's spelt wrong?"</h3>
+  <div id="main-bottom">
+    <div id="main-bottom-iframe">          
+      <iframe frameborder="0" src="<%= @property.full_url %>"></iframe>          
+    </div>
+    <div id="main-bottom-right">          
+      <table>
+        <tr>
+          <th>Address</th>
+          <td><%= link_to @property.address, edit_property_path %></td>  
+        </tr>
+        <tr>
+          <th>Postcode</th>
+          <td><%= @property.postcode %></td>  
+        </tr>
+        <tr>
+          <th>Asking Price</th>
+          <td><%= @property.asking_price %></td>  
+        </tr>
+        <tr>
+          <th>Status</th>          
+          <td><%= @property.status %></td>  
+        </tr>
+      </table>
+      <ul>
+        <li>Estate Agent Comments</li>
+        <li>Agent Comments</li>
+        <li>History</li>
+      </ul>
     </div>
   </div>
-<% end %>
+</div>

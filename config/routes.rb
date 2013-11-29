@@ -14,19 +14,24 @@ Otto::Application.routes.draw do
   resources :agents do
     resources :properties
   end
-  resources :properties
+  resources :properties do
+    resources :estate_agents
+    resources :branches
+    resources :agents
+  end
   resources :sessions, only: [:new, :create, :destroy]
 
   get "static_pages/home"
-  get "static_pages/hunt"
   
   root  'static_pages#home'
-  match '/',        to: 'static_pages#home',    via: 'get'
-  match '/signup',  to: 'users#new',            via: 'get'
-  match '/signin',  to: 'sessions#new',         via: 'get'
-  match '/signout', to: 'sessions#destroy',     via: 'delete'
-  match '/hunt',    to: 'static_pages#hunt',    via: 'get'
-
+  match '/',                to: 'static_pages#home',      via: 'get'
+  match '/signup',          to: 'users#new',              via: 'get'
+  match '/signin',          to: 'sessions#new',           via: 'get'
+  match '/quietsession',    to: 'sessions#quietly',       via: 'post'
+  match '/signout',         to: 'sessions#destroy',       via: 'delete'
+  match '/validate',        to: 'sessions#validate',      via: 'get'
+  match '/external/property',to: 'properties#external',    via: 'get'
+  
   # The priority is based upon order of creation:
   # first created -> highest priority.
 

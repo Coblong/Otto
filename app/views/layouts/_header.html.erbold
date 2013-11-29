@@ -1,5 +1,5 @@
 <div id="navbar">
-  <div class="navbar-menus left">
+  <div class="menus">
     <ul>
 <% if defined? @estate_agents %>
   <% if defined? @estate_agent %>
@@ -65,9 +65,9 @@
 
   <% end %>
 <% end %>
-    </ul>
+    </ul> 
   </div>
-  <div class="navbar-menus right">
+  <div class="menus right">
     <ul>
       <li><%= link_to "Home", root_path %></li>
       <% if signed_in? %>
