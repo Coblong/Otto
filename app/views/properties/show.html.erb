@@ -9,32 +9,32 @@
   </div>
   <div id="main-bottom">
     <div id="main-bottom-iframe">          
-      <iframe frameborder="0" src="<%= @property.full_url %>"></iframe>          
-    </div>
-    <div id="main-bottom-right">          
-      <table>
-        <tr>
-          <th>Address</th>
-          <td><%= link_to @property.address, edit_property_path %></td>  
-        </tr>
-        <tr>
-          <th>Postcode</th>
-          <td><%= @property.postcode %></td>  
-        </tr>
-        <tr>
-          <th>Asking Price</th>
-          <td><%= @property.asking_price %></td>  
-        </tr>
-        <tr>
-          <th>Status</th>          
-          <td><%= @property.status %></td>  
-        </tr>
-      </table>
-      <ul>
-        <li>Estate Agent Comments</li>
-        <li>Agent Comments</li>
-        <li>History</li>
-      </ul>
+      <iframe src="<%= @property.full_url %>"></iframe>          
     </div>
   </div>
+</div>
+<div id="rightpanel">          
+  <table>
+    <tr>
+      <th>Address</th>
+      <td><%= link_to @property.address, edit_property_path %></td>  
+    </tr>
+    <tr>
+      <th>Postcode</th>
+      <td><%= @property.postcode %></td>  
+    </tr>
+    <tr>
+      <th>Asking Price</th>
+      <td><%= @property.asking_price %></td>  
+    </tr>
+    <tr>
+      <th>Status</th>          
+      <td><%= @property.status %></td>  
+    </tr>
+  </table>
+  <ul>
+    <li>Estate Agent Comments</li>
+    <li>Agent Comments</li>
+    <li>History</li>
+  </ul>
 </div>

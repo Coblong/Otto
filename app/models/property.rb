@@ -7,7 +7,7 @@ class Property < ActiveRecord::Base
   default_scope -> { order('created_at DESC') }  
 
   def full_url
-    puts 'the full url for this property is http://' + url + external_id
-    'http://' + url + external_id
+    puts 'the full url for this property is http://' + url + external_ref
+    'http://' + url + external_ref
   end
 end

@@ -16,11 +16,11 @@ class PropertiesController < ApplicationController
     @property = Property.new
     @property.estate_agents << @estate_agent
     @property.branches << @branch
-    @property.external_id = params[:url]
+    @property.external_ref = params[:url]
     @property.address = params[:address].partition(',').first
     @property.url = params[:hostname]
     @property.postcode = params[:address]
-    @property.asking_price = '£100,000'
+    @property.asking_price = params[:asking_price]
     @property.status = 'New'
 
     puts @property.to_yaml
@@ -35,14 +35,18 @@ class PropertiesController < ApplicationController
   end
 
   def external
-    puts 'Trying to find property for url ' + params[:url].to_s
-    @property = Property.find_by(external_id: params[:url]);
-    if @property.nil?
-      puts 'Property not found'
-      render :nothing => true, :status => :service_unavailable
+    if !current_user
+      render :nothing => true, :status => :unauthorized
     else
-      puts 'Returning property ' + @property.to_yaml
-      render :json => @property
+      puts 'Trying to load property for external ref ' + params[:url].to_s
+      @property = Property.find_by(external_ref: params[:url]);
+      if @property.nil?
+        puts 'Property not found'
+        render :nothing => true, :status => :not_found
+      else
+        puts 'Returning property ' + @property.to_yaml
+        render :json => @property.to_json(:include => [:estate_agents, :branches, :agents])
+      end
     end
   end
 

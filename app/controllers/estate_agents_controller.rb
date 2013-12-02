@@ -28,6 +28,14 @@ class EstateAgentsController < ApplicationController
     @estate_agent = EstateAgent.find(params[:id])
   end
 
+  def update
+    @estate_agent.name = params[:estate_agent][:name]
+    @estate_agent.comment = params[:estate_agent][:comment]
+    if @estate_agent.save
+      render 'show'
+    end
+  end
+
   def create
     @estate_agent = current_user.estate_agents.build(estate_agent_params)
 

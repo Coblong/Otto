@@ -1,7 +1,14 @@
 class StaticPagesController < ApplicationController
   before_action :set_lists, only: [:home, :hunt]
 
-  def home      
+  def home     
+    if defined? @agent
+      render "agents/show"
+    elsif defined? @branch 
+      render "branches/show"
+    elsif defined? @estate_agent 
+      render "estate_agents/show"
+    end
   end
 
   private

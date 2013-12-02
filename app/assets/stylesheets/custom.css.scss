@@ -21,16 +21,23 @@ html,body {
   padding: 0px; 
 }
 
-#navbar {
-  height: 40px;
-  width:100%;
-  background-color: $bg2;
-  border-bottom: 1px solid $darkline;  
+.dark {
+  background: $dark-well-colour;  
+}
+.light {
+  background: $well-colour; 
 }
 
 .right {
   text-align: right;    
   float:right; 
+}
+
+#navbar {
+  height: 40px;
+  width:100%;
+  background-color: $bg2;
+  border-bottom: 1px solid $darkline;  
 }
 
 .navbar-menus {
@@ -117,14 +124,15 @@ html,body {
 }
 
 .container {
+  display: table;
   height: 100%;
+  width:100%;
   padding:0px;
   margin:0px;  
 }
 
 #left-nav {
-  display: inline-block;
-  float:left;
+  display: table-cell;
   height: 100%;  
   width:15%;
   border-right: solid 1px $darkline;
@@ -153,19 +161,17 @@ html,body {
 }
 
 #main  {
-  display: inline;
-  float:left;
+  display: table-cell;
   margin:0px;
   padding:0px;
-  height: 100%;      
-  width: 84%;
-  vertical-align: top; 
+  height: 100%;
 }
 
 #main-top {  
   margin:2px;
   padding:0px;
-  min-height: 34px;  
+  width:100%;
+  height: 31px;      
 }
 
 #main-bottom {  
@@ -175,19 +181,19 @@ html,body {
 }
 
 #main-bottom-iframe {
-  display: inline;      
+  width: 100%;
   iframe {
-    width: 60%;
+    width: 100%;
+    min-width: 650px;
     height: 600px;    
+    border:0px;
   }
 }
 
-#main-bottom-right {
+#rightpanel {
+  display: table-cell;      
   height: 100%;  
-  display: inline-block;  
-  float:right;  
-  width: 35%;
-  vertical-align: top;   
+  width: 30%;    
   border-left: solid 1px $lightline;
   border-right: solid 1px $lightline;
   table {
@@ -195,6 +201,7 @@ html,body {
     text-align: left;      
     background-color: $well-colour;
     border-bottom: solid 1px $lightline;
+    padding:5px;        
   }
   ul {
     list-style: none;
@@ -224,12 +231,11 @@ html,body {
   padding:5px;
   border-radius: 1px;
   -moz-border-radius: 1px;
-
   table {
     text-align: left;      
     border: 1px solid $bg2;
     -webkit-border-radius: 5px;
-    width: 100%;
+    width: 98%;
     th {
       font-weight: normal;
       border-bottom:1px solid $bg2;      

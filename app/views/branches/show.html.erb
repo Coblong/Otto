@@ -5,22 +5,40 @@
 <div id="main"> 
   <div id="main-top">   
     <div id="main-top-details">
-      <%= link_to @branch.estate_agent.name, @branch.estate_agent %> / <%= @branch.name %>
+      <%= link_to @branch.estate_agent.name, @branch.estate_agent %> / <%= @branch.name %><p>
       <%= @branch.comment %><p>        
       <% if @branch.agents.any? %>      
-        <table class="children">
+        <table>
           <tr>
             <th>Agent</th>            
             <th>Properties</th>
           </tr>          
-        <% @branch.agents.each do |agent| %>
-            <tr class="light">
-              <td><%= link_to agent.name, agent %></td>
-              <td><%= agent.properties.count %></td>
+        <% branch.agents.each do |agent| %>
+          <tr class="light">
+            <td><%= link_to 'Agent', '# => ' %></td>                
+            <td><%= agent.properties.count %></td>
+          </tr>
+        <% end %>  
+        </table>
+        <p>
+      <% end %>
+      <% if @branch.properties.any? %>      
+        <table>
+          <tr>
+            <th>Property</th>
+            <th>Asking Price</th>
+            <th>Status</th>            
+          </tr>          
+        <% @branch.properties.each do |property| %>
+            <tr class="dark">
+              <td><%= link_to property.address, property %></td>
+              <td><%= property.asking_price %></td>
+              <td><%= property.status %></td>
             </tr>
         <% end %>  
         </table>
       <% end %>
+      </ul>
     </div>
   </div>
   </div>

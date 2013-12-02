@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131127230004) do
+ActiveRecord::Schema.define(version: 20131202202822) do
 
   create_table "agents", force: true do |t|
     t.string   "name"
@@ -36,6 +36,7 @@ ActiveRecord::Schema.define(version: 20131127230004) do
     t.integer  "estate_agent_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "external_ref"
   end
 
   add_index "branches", ["estate_agent_id", "created_at"], name: "index_branches_on_estate_agent_id_and_created_at"
@@ -51,6 +52,7 @@ ActiveRecord::Schema.define(version: 20131127230004) do
     t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "external_ref"
   end
 
   add_index "estate_agents", ["user_id", "created_at"], name: "index_estate_agents_on_user_id_and_created_at"
@@ -62,21 +64,18 @@ ActiveRecord::Schema.define(version: 20131127230004) do
 
   create_table "properties", force: true do |t|
     t.string   "address"
-    t.string   "url",             limit: 1000
-    t.integer  "estate_agent_id"
-    t.integer  "branch_id"
-    t.integer  "agent_id"
+    t.string   "url",          limit: 1000
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "postcode"
     t.string   "asking_price"
     t.string   "status"
-    t.string   "external_id"
+    t.string   "external_ref"
   end
 
-  add_index "properties", ["agent_id", "created_at"], name: "index_properties_on_agent_id_and_created_at"
-  add_index "properties", ["branch_id", "created_at"], name: "index_properties_on_branch_id_and_created_at"
-  add_index "properties", ["estate_agent_id", "created_at"], name: "index_properties_on_estate_agent_id_and_created_at"
+  add_index "properties", ["created_at"], name: "index_properties_on_agent_id_and_created_at"
+  add_index "properties", ["created_at"], name: "index_properties_on_branch_id_and_created_at"
+  add_index "properties", ["created_at"], name: "index_properties_on_estate_agent_id_and_created_at"
 
   create_table "users", force: true do |t|
     t.string   "name"
