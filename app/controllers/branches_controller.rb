@@ -20,6 +20,14 @@ class BranchesController < ApplicationController
     end
   end
 
+  def update
+    @branch.name = params[:branch][:name]
+    @branch.comment = params[:branch][:comment]
+    if @branch.save
+      render 'show'
+    end
+  end
+  
   private
 
     def set_branch

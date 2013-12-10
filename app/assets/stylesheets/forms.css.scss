@@ -1,8 +1,19 @@
+$bg1:lightgray;
+$bg2: lightblue;
+$lightline: lightblue;
+$darkline: midnightblue;
+$highlight-colour: gray;
+$highlight-bg: #9CC2CF;
+$dropdown-bg: white;
+$colour: midnightblue;
+$well-colour: mintcream;
+$dark-well-colour: snow;
+
 input {
   font-size: 12px;
+  width: 25%;
   border: none;
   cursor: pointer;
-  width: 25%;
 }
 
 textarea {
@@ -10,4 +21,17 @@ textarea {
   border: none; 
   width: 50%;
   cursor: pointer;
+}
+
+.settings-form {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 70%;
+
+  input {
+    width: 150px;
+    border: 1px solid $darkline;
+  }
 }

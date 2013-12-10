@@ -1,6 +1,7 @@
 Otto::Application.routes.draw do
   resources :users do
     resources :estate_agents
+    resources :statuses
   end
   resources :estate_agents do
     resources :branches
@@ -19,6 +20,7 @@ Otto::Application.routes.draw do
     resources :branches
     resources :agents
   end
+  resources :statuses
   resources :sessions, only: [:new, :create, :destroy]
 
   get "static_pages/home"
@@ -30,7 +32,8 @@ Otto::Application.routes.draw do
   match '/quietsession',    to: 'sessions#quietly',       via: 'post'
   match '/signout',         to: 'sessions#destroy',       via: 'delete'
   match '/validate',        to: 'sessions#validate',      via: 'get'
-  match '/external/property',to: 'properties#external',    via: 'get'
+  match '/external/property',to: 'properties#external',   via: 'get'
+  match '/notes',           to: 'properties#create_note', via: 'post'
   
   # The priority is based upon order of creation:
   # first created -> highest priority.

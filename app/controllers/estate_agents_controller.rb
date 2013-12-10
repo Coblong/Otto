@@ -20,7 +20,6 @@ class EstateAgentsController < ApplicationController
   end
 
   def new
-    puts 'creating a new estate agent'
     @estate_agent = current_user.estate_agents.build
   end
 

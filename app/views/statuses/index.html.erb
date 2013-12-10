@@ -1,0 +1,15 @@
+<% provide(:title, 'All status') %>
+<div class="central">  
+  <div class="heading">Statuses</div>
+  <div>        
+    <ul>
+      <% @statuses.each do |st| %>
+        <li>
+          <div><%= link_to st.description, st %></div>
+          <div style="background:#<%= st.colour %>"><%= st.colour %></div>          
+        </li>
+      <% end %>
+    </ul>
+    <%= link_to "Add new status", new_user_status_path %><p>
+  </div>
+</div>

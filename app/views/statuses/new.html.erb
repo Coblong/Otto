@@ -1,0 +1,28 @@
+<% provide(:title, 'New Status') %>
+<%= form_for(@status) do |f| %>
+  <div class="central">  
+    <div class="heading">New Status</div>  
+    <div>                  
+        <table class="settings-form">
+          <tr>
+            <td><%= render 'shared/error_messages', obj: @status %></td>
+          </tr>
+          <tr>
+            <td><%= f.label :description %></td>
+            <td><%= f.text_field :description %></td>
+          </tr>
+          <tr>
+            <td><%= f.label :colour %></td>
+            <td><%= f.text_field :colour, class: 'color' %></td>           
+          </tr>
+          <tr><td>&nbsp;</td></tr>
+          <tr>
+            <td></td>
+            <td><%= f.submit "Create status" %></td>
+          </tr>
+        </table>
+    </div>
+  </div>
+<% end %>
+
+

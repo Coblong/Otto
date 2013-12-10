@@ -4,18 +4,20 @@
 </div>
 <div id="main"> 
   <div id="main-top">   
-    <div id="main-top-details">
-      <%= link_to @branch.estate_agent.name, @branch.estate_agent %> / <%= @branch.name %><p>
-      <%= @branch.comment %><p>        
+    <div id="main-top-details">      
+      <%= form_for(@branch) do |f| %>
+        <%= link_to @branch.estate_agent.name, @branch.estate_agent %> / <%= f.text_field :name %><p>
+        <%= f.text_area :comment, placeholder: 'no comments', onfocuslost: "alert('hi')" %><br>        
+      <% end %>
       <% if @branch.agents.any? %>      
         <table>
           <tr>
             <th>Agent</th>            
             <th>Properties</th>
           </tr>          
-        <% branch.agents.each do |agent| %>
+        <% @branch.agents.each do |agent| %>
           <tr class="light">
-            <td><%= link_to 'Agent', '# => ' %></td>                
+            <td><%= link_to agent.name, agent %></td>                
             <td><%= agent.properties.count %></td>
           </tr>
         <% end %>  
@@ -30,10 +32,10 @@
             <th>Status</th>            
           </tr>          
         <% @branch.properties.each do |property| %>
-            <tr class="dark">
+            <tr>
               <td><%= link_to property.address, property %></td>
               <td><%= property.asking_price %></td>
-              <td><%= property.status %></td>
+              <td><%= property.status.description %></td>
             </tr>
         <% end %>  
         </table>

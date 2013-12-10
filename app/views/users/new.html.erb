@@ -3,8 +3,8 @@
   <div class="welcome-inner">
     <%= form_for(@user) do |f| %>
       <h2>Sign un for Ottor<h2>        
-      <%= render 'shared/error_messages' %>
-      <table>
+      <%= render 'shared/error_messages', obj: @user %>
+      <table class="settings-form">
         <tr>
           <td><%= f.label :name %></td>
           <td><%= f.text_field :name %></td>

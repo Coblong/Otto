@@ -3,7 +3,7 @@
   <div class="welcome-inner">
     <%= form_for(:session, url: sessions_path) do |f| %>    
       <h2>You gotta sign in to Ottor<h2>        
-      <table>
+      <table class="settings-form">
         <tr>
           <td><%= f.label :email %></td>
           <td><%= f.text_field :email %></td>

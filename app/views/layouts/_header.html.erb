@@ -26,8 +26,8 @@
     <% end %>
         <ul>
           <li><%= link_to "All Branches", root_path(estate_agent_id: @estate_agent.id) %></li>          
-    <% @branches.each do |branch| %>
           <li class="separator"></li>
+    <% @branches.each do |branch| %>          
           <li><%= link_to branch.name, root_path(estate_agent_id: branch.estate_agent.id, branch_id: branch.id) %></li>
     <% end %>          
           <li class="separator"</li>
@@ -73,7 +73,7 @@
       <% if signed_in? %>
         <li><%= link_to current_user.name, current_user %>&nbsp;&nbsp;<b class="caret"></b>&nbsp;
           <ul>
-            <li><%= link_to "Settings", edit_user_path(current_user) %></li>
+            <li><%= link_to "Settings", user_statuses_path(current_user) %></li>
             <li>
               <%= link_to "Sign out", signout_path, method: "delete" %>
             </li>

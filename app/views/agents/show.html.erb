@@ -5,44 +5,22 @@
 <div id="main"> 
   <div id="main-top">   
     <div id="main-top-details">
-      <%= @estate_agent.name %><p>
-      <%= @estate_agent.comment %><p>        
-      <% if @estate_agent.branches.any? %>      
-        <table>
-          <tr>
-            <th>Branch</th>
-            <th>Agent</th>            
-            <th>Properties</th>
-          </tr>          
-        <% @estate_agent.branches.each do |branch| %>
-            <tr class="dark">
-              <td><%= link_to branch.name, branch %></td>
-              <td><%= branch.agents.count %></td>
-              <td><%= branch.properties.count %></td>
-            </tr>
-          <% branch.agents.each do |agent| %>
-              <tr class="light">
-                <td></td>
-                <td><%= link_to 'Agent', '# => ' %></td>                
-                <td><%= agent.properties.count %></td>
-              </tr>
-          <% end %>  
-        <% end %>  
-        </table>
-        <p>
+      <%= form_for(@agent) do |f| %>
+        <%= link_to @agent.estate_agent.name, @agent.estate_agent %> / <%= link_to @agent.branch.name, @agent.branch %> / <%= f.text_field :name %><p>
+        <%= f.text_area :comment, placeholder: 'no comments', onfocuslost: "alert('hi')" %><br>        
       <% end %>
-      <% if @estate_agent.properties.any? %>      
+      <% if @agent.properties.any? %>      
         <table>
           <tr>
             <th>Properties</th>
             <th>Asking Price</th>
             <th>Status</th>            
           </tr>          
-        <% @estate_agent.properties.each do |property| %>
-            <tr class="dark">
+        <% @agent.properties.each do |property| %>
+            <tr>
               <td><%= link_to property.address, property %></td>
               <td><%= property.asking_price %></td>
-              <td><%= property.status %></td>
+              <td><%= property.status.description %></td>
             </tr>
         <% end %>  
         </table>

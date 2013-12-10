@@ -7,7 +7,7 @@ $highlight-bg: #9CC2CF;
 $dropdown-bg: white;
 $colour: midnightblue;
 $well-colour: mintcream;
-$dark-well-colour: snow;
+$dark-well-colour: lightblue;
 
 @mixin box_sizing {
   -moz-box-sizing: border-box;
@@ -24,6 +24,7 @@ html,body {
 .dark {
   background: $dark-well-colour;  
 }
+
 .light {
   background: $well-colour; 
 }
@@ -31,6 +32,21 @@ html,body {
 .right {
   text-align: right;    
   float:right; 
+}
+
+.heading {
+  text-align: center;
+  background: $bg2;
+}
+
+.alert-error {
+  color: red;
+  text-align: center;
+}
+
+.alert-success {
+  color: green;
+  text-align: center;
 }
 
 #navbar {
@@ -150,11 +166,9 @@ html,body {
     }
     li {
       padding: 10px;
-      border-bottom: solid 1px $highlight-bg;
-      background: -webkit-gradient(linear, right top, left top, from($dark-well-colour), to($well-colour));      
+      border-bottom: solid 1px $highlight-bg;      
       &:hover {
-        background: -webkit-gradient(linear, left top, right top, from($dark-well-colour), to($well-colour));        
-        colour: red;
+        background: -webkit-gradient(linear, right top, left top, from($well-colour), to($dark-well-colour));      
       }
     }    
   }
@@ -171,7 +185,7 @@ html,body {
   margin:2px;
   padding:0px;
   width:100%;
-  height: 31px;      
+  height: 32px;      
 }
 
 #main-bottom {  
@@ -190,43 +204,6 @@ html,body {
   }
 }
 
-#rightpanel {
-  display: table-cell;      
-  height: 100%;  
-  width: 30%;    
-  border-left: solid 1px $lightline;
-  border-right: solid 1px $lightline;
-  table {
-    width: 100%;
-    text-align: left;      
-    background-color: $well-colour;
-    border-bottom: solid 1px $lightline;
-    padding:5px;        
-  }
-  ul {
-    list-style: none;
-    padding: 0px;
-    margin: 0px;
-    a {
-      text-decoration: none;
-      background: none;
-      &:hover {
-        background: none;
-        color: black;
-      }
-    }
-    li {
-      padding: 10px;
-      border-bottom: solid 1px $highlight-bg;
-      background: -webkit-gradient(linear, right top, left top, from($dark-well-colour), to($well-colour));      
-      &:hover {
-        background: -webkit-gradient(linear, left top, right top, from($dark-well-colour), to($well-colour));        
-        colour: red;
-      }
-    }    
-  }
-}
-
 #main-top-details {
   padding:5px;
   border-radius: 1px;
@@ -239,6 +216,7 @@ html,body {
     th {
       font-weight: normal;
       border-bottom:1px solid $bg2;      
+      background: $highlight-bg;    
     }
     td {
       width: 30%;
@@ -250,7 +228,7 @@ html,body {
 }
 
 .welcome-inner {
-  border: solid 1px black;
+  border: solid 1px $darkline;
   position: fixed;
   left: 50%;
   top:100px;
@@ -308,4 +286,46 @@ footer {
   margin-top: 45px;
   margin-left: -300px;
   @include box_sizing;
+}
+
+.central {
+  width: 100%;
+  display:inline;
+  text-align: center;
+  div {    
+    margin: 20px auto;
+    width:600px;    
+    border: 1px solid $lightline;
+    .heading {
+      margin-top: 0px;
+      padding:2px;
+      background: $bg2;
+      text-align:center;
+    }
+    ul {
+      list-style: none;
+      text-decoration:none;
+      padding:5px;
+      margin-left: auto;
+      margin-right: auto;
+      width: 50%;
+      
+      a {
+        text-decoration:none;
+      }
+      li {  
+        display: table;      
+        padding:5px;
+        div {
+          display: table-cell;      
+          border: none;
+          width:150px;
+          &:first-child {
+            text-align: left;
+          }
+          text-align: center;
+        }
+      }
+    }
+  }
 }
