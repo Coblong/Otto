@@ -28,10 +28,14 @@ class EstateAgentsController < ApplicationController
   end
 
   def update
+    puts 'Updating estate agent'
     @estate_agent.name = params[:estate_agent][:name]
     @estate_agent.comment = params[:estate_agent][:comment]
-    if @estate_agent.save
+    if @estate_agent.save!
+      puts 'Estate agent saved'
       render 'show'
+    else
+      puts 'Estate agent not saved... this is why its fucking up'
     end
   end
 

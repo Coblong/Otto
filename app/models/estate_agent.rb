@@ -6,5 +6,5 @@ class EstateAgent < ActiveRecord::Base
   has_many :notes, dependent: :destroy
   validates :user_id, presence: true
   validates :name, presence: true, length: { maximum: 100 }
-  validates :comment, length: { maximum: 200 }
+  validates :comment, length: { maximum: 500 }
 end

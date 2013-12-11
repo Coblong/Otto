@@ -7,7 +7,7 @@
     <div id="main-top-details">
       <%= form_for(@estate_agent) do |f| %>
         <%= f.text_field :name %><p>
-        <%= f.text_area :comment, placeholder: 'no comments', onfocuslost: "alert('hi')" %><br>        
+        <%= f.text_area :comment, placeholder: 'no comments' %><br>        
       <% end %>
       <% if @estate_agent.branches.any? %>      
         <table>
@@ -44,7 +44,7 @@
             <tr class="light">
               <td><%= link_to property.address, property %></td>
               <td><%= property.asking_price %></td>
-              <td><%= property.status.description %></td>
+              <td><%= link_to property.status.description, property.status %></td>
             </tr>
         <% end %>  
         </table>
@@ -55,12 +55,11 @@
   </div>
 </div>
 <script type="text/javascript">
+$("textarea").height($("textarea")[0].scrollHeight);
 $("input").blur(function(){
-  alert('hi');
-  $("form.form_class").submit();
+  $("form").first().submit();
 });
 $("textarea").blur(function(){
-  alert('hi');
-  $("form.form_class").submit();
+  $("form").first().submit();
 });
 </script>

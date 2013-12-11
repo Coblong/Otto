@@ -5,8 +5,11 @@
     <ul>
       <% @statuses.each do |st| %>
         <li>
-          <div><%= link_to st.description, st %></div>
-          <div style="background:#<%= st.colour %>"><%= st.colour %></div>          
+          <div><%= link_to st.description, edit_user_status_path(id: st.id) %></div>
+          <div style="background:#<%= st.colour %>"><%= st.colour %></div>                    
+          <div><%= link_to "delete", st, method: :delete,
+                                     data: { confirm: "Are you sure you want to delete " + st.description + "?" },
+                                     title: st.description %></div>
         </li>
       <% end %>
     </ul>

@@ -12,7 +12,44 @@
 <% elsif defined? @estate_agent %>
       <%= render @estate_agent %>
 <% else %>
-      &nbsp;
+      <% if @estate_agents.any? %>            
+        <table>
+          <tr>
+            <th>Estate Agent</th>
+            <th>Branches</th>
+            <th>Agents</th>            
+            <th>Properties</th>
+          </tr>          
+        <% @estate_agents.each do |estate_agent| %>
+            <tr class='light'>
+              <td><%= link_to estate_agent.name, estate_agent %></td>
+              <td><%= estate_agent.branches.count %></td>
+              <td><%= estate_agent.agents.count %></td>
+              <td><%= estate_agent.properties.count %></td>
+            </tr>
+        <% end %>  
+      <% end %>  
+        </table>
+        <p>
+      <% if @properties.any? %>      
+        <table>
+          <tr>
+            <th>Property</th>
+            <th>Estate Agent</th>
+            <th>Asking Price</th>
+            <th>Status</th>            
+          </tr>          
+        <% @properties.each do |property| %>
+            <tr class="light">
+              <td><%= link_to property.address, property %></td>
+              <td><%= link_to property.estate_agent.name, property.estate_agent %>  / <%= link_to property.branch.name, property.branch %></td>
+              <td><%= property.asking_price %></td>
+              <td><%= link_to property.status.description, property.status %></td>
+            </tr>
+        <% end %>  
+        </table>
+      <% end %>
+      </ul>
 <% end %>
       </div>
     </div>

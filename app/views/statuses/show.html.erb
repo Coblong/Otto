@@ -1,28 +1,31 @@
-<% provide(:title, 'Update Status') %>
-<%= form_for(@status) do |f| %>
-  <div class="central">  
-    <div class="heading">Update Status</div>  
-    <div>                  
-        <table class="settings-form">
+<% provide(:title, @status.description) %>
+<div id="left-nav" class="tall">  
+  <%= render 'shared/properties' %>
+</div>
+<div id="main"> 
+  <div id="main-top">   
+    <div id="main-top-details">
+      <%= @status.description %> Properties<p>
+      <% if @properties.any? %>      
+        <table>
           <tr>
-            <td><%= render 'shared/error_messages', obj: @status %></td>
-          </tr>
-          <tr>
-            <td><%= f.label :description %></td>
-            <td><%= f.text_field :description %></td>
-          </tr>
-          <tr>
-            <td><%= f.label :colour %></td>
-            <td><%= f.text_field :colour, class: 'color' %></td>           
-          </tr>
-          <tr><td>&nbsp;</td></tr>
-          <tr>
-            <td></td>
-            <td><%= f.submit "Update status" %></td>
-          </tr>
+            <th>Properties</th>
+            <th>Estate Agent</th>
+            <th>Asking Price</th>
+            <th>Last Updated</th>            
+          </tr>          
+        <% @properties.each do |property| %>
+            <tr>
+              <td><%= link_to property.address, property %></td>
+              <td><%= link_to property.estate_agent.name, property.estate_agent %>  / <%= link_to property.branch.name, property.branch %></td>
+              <td><%= property.asking_price %></td>
+              <td><%= property.updated_at.to_formatted_s(:short) %></td>
+            </tr>
+        <% end %>  
         </table>
+      <% end %>
+      </ul>
     </div>
   </div>
-<% end %>
-
-
+  </div>
+</div>

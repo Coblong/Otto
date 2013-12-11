@@ -1,5 +1,5 @@
 class Property < ActiveRecord::Base
-  belongs_to :status  
+  belongs_to :status, class_name: "Status", foreign_key: "status_id"
   has_and_belongs_to_many :agents
   belongs_to :branch
   belongs_to :estate_agent

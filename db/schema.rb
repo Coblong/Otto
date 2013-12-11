@@ -11,11 +11,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131204213030) do
+ActiveRecord::Schema.define(version: 20131211223110) do
 
   create_table "agents", force: true do |t|
     t.string   "name"
-    t.string   "comment"
+    t.text     "comment",         limit: 500
     t.integer  "branch_id"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -32,7 +32,7 @@ ActiveRecord::Schema.define(version: 20131204213030) do
 
   create_table "branches", force: true do |t|
     t.string   "name"
-    t.string   "comment"
+    t.text     "comment",         limit: 500
     t.integer  "estate_agent_id"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -43,7 +43,7 @@ ActiveRecord::Schema.define(version: 20131204213030) do
 
   create_table "estate_agents", force: true do |t|
     t.string   "name"
-    t.string   "comment"
+    t.text     "comment",      limit: 500
     t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"

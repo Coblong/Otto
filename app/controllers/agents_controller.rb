@@ -18,6 +18,14 @@ class AgentsController < ApplicationController
     @agent = Agent.find(params[:id])
   end
 
+  def update
+    @agent.name = params[:agent][:name]
+    @agent.comment = params[:agent][:comment]
+    if @agent.save!
+      render 'show'
+    end
+  end
+
   def create
     @branch = Branch.find(params[:agent][:branch_id])
     @agent = @branch.agents.build(agent_params)

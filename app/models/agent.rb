@@ -6,6 +6,6 @@ class Agent < ActiveRecord::Base
   validates :branch_id, presence: true
   validates :estate_agent_id, presence: true
   validates :name, presence: true, length: { maximum: 100 }
-  validates :comment, length: { maximum: 200 }
+  validates :comment, length: { maximum: 500 }
   default_scope -> { order('created_at DESC') }
 end
