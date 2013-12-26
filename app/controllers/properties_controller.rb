@@ -1,8 +1,10 @@
 class PropertiesController < ApplicationController
-  before_action :set_property, only: [:show, :edit]  
+  before_action :set_property_in_controller, only: [:show, :edit]  
   skip_before_filter  :verify_authenticity_token
 
   def show
+    puts 'the current property is ' + current_property.address
+    puts 'the current branch is ' + current_branch.name
   end
 
   def create
@@ -14,27 +16,35 @@ class PropertiesController < ApplicationController
       puts 'This is a new property so create it'
       estate_agent_ref = params[:estate_agent].partition(',').first
       @estate_agent = find_or_create_estate_agent(estate_agent_ref)    
-      branch_ref = params[:branch].partition(',').first
-      @branch = find_or_create_branch(@estate_agent, branch_ref);
-
+      @branch = find_or_create_branch(@estate_agent, params[:branch]);
+      
+      area_code = params[:post_code].partition('_').first
+      post_code = params[:post_code].gsub('_', ' ')
+      @area_code = find_or_create_area_code(area_code)
+      
       @property = @estate_agent.properties.build
       @property.branch = @branch
       @property.external_ref = params[:url]
       @property.address = params[:address].partition(',').first
+      puts 'about to set the area code to ' + @area_code.description
+      @property.area_code = @area_code
+      puts 'about to set the post code to ' + post_code
+      @property.post_code = post_code
       @property.url = params[:hostname]
       @property.asking_price = params[:asking_price]
       @property.status = Status.find(params[:status_id])    
-
+      @property.call_date = Date.today
+      
       note = @property.notes.build
       note.content = 'Created'
-      note.note_type = 'auto'      
+      note.note_type = Note.TYPE_AUTO      
       puts 'Property notes ' + @property.notes.to_s
     else
       new_status = Status.find(params[:status_id])    
       if new_status.id != @property.status.id
         note = @property.notes.build
         note.content = 'Status changed from ' + @property.status.description + ' to ' + new_status.description
-        note.note_type = 'status'                
+        note.note_type = Note.TYPE_STATUS
         @property.status = new_status      
       end
     end
@@ -105,7 +115,7 @@ class PropertiesController < ApplicationController
         note.agent_id = agent.id
         note.branch_id = branch.id
         note.estate_agent_id = branch.estate_agent_id
-        note.note_type = 'manual'
+        note.note_type = Note.TYPE_MANUAL
 
         note.save()
         
@@ -116,8 +126,24 @@ class PropertiesController < ApplicationController
     end
   end
 
+  def update_call_date
+    puts 'Here we are'
+    puts params.to_yaml
+    @property = Property.find(params[:property_id])    
+    puts 'property is ' + @property.to_yaml
+    new_date = params[:new_call_date]
+    puts 'new call date is ' + new_date.to_s
+    @property.call_date = Date.parse( new_date.gsub(/, */, '-') )
+    puts 'the new date is ' + @property.call_date_formatted
+    if @property.save()    
+      render :json => {call_date: @property.call_date_formatted}, :status => :created
+    else
+      render :nothing => true, :status => :internal_server_error
+    end
+  end
+
   def update
-    @property = Property.find(params[:id])
+    @property = Property.find(params[:id])    
     @property.update_attributes!(property_params)
     redirect_to @property
   end
@@ -136,6 +162,14 @@ class PropertiesController < ApplicationController
     end
 
     def find_or_create_branch(estate_agent, branch_ref)
+
+      branch_elements = params[:branch].split(',')
+      if branch_elements.size > 1
+        branch_ref = branch_elements.second.gsub(/\s+/, "")
+      else
+        branch_ref = branch_elements.first.gsub(/\s+/, "")
+      end
+
       estate_agent.branches.each do |branch|
         if branch_ref == branch.external_ref
           puts 'Found branch ' + branch.name
@@ -147,18 +181,24 @@ class PropertiesController < ApplicationController
       return branch
     end
 
-    def set_property
-      @property = Property.find(params[:id])      
-      @estate_agent = @property.estate_agent
-      @branch = @property.branch
-      @estate_agents = current_user.estate_agents
-      @branches = @estate_agent.branches
-      @agents = @estate_agent.agents
-      @properties = Property.all
+    def find_or_create_area_code(area_code_desc)      
+      area_code = AreaCode.find_by(user_id: current_user.id, description: area_code_desc);
+      if area_code.nil?
+        puts 'Creating new area code'
+        area_code = current_user.area_codes.create(description: area_code_desc)      
+      else
+        puts 'Found area code ' + area_code.to_yaml
+      end
+
+      return area_code
+    end
+
+    def set_property_in_controller
+      set_property(Property.find(params[:id]))
     end
 
     def property_params
-      params.require(:property).permit(:address, :postcode, :asking_price, :url, :status, :estate_agent, :branch_id, :agent_id)
+      params.require(:property).permit(:address, :post_code, :asking_price, :url, :status, :estate_agent, :branch_id, :agent_id, :call_date)
     end
 
     def build_response

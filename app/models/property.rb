@@ -3,17 +3,32 @@ class Property < ActiveRecord::Base
   has_and_belongs_to_many :agents
   belongs_to :branch
   belongs_to :estate_agent
+  belongs_to :area_code
   has_many :notes, dependent: :destroy
   validates :address, presence: true, length: { maximum: 100 }
   validates :url, length: { maximum: 200 }
-  default_scope -> { order('created_at DESC') }  
+  default_scope -> { order('call_date') }  
 
   def full_url
-    puts 'the full url for this property is http://' + url + external_ref
     'http://' + url + external_ref
   end
 
   def statuses
     Status.all
+  end
+
+  def call_date_formatted
+    if self.call_date == Date.today
+      'Today'
+    elsif self.call_date == Date.tomorrow
+      'Tomorrow'
+    else
+      self.call_date.strftime('%A, %d %b') unless self.call_date.nil?
+    end
+  end
+
+  def last_notes
+    #self.notes.where(note_type: 'manual')
+    self.notes
   end
 end

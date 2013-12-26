@@ -2,56 +2,66 @@
   <div id="left-nav" class="tall">  
     <%= render 'shared/properties' %>
   </div>
-  <div id="main"> 
-    <div id="main-top">   
-      <div id="main-top-details">        
-<% if defined? @agent %>
-      <%= render @agent %>
-<% elsif defined? @branch %>
-      <%= render @branch %>
-<% elsif defined? @estate_agent %>
-      <%= render @estate_agent %>
-<% else %>
-      <% if @estate_agents.any? %>            
-        <table>
-          <tr>
-            <th>Estate Agent</th>
-            <th>Branches</th>
-            <th>Agents</th>            
-            <th>Properties</th>
-          </tr>          
-        <% @estate_agents.each do |estate_agent| %>
-            <tr class='light'>
-              <td><%= link_to estate_agent.name, estate_agent %></td>
-              <td><%= estate_agent.branches.count %></td>
-              <td><%= estate_agent.agents.count %></td>
-              <td><%= estate_agent.properties.count %></td>
-            </tr>
-        <% end %>  
-      <% end %>  
-        </table>
-        <p>
-      <% if @properties.any? %>      
-        <table>
-          <tr>
-            <th>Property</th>
-            <th>Estate Agent</th>
-            <th>Asking Price</th>
-            <th>Status</th>            
-          </tr>          
-        <% @properties.each do |property| %>
-            <tr class="light">
-              <td><%= link_to property.address, property %></td>
-              <td><%= link_to property.estate_agent.name, property.estate_agent %>  / <%= link_to property.branch.name, property.branch %></td>
-              <td><%= property.asking_price %></td>
-              <td><%= link_to property.status.description, property.status %></td>
-            </tr>
-        <% end %>  
-        </table>
-      <% end %>
-      </ul>
-<% end %>
+  <div id="main">     
+
+  <% if !todays_properties.any? %>
+    <div id="main-top">           
+      <div class="diary-header">       
+        You don't have any calls today
       </div>
+    </div>
+  
+  <% else %>
+    <div id="main-top">           
+      <div class="diary-header">       
+        You have <%= todays_properties.size %> calls today
+      </div>
+      <div id="diary-panel">       
+    <% todays_properties.each do |property| %>
+        <%= render "/shared/diary_entry", property: property %>   
+    <% end %>        
+      </div>
+    </div>
+  <% end %>        
+      
+  <% if tomorrows_properties.any? %>
+    <div id="main-top">         
+      <div class="diary-header">       
+        You have <%= tomorrows_properties.size %> calls tomorrow
+      </div>
+      <div id="diary-panel">       
+    <% tomorrows_properties.each do |property| %>
+        <%= render "/shared/diary_entry", property: property %>   
+    <% end %>        
+      </div>
+    </div>
+  <% end %>        
+
+  <% if rest_of_the_weeks_properties.any? %>
+    <div id="main-top">         
+      <div class="diary-header">       
+        Then you have <%= rest_of_the_weeks_properties.size %> more calls this week
+      </div>
+      <div id="diary-panel">       
+    <% rest_of_the_weeks_properties.each do |property| %>
+        <%= render "/shared/diary_entry", property: property %>   
+    <% end %>        
+      </div>
+    </div>
+  <% end %>        
+
+    <div id="main-bottom">   
+  <% if current_properties.any? %>     
+        <%= render "/shared/statuses_table" %>   
+  <% end %>  
+    <p>
+  <% if current_user.estate_agents.any? %>     
+        <%= render "/shared/estate_agents_table" %>   
+  <% end %>  
+    <p>
+  <% if current_properties.any? %>      
+        <%= render "/shared/properties_table" %>
+  <% end %>
     </div>
   </div>
 <% else %>

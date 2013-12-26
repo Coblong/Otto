@@ -34,6 +34,7 @@ Otto::Application.routes.draw do
   match '/validate',        to: 'sessions#validate',      via: 'get'
   match '/external/property',to: 'properties#external',   via: 'get'
   match '/notes',           to: 'properties#create_note', via: 'post'
+  match '/update_call_date',to: 'properties#update_call_date', via: 'post'
   
   # The priority is based upon order of creation:
   # first created -> highest priority.

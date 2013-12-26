@@ -6,25 +6,27 @@
   <div id="main-top">   
     <div id="main-top-details">
       <%= @status.description %> Properties<p>
-      <% if @properties.any? %>      
-        <table>
+    </div>
+  </div>
+  <div id="main-bottom">
+    <% if @properties.any? %>      
+      <table class="stats-table">
+        <tr>
+          <th>Properties</th>
+          <th>Estate Agent</th>
+          <th>Asking Price</th>
+          <th>Last Updated</th>            
+        </tr>          
+      <% @properties.each do |property| %>
           <tr>
-            <th>Properties</th>
-            <th>Estate Agent</th>
-            <th>Asking Price</th>
-            <th>Last Updated</th>            
-          </tr>          
-        <% @properties.each do |property| %>
-            <tr>
-              <td><%= link_to property.address, property %></td>
-              <td><%= link_to property.estate_agent.name, property.estate_agent %>  / <%= link_to property.branch.name, property.branch %></td>
-              <td><%= property.asking_price %></td>
-              <td><%= property.updated_at.to_formatted_s(:short) %></td>
-            </tr>
-        <% end %>  
-        </table>
-      <% end %>
-      </ul>
+            <td><%= link_to property.address, property %></td>
+            <td><%= link_to property.estate_agent.name, property.estate_agent %>  / <%= link_to property.branch.name, property.branch %></td>
+            <td><%= property.asking_price %></td>
+            <td><%= property.updated_at.to_formatted_s(:short) %></td>
+          </tr>
+      <% end %>  
+      </table>
+    <% end %>
     </div>
   </div>
   </div>

@@ -1,12 +1,12 @@
 class StaticPagesController < ApplicationController
   before_action :set_lists, only: [:home, :hunt]
 
-  def home     
-    if defined? @agent
+  def home 
+    if !current_agent.nil?
       render "agents/show"
-    elsif defined? @branch 
+    elsif !current_branch.nil?
       render "branches/show"
-    elsif defined? @estate_agent 
+    elsif !current_estate_agent.nil?
       render "estate_agents/show"
     end
   end
@@ -15,27 +15,37 @@ class StaticPagesController < ApplicationController
 
     def set_lists
       if signed_in?
-        @estate_agents = current_user.estate_agents        
-        @properties = Property.all
+        if !params[:area_code].nil? and !params[:area_code].empty?
+          if params[:area_code].to_i > 0
+            set_area_code(AreaCode.find(params[:area_code]))
+          else
+            set_area_code(nil)
+          end
+        end
 
-        if !params[:estate_agent_id].nil? and !params[:estate_agent_id].empty?
-          @estate_agent = EstateAgent.find(params[:estate_agent_id])
-          @branches = @estate_agent.branches
-          @agents = @estate_agent.agents        
-          @properties = @estate_agent.properties
+        if !params[:estate_agent].nil? and !params[:estate_agent].empty?
+          if params[:estate_agent].to_i > 0
+            set_estate_agent(EstateAgent.find(params[:estate_agent]))
+          else
+            set_estate_agent(nil)
+          end
         end
-        if !params[:branch_id].nil? and !params[:branch_id].empty?
-          @branch = Branch.find(params[:branch_id])          
-          @agents = @branch.agents
-          @properties = @branch.properties
+
+        if !params[:branch].nil? and !params[:branch].empty?
+          if params[:branch].to_i > 0
+            set_branch(Branch.find(params[:branch]))
+          else
+            set_branch(nil)
+          end
         end
-        if !params[:agent_id].nil? and !params[:agent_id].empty?
-          @agent = Agent.find(params[:agent_id])
-          @branch = @agent.branch
-          @agents = @branch.agents
-          @properties = @agent.properties
-        end        
+
+        if !params[:agent].nil? and !params[:agent].empty?
+          if params[:agent].to_i > 0
+            set_agent(Agent.find(params[:agent]))
+          else
+            set_agent(nil)
+          end
+        end
       end
-    end
-
+  end
 end

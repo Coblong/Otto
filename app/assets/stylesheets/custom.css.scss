@@ -4,7 +4,7 @@ $lightline: lightblue;
 $darkline: midnightblue;
 $highlight-colour: gray;
 $highlight-bg: #9CC2CF;
-$dropdown-bg: white;
+$main-bg: white;
 $colour: midnightblue;
 $well-colour: mintcream;
 $dark-well-colour: lightblue;
@@ -19,6 +19,15 @@ html,body {
   height: 100%; 
   margin: 0px; 
   padding: 0px; 
+}
+
+a {
+  text-decoration:none;
+  &:hover {
+    text-decoration:underline;
+    color: $colour;
+    background: $well-colour; 
+  }
 }
 
 .dark {
@@ -121,15 +130,15 @@ html,body {
           font-weight: normal;
           padding: 5px;
           margin-right:1px;
-          background: $dropdown-bg;
+          background: $main-bg;
           color: $colour;
           display: block; 
           &:hover {           
-            background: $dropdown-bg;          
+            background: $main-bg;          
           }
           a {
             &:hover {
-              background: $dropdown-bg;
+              background: $main-bg;
               colour: $highlight-bg;
             }
           }
@@ -137,6 +146,12 @@ html,body {
       }      
     }
   }
+}
+
+.rounded {
+  border: 1px solid $darkline;
+  border-radius: 5px;
+  -moz-border-radius: 5px;       
 }
 
 .container {
@@ -147,12 +162,17 @@ html,body {
   margin:0px;  
 }
 
+.left-nav-table {
+  width: 100%;
+  outline: 1px solid $well-colour;  
+}
+
 #left-nav {
   display: table-cell;
   height: 100%;  
   width:15%;
-  border-right: solid 1px $darkline;
-  ul {
+  border-right: solid 1px $darkline;  
+  ul {  
     list-style: none;
     padding: 0px;
     margin: 0px;
@@ -165,13 +185,30 @@ html,body {
       }
     }
     li {
-      padding: 10px;
+      padding: 2px;
       border-bottom: solid 1px $highlight-bg;      
       &:hover {
         background: -webkit-gradient(linear, right top, left top, from($well-colour), to($dark-well-colour));      
+        cursor: pointer;        
       }
     }    
   }
+}
+
+.tall {
+  vertical-align: top;  
+}
+
+.status-icon {
+  position: relative;
+  float: right;
+  top: 0px;
+  border: solid 1px $highlight-bg;      
+  padding: 2px;
+  width: 5px;
+  height: 5px; 
+  border-radius: 5px;
+  -moz-border-radius: 5px;       
 }
 
 #main  {
@@ -179,19 +216,24 @@ html,body {
   margin:0px;
   padding:0px;
   height: 100%;
+  background: $bg1;
 }
 
 #main-top {  
-  margin:2px;
+  margin: 5px auto;
   padding:0px;
-  width:100%;
-  height: 32px;      
+  width:98%;      
+  border: solid 1px $lightline;
+  background: $main-bg;
 }
 
 #main-bottom {  
+  margin: 5px auto;
+  padding:0px;
   height: 100%;  
-  width: 100%;
-  border-top: solid 1px $lightline;
+  width: 98%;
+  border: solid 1px $lightline;
+  background: $main-bg;
 }
 
 #main-bottom-iframe {
@@ -205,25 +247,81 @@ html,body {
 }
 
 #main-top-details {
+  margin: 10px auto;
+  width: 98%;
   padding:5px;
   border-radius: 1px;
   -moz-border-radius: 1px;
+  display: table;
+  div {
+    display: table-cell;
+    &:last-child {
+      text-align: right;
+    }
+  }  
+}
+
+.diary-header {
+  margin: 10px auto;
+  width: 98%;
+  padding: 5px;
+  background: $highlight-bg; 
+}
+
+#diary-panel {
+  margin: 10px auto;
+  width: 98%;
+  padding: 5px;
+  display: table;
+}
+
+.diary {
+  display: table-row;
+  width: 100%; 
+  padding: 5px;
+  border-radius: 2px;
   table {
-    text-align: left;      
-    border: 1px solid $bg2;
-    -webkit-border-radius: 5px;
-    width: 98%;
-    th {
-      font-weight: normal;
-      border-bottom:1px solid $bg2;      
-      background: $highlight-bg;    
+    border-bottom: 1px solid $lightline;      
+    padding: 5px;    
+    width: 100%;
+    height: 100%;
+  }
+  ul {
+    list-style: none;
+    margin: 0px;
+    padding: 0px;
+    li {
+      margin: 5px 1px;
+      padding: 5px;
+      border-radius: 2px;
+      border: 1px solid $lightline;
+      background: $bg1; 
     }
-    td {
-      width: 25%;
-      &:first-child {
-        width: 25%;
-      }      
+  }
+}
+
+.stats-table {
+  margin: 10px auto;
+  text-align: left;      
+  border: 1px solid $bg2;
+  -webkit-border-radius: 5px;
+  width: 98%;
+  th {
+    font-weight: normal;
+    border-bottom:1px solid $bg2;      
+    background: $highlight-bg;    
+  }
+  td {
+    width: 20%;
+    &:first-child {
+      width: 20%;
     }
+    a {
+      &:hover {
+        color: $colour;
+        background: inherit; 
+      }
+    }      
   }
 }
 
@@ -305,21 +403,17 @@ footer {
     ul {
       list-style: none;
       text-decoration:none;
-      padding:5px;
+      padding:0 5px 5px 5px;
       margin-left: auto;
       margin-right: auto;
-      width: 50%;
-      
-      a {
-        text-decoration:none;
-      }
+      width: 60%;
       li {  
         display: table;      
         padding:5px;
         div {
           display: table-cell;      
           border: none;
-          width:150px;
+          min-width:100px;
           &:first-child {
             text-align: left;
           }

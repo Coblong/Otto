@@ -4,14 +4,68 @@
 <div id="main"> 
   <div id="main-top">   
     <div id="main-top-details">
-      <%= form_for(@property) do |f| %>
-        <%= link_to @property.estate_agent.name, @property.estate_agent %> / <%= link_to @property.branch.name, @property.branch %> / <%= f.text_field :address %>
-      <% end %>      
-    </div>
+      <div class="property-header">
+        <%= form_for(current_property) do |f| %>
+          <input type="hidden" id="new_call_date" name="new_call_date"/>
+          <%= link_to current_property.estate_agent.name, current_property.estate_agent %> / <%= link_to current_property.branch.name, current_property.branch %> / <%= current_property.post_code %> / <%= f.text_field :address %>
+        <% end %>      
+      </div>
+      <div>
+        Next call on <input type="text" id="datepicker" value="<%= current_property.call_date_formatted %>">
+        <button class="btn" id="addoneweek">+ 1 Week</button>&nbsp;
+        <button class="btn" id="addtwoweeks">+ 2 Weeks</button>&nbsp;
+        <button class="btn" id="addonemonth">+ 1 Month</button>
+      </div>
+    </div>    
   </div>
   <div id="main-bottom">
     <div id="main-bottom-iframe">          
-      <iframe src="<%= @property.full_url %>"></iframe>          
+      <iframe src="<%= current_property.full_url %>"></iframe>          
     </div>
   </div>
 </div>
+<script type="text/javascript">
+$(function() {
+    $( "#datepicker" ).datepicker({
+      numberOfMonths: 2,
+      showButtonPanel: true,
+      dateFormat: "DD, d M",
+      onSelect: function(dateText) {
+        updateCallDate($("#datepicker").datepicker('getDate'))
+      }
+    });
+  });
+$('#addoneweek').click(function() {
+  var oldDate = $("#datepicker").datepicker('getDate');
+  var newDate = new Date()
+  newDate.setDate(oldDate.getDate() + 7);
+  updateCallDate(newDate)
+});
+$('#addtwoweeks').click(function() {
+  var oldDate = $("#datepicker").datepicker('getDate');
+  var newDate = new Date()
+  newDate.setDate(oldDate.getDate() + 14);
+  updateCallDate(newDate)
+});
+$('#addonemonth').click(function() {
+  var oldDate = $("#datepicker").datepicker('getDate');
+  var newDate = new Date()
+  newDate.setMonth(oldDate.getMonth() + 1);
+  updateCallDate(newDate)
+});
+function updateCallDate(newDate) {
+  $.ajax({
+      type: "POST",
+      url: "/update_call_date",
+      data: 'new_call_date=' + newDate + '&property_id=' + <%= current_property.id %>,
+      dataType: "json",
+      error: function(xhr, status, error) {
+        $( "#datepicker" ).datepicker("setDate", oldDate );  
+      },
+      success: function (xhr, data) {
+        $( "#datepicker" ).datepicker("setDate", xhr["call_date"] );  
+        $("#call_date_" + <%= current_property.id %>).html("<small>" + xhr["call_date"] + "</small>")
+      }
+  });
+}
+</script>

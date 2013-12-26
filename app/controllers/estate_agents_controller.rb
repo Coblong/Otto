@@ -2,7 +2,6 @@ class EstateAgentsController < ApplicationController
   before_action :set_estate_agent, only: [:new, :show, :edit, :update, :destroy]
 
   def index
-    puts 'Calling estate agents index'
     if !current_user
       render :nothing => true, :status => :service_unavailable
     else
@@ -15,8 +14,6 @@ class EstateAgentsController < ApplicationController
   end
 
   def show
-    @estate_agent = EstateAgent.find(params[:id])
-    @properties = @estate_agent.properties
   end
 
   def new
@@ -24,7 +21,6 @@ class EstateAgentsController < ApplicationController
   end
 
   def edit
-    @estate_agent = EstateAgent.find(params[:id])
   end
 
   def update
@@ -40,8 +36,7 @@ class EstateAgentsController < ApplicationController
   end
 
   def create
-    @estate_agent = current_user.estate_agents.build(estate_agent_params)
-
+    @estate_agent = current_user.estate_agents.build(estate_agent_params)    
     if @estate_agent.save
       flash[:success] = "Estate Agent created!"
       redirect_to root_path estate_agent_id: @estate_agent.id
@@ -53,18 +48,7 @@ class EstateAgentsController < ApplicationController
   private
 
     def set_estate_agent
-      if current_user
-        @estate_agents = current_user.estate_agents        
-        @properties = Property.all
-
-        if !params[:id].nil? and params[:id].to_i > 0
-          @estate_agent = EstateAgent.find(params[:id])      
-          @estate_agents = current_user.estate_agents
-          @branches = @estate_agent.branches
-          @agents = @estate_agent.agents
-          @properties = @estate_agent.properties
-        end
-      end
+      set_current_estate_agent(EstateAgent.find(params[:id]))
     end
 
     def estate_agent_params

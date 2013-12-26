@@ -1,48 +1,24 @@
-<% provide(:title, @branch.name) %>
+<% provide(:title, current_branch.name) %>
 <div id="left-nav" class="tall">  
   <%= render 'shared/properties' %>
 </div>
 <div id="main"> 
   <div id="main-top">   
     <div id="main-top-details">      
-      <%= form_for(@branch) do |f| %>
-        <%= link_to @branch.estate_agent.name, @branch.estate_agent %> / <%= f.text_field :name %><p>
+      <%= form_for(current_branch) do |f| %>
+        <%= link_to current_branch.estate_agent.name, current_branch.estate_agent %> / <%= f.text_field :name %><p>
         <%= f.text_area :comment, placeholder: 'no comments' %><br>        
       <% end %>
-      <% if @branch.agents.any? %>      
-        <table>
-          <tr>
-            <th>Agent</th>            
-            <th>Properties</th>
-          </tr>          
-        <% @branch.agents.each do |agent| %>
-          <tr class="light">
-            <td><%= link_to agent.name, agent %></td>                
-            <td><%= agent.properties.count %></td>
-          </tr>
-        <% end %>  
-        </table>
-        <p>
-      <% end %>
-      <% if @branch.properties.any? %>      
-        <table>
-          <tr>
-            <th>Property</th>
-            <th>Asking Price</th>
-            <th>Status</th>            
-          </tr>          
-        <% @branch.properties.each do |property| %>
-            <tr>
-              <td><%= link_to property.address, property %></td>
-              <td><%= property.asking_price %></td>
-              <td><%= link_to property.status.description, property.status %></td>
-            </tr>
-        <% end %>  
-        </table>
-      <% end %>
-      </ul>
     </div>
   </div>
+  <div id="main-bottom">
+<% if current_branch.agents.any? %>      
+        <%= render "/shared/agents_table" %>   
+<% end %>
+        <p>
+<% if current_branch.properties.any? %>      
+        <%= render "/shared/properties_table" %>   
+<% end %>
   </div>
 </div>
 <script type="text/javascript">

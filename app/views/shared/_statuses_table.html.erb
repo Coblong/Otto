@@ -1,0 +1,12 @@
+<table class="stats-table">
+  <tr>
+    <th>Status</th>
+    <th>Properties</th>
+  </tr>          
+<% current_user.statuses.each do |status| %>
+    <tr class='light'>
+      <td><%= link_to status.description, status %></td>
+      <td><%= status.properties.count %></td>
+    </tr>
+<% end %>  
+</table>

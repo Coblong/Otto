@@ -1,2 +1,2 @@
-<% provide(:title, @agent.name) %>
-<%= link_to @agent.branch.estate_agent.name, @agent.branch.estate_agent %> / <%= link_to @agent.branch.name, @agent.branch %> / <%= link_to @agent.name, @agent %>
+<% provide(:title, current_agent.name) %>
+<%= link_to current_agent.branch.estate_agent.name, current_agent.branch.estate_agent %> / <%= link_to current_agent.branch.name, current_agent.branch %> / <%= link_to current_agent.name, current_agent %>

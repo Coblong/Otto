@@ -1,33 +1,21 @@
-<% provide(:title, @estate_agent.name) %>
+<% provide(:title, current_agent.name) %>
 <div id="left-nav" class="tall">  
   <%= render 'shared/properties' %>
 </div>
 <div id="main"> 
   <div id="main-top">   
     <div id="main-top-details">
-      <%= form_for(@agent) do |f| %>
-        <%= link_to @agent.estate_agent.name, @agent.estate_agent %> / <%= link_to @agent.branch.name, @agent.branch %> / <%= f.text_field :name %><p>
+<%= form_for(current_agent) do |f| %>
+        <%= link_to current_agent.estate_agent.name, current_agent.estate_agent %> / <%= link_to current_agent.branch.name, current_agent.branch %> / <%= f.text_field :name %><p>
         <%= f.text_area :comment, placeholder: 'no comments' %><br>        
-      <% end %>
-      <% if @agent.properties.any? %>      
-        <table>
-          <tr>
-            <th>Properties</th>
-            <th>Asking Price</th>
-            <th>Status</th>            
-          </tr>          
-        <% @agent.properties.each do |property| %>
-            <tr>
-              <td><%= link_to property.address, property %></td>
-              <td><%= property.asking_price %></td>
-              <td><%= link_to property.status.description, property.status %></td>
-            </tr>
-        <% end %>  
-        </table>
-      <% end %>
+<% end %>
       </ul>
     </div>
   </div>
+  <div id="main-bottom">
+<% if current_agent.properties.any? %>      
+        <%= render "/shared/properties_table" %>   
+<% end %>
   </div>
 </div>
 <script type="text/javascript">

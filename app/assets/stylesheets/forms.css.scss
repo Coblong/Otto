@@ -19,7 +19,7 @@ input {
 textarea {
   font-size: 12px;
   border: none; 
-  width: 95%;
+  width: 98%;
   cursor: pointer;
 }
 
@@ -34,4 +34,8 @@ textarea {
     width: 150px;
     border: 1px solid $darkline;
   }
+}
+
+#datepicker {
+  width: 120px;
 }

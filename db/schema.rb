@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131211223110) do
+ActiveRecord::Schema.define(version: 20131220150545) do
 
   create_table "agents", force: true do |t|
     t.string   "name"
@@ -29,6 +29,15 @@ ActiveRecord::Schema.define(version: 20131211223110) do
     t.integer "agent_id"
     t.integer "property_id"
   end
+
+  create_table "area_codes", force: true do |t|
+    t.integer  "user_id"
+    t.string   "description"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "area_codes", ["user_id", "created_at"], name: "index_area_codes_on_user_id_and_created_at"
 
   create_table "branches", force: true do |t|
     t.string   "name"
@@ -68,13 +77,15 @@ ActiveRecord::Schema.define(version: 20131211223110) do
     t.string   "url",             limit: 1000
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "postcode"
+    t.string   "post_code"
     t.string   "asking_price"
     t.string   "external_ref"
     t.integer  "status_id"
     t.integer  "estate_agent_id"
     t.integer  "branch_id"
     t.integer  "agent_id"
+    t.integer  "area_code_id"
+    t.datetime "call_date"
   end
 
   add_index "properties", ["agent_id", "created_at"], name: "index_properties_on_agent_id_and_created_at"

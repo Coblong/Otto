@@ -1,0 +1,18 @@
+<table class="stats-table">
+  <tr>
+    <th>Property</th>
+    <th>Estate Agent</th>
+    <th>Asking Price</th>
+    <th>Postcode</th>
+    <th>Status</th>            
+  </tr>          
+<% current_properties.each do |property| %>
+    <tr class="light">
+      <td><%= link_to property.address, property %></td>
+      <td><%= link_to property.estate_agent.name, property.estate_agent %>  / <%= link_to property.branch.name, property.branch %></td>
+      <td><%= property.asking_price %></td>
+      <td><%= property.post_code %></td>
+      <td><%= link_to property.status.description, property.status %></td>
+    </tr>
+<% end %>  
+</table>

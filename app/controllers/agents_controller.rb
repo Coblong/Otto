@@ -5,6 +5,10 @@ class AgentsController < ApplicationController
     @agents = Agent.all
   end
 
+  def show
+    puts 'inside the agent controller show method'
+  end
+  
   def new
     @estate_agents = current_user.estate_agents
     @branch = Branch.find(params[:branch_id])
@@ -41,14 +45,7 @@ class AgentsController < ApplicationController
   private
 
     def set_agent
-      @agent = Agent.find(params[:id])
-      
-      @estate_agents = current_user.estate_agents
-      @estate_agent = @agent.branch.estate_agent 
-      @branches = @estate_agent.branches
-      @branch = @agent.branch
-      @agents = @branch.agents
-      @properties = @agent.properties
+      set_current_agent(Agent.find(params[:id]))
     end
 
     def agent_params

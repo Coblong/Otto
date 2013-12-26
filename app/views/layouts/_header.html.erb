@@ -1,64 +1,69 @@
 <div id="navbar">
   <div class="navbar-menus left">
     <ul>
-<% if defined? @estate_agents %>
-  <% if defined? @estate_agent %>
-      <li><%= link_to @estate_agent.name, root_path(estate_agent_id: @estate_agent.id) %>&nbsp;&nbsp;<b class="caret"></b>
+<% if !current_user.area_codes.nil? %>
+  <% if current_area_code.nil? %>
+    <li><%= link_to "All Areas", root_path(area_code: -1) %>&nbsp;&nbsp;<b class="caret"></b>
   <% else %>
-      <li><%= link_to "All Estate Agents", root_path %>&nbsp;&nbsp;<b class="caret"></b>
+    <li><%= link_to current_area_code.description, root_path(area_code: current_area_code) %>&nbsp;&nbsp;<b class="caret"></b>
   <% end %>      
         <ul>
-          <li><%= link_to "All Estate Agents", root_path %></li>                    
-          <li class="separator"></li>
-  <% @estate_agents.each do |estate_agent| %>          
-          <li><%= link_to estate_agent.name, root_path(estate_agent_id: estate_agent.id) %></li>
+  <% if !current_area_code.nil? %>
+            <li><%= link_to "All Areas", root_path(area_code: -1) %></li>                    
+            <li class="separator"></li>
+  <% end %>          
+  <% current_user.area_codes.each do |area_code| %>          
+          <li><%= link_to area_code.description, root_path(area_code: area_code) %></li>
   <% end %>
-          <li class="separator"></li>
-          <li><%= link_to "Add Estate Agent", new_user_estate_agent_path(user_id: current_user.id)  %></li>
+        </ul>
+      </li> 
+<% end %>      
+<% if !current_user.estate_agents.nil? %>
+  <% if current_estate_agent.nil? %>
+      <li><%= link_to "All Estate Agents", root_path(estate_agent: -1) %>&nbsp;&nbsp;<b class="caret"></b>
+  <% else %>
+      <li><%= link_to current_estate_agent.name, root_path(estate_agent: current_estate_agent) %>&nbsp;&nbsp;<b class="caret"></b>
+  <% end %>      
+        <ul>
+  <% if !current_estate_agent.nil? %>
+            <li><%= link_to "All Estate Agents", root_path(estate_agent: -1) %></li>                    
+            <li class="separator"></li>
+  <% end %>
+  <% current_user.estate_agents.each do |estate_agent| %>          
+          <li><%= link_to estate_agent.name, root_path(estate_agent: estate_agent) %></li>
+  <% end %>
         </ul>
       </li> 
 
-  <% if defined? @branches %>
-    <% if defined? @branch %>
-      <li><%= link_to @branch.name, root_path(estate_agent_id: @estate_agent.id, branch_id: @branch.id) %>&nbsp;&nbsp;<b class="caret"></b>
+  <% if !current_branches.nil? %>
+    <% if current_branch.nil? %>
+      <li><%= link_to "All Branches", root_path(estate_agent: current_estate_agent, branch: -1) %>&nbsp;&nbsp;<b class="caret"></b>
     <% else %>
-      <li><%= link_to "All Branches", root_path(estate_agent_id: @estate_agent.id) %>&nbsp;&nbsp;<b class="caret"></b>
+      <li><%= link_to current_branch.name, root_path(branch: current_branch) %>&nbsp;&nbsp;<b class="caret"></b>
     <% end %>
         <ul>
-          <li><%= link_to "All Branches", root_path(estate_agent_id: @estate_agent.id) %></li>          
+    <% if !current_branch.nil? %>
+          <li><%= link_to "All Branches", root_path(estate_agent: current_estate_agent, branch: -1) %></li>          
           <li class="separator"></li>
-    <% @branches.each do |branch| %>          
-          <li><%= link_to branch.name, root_path(estate_agent_id: branch.estate_agent.id, branch_id: branch.id) %></li>
+    <% end %>
+    <% current_branches.each do |branch| %>          
+          <li><%= link_to branch.name, root_path(branch: branch) %></li>
     <% end %>          
-          <li class="separator"</li>
-          <li><%= link_to "Add Branches", new_estate_agent_branch_path(estate_agent_id: @estate_agent.id)  %></li>
         </ul>
       </li> 
 
-    <% if defined? @agents %>
-      <% if defined? @agent %>
-        <li><%= link_to @agent.name, root_path(estate_agent_id: @estate_agent.id, branch_id: @agent.branch.id, agent_id: @agent.id) %>&nbsp;&nbsp;<b class="caret"></b>
+    <% if !current_agents.nil? and !current_agents.empty? %>
+      <% if current_agent.nil? %>
+        <li><%= link_to "All Agents", root_path(branch: current_branch, agent: -1) %>&nbsp;&nbsp;<b class="caret"></b>
       <% else %>
-        <% if defined? @branch %>
-          <li><%= link_to "All Agents", root_path(estate_agent_id: @branch.estate_agent.id, branch_id: @branch.id) %>&nbsp;&nbsp;<b class="caret"></b>
-        <% else %>
-          <li><%= link_to "All Agents", root_path(estate_agent_id: @estate_agent.id) %>&nbsp;&nbsp;<b class="caret"></b>
-        <% end %>
+        <li><%= link_to current_agent.name, root_path(agent: @agent) %>&nbsp;&nbsp;<b class="caret"></b>
       <% end %>
           <ul>
-      <% if defined? @branch %>
-            <li><%= link_to "All Agents", root_path(estate_agent_id: @estate_agent.id, branch_id: @branch.id) %></li>
-      <% else %>
-            <li><%= link_to "All Agents", root_path(estate_agent_id: @estate_agent.id) %></li>
-      <% end %>            
-      <% @agents.each do |agent| %>
+          <li><%= link_to "All Agents", root_path(branch: current_branch, agent: -1) %>&nbsp;&nbsp;<b class="caret"></b>      
+      <% current_agents.each do |agent| %>
             <li class="separator"></li>
-            <li><%= link_to agent.name, root_path(estate_agent_id: agent.branch.estate_agent.id, branch_id: agent.branch.id, agent_id: agent.id) %></li>
+            <li><%= link_to agent.name, root_path(agent: agent) %></li>
       <% end %>
-      <% if defined? @branch %>
-            <li class="separator"></li>
-            <li><%= link_to "Add Agent", new_branch_agent_path(branch_id: @branch.id)  %></li>
-      <% end %>    
           </ul>
         </li> 
     <% end %>
@@ -69,7 +74,7 @@
   </div>
   <div class="navbar-menus right">
     <ul>
-      <li><%= link_to "Home", root_path %></li>
+      <li><%= link_to "Home", root_path(area_code: -1, estate_agent: -1) %></li>
       <% if signed_in? %>
         <li><%= link_to current_user.name, current_user %>&nbsp;&nbsp;<b class="caret"></b>&nbsp;
           <ul>

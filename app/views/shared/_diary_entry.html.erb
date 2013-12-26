@@ -1,0 +1,19 @@
+<div class='diary'>
+  <table>
+    <tr><td><b><%= link_to property.address, property %></b></td><td><%= render "/shared/status", property: property %></td></tr>
+    <tr><td><%= link_to property.estate_agent.name, property.estate_agent %> / <%= link_to property.branch.name, property.branch %></td><td colspan="2" align="right" id="call_date_<%= property.id %>"><small><%= property.call_date_formatted %></small></td></tr>
+    <tr>
+      <td colspan="2">
+        <ul>
+<% property.last_notes.each do |note| %>          
+  <% if !note.agent.nil? %>    
+          <li><%= note.agent.name %> - <%= note.content %></li>
+  <% else %>
+          <li><%= note.content %></li>
+  <% end %>          
+<% end %>        
+        </ul>
+      </td>
+    </tr>
+  </table>  
+</div>

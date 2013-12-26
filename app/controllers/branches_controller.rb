@@ -31,14 +31,7 @@ class BranchesController < ApplicationController
   private
 
     def set_branch
-    
-      @branch = Branch.find(params[:id])
-    
-      @estate_agents = current_user.estate_agents
-      @estate_agent = @branch.estate_agent 
-      @branches = @estate_agent.branches
-      @agents = @branch.agents
-      @properties = @branch.properties
+      set_current_branch(Branch.find(params[:id]))
     end
 
     def branch_params
