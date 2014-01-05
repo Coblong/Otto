@@ -223,7 +223,35 @@ class PropertiesController < ApplicationController
         / Build the note /
         note = @property.notes.build
         note.note_type = Note.TYPE_MANUAL
-        note.content = "Close"
+        note.content = "Closed"
+        note.branch_id = @property.branch_id
+        note.estate_agent_id = @property.estate_agent.id
+
+        note.save()
+
+        render :json => note.to_json(methods: [:formatted_date, :agent_name] ), :status => :ok
+      end
+    end
+  end
+
+  def reopen
+    puts 'Reopen property'
+    if !current_user
+      render :nothing => true, :status => :unauthorized
+    else
+      @property = Property.find(params[:property_id]);
+      if @property.nil?
+        response = { "statuses" => current_user.statuses.to_json }
+        render :json => response
+      else      
+
+        @property.closed = false
+        @property.save()
+        
+        / Build the note /
+        note = @property.notes.build
+        note.note_type = Note.TYPE_MANUAL
+        note.content = "Reopened"
         note.branch_id = @property.branch_id
         note.estate_agent_id = @property.estate_agent.id
 

@@ -59,6 +59,8 @@ $(function() {
 
               if (response.status == 200) {
                 $( "#accordian-notes-<%= property.id%> ul" ).prepend(html);                                
+                $("#nna-<%= property.id %>").val("");
+                $("#nn-<%= property.id %>").val("")
                 addDeleteFunction(data["id"]);
                 $( "#dialog<%= property.id %>" ).dialog( "close" );
               } else {

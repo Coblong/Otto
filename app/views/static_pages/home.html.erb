@@ -129,6 +129,11 @@ $('.close').click(function(e) {
   var propertyId = this.id.toString().substring(2)
   closeProperty(propertyId)
 });
+$('.reopen').click(function(e) {
+  e.preventDefault();
+  var propertyId = this.id.toString().substring(2)
+  reopenProperty(propertyId)
+});
 $(".history").click(function(e) {
     e.preventDefault();
     var propertyId = this.id.toString().substring(2)
@@ -158,6 +163,20 @@ function closeProperty(propertyId) {
   $.ajax({
       type: "POST",
       url: "/close",
+      data: 'property_id=' + propertyId,
+      dataType: "json",
+      error: function(xhr, status, error) {
+        alert('Unable to close property')
+      },
+      success: function (xhr, data) {
+        location.reload();
+      }
+  });
+}
+function reopenProperty(propertyId) {
+  $.ajax({
+      type: "POST",
+      url: "/reopen",
       data: 'property_id=' + propertyId,
       dataType: "json",
       error: function(xhr, status, error) {

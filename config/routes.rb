@@ -38,6 +38,7 @@ Otto::Application.routes.draw do
   match '/viewings',        to: 'properties#create_viewing',  via: 'post'
   match '/offers',          to: 'properties#create_offer',    via: 'post'
   match '/close',           to: 'properties#close',           via: 'post'
+  match '/reopen',          to: 'properties#reopen',          via: 'post'
   match '/update_call_date',to: 'properties#update_call_date',via: 'post'
   match '/update_status',   to: 'properties#update_status',   via: 'post'
   match '/delete_note',     to: 'properties#delete_note',     via: 'post'

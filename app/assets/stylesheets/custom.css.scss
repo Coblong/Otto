@@ -295,12 +295,21 @@ a {
 }
 
 .toolitem {
+  height: 28px;
   width: 28px;
   vertical-align: bottom;
   cursor: pointer;
   outline: 1px $main-bg;
+  border-radius: 5px;
+  border-left: 1px solid $main-bg;
+  border-top: 1px solid $main-bg;
+  border-bottom: 2px solid $main-bg;
+  border-right: 2px solid $main-bg;
   &:hover {
-    outline: 1px solid $lightline;
+    border-left: 1px solid $lightline;
+    border-top: 1px solid $lightline;
+    border-right: 2px solid gray;
+    border-bottom: 2px solid gray;
   }
 }
 
