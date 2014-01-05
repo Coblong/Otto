@@ -119,7 +119,7 @@ class StaticPagesController < ApplicationController
 
     def get_key(day, properties, agents)
       if properties == 0
-        day + " - No calls"
+        day + " - Nothing to do"
       else
         day + " - " + properties.to_s + (properties == 1 ? ' call - ' : " calls - ") + agents.to_s + (agents == 1 ? ' agent' : " agents")
       end
