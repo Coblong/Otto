@@ -1,24 +1,25 @@
 <% provide(:title, "Sign in") %>
-<div class="container">
-  <div class="welcome-inner">
+<div id="main">
+  <div id="container">     
+    <div id="thin-top" class="signin-form">           
     <%= form_for(:session, url: sessions_path) do |f| %>    
-      <h2>You gotta sign in to Ottor<h2>        
-      <table class="settings-form">
+      <h3>Please sign in</h3>
+      <table>
         <tr>
           <td><%= f.label :email %></td>
-          <td><%= f.text_field :email %></td>
+          <td><%= f.text_field :email, class: "settings-input signin-input" %></td>
         </tr>
         <tr>
           <td><%= f.label :password %></td>
-          <td><%= f.password_field :password %></td>
+          <td><%= f.password_field :password, class: "settings-input signin-input" %></td>
         </tr>
         <tr><td>&nbsp;</td></tr>
         <tr>
-          <td colspan="2"><%= f.submit "Sign in", class: "btn btn-large btn-primary" %></td>
+          <td></td><td><%= f.submit "Sign in", class: "btn" %></td>
         </tr>
       </table>
     <% end %>
 
     <p>New user? <%= link_to "Sign up now!", signup_path %></p>
-  </div>
+  </div></div>
 </div>

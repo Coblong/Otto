@@ -43,6 +43,19 @@ textarea {
   width: 40px;
 }
 
+.signin-form {
+  text-align: center;
+  table {
+    margin: 20px auto;
+    width:50%;
+    text-align: left;
+  }
+}
+
+.signin-input {
+  border: 1px solid $lightline;
+}
+
 .settings-input {
   width: 150px;
 }

@@ -1,30 +1,32 @@
-<% provide(:title, "Sign un") %>
-<div class="container">
-  <div class="welcome-inner">
+<% provide(:title, "Sign up") %>
+<div id="main">
+  <div id="container">     
+    <div id="thin-top" class="signin-form">           
     <%= form_for(@user) do |f| %>
-      <h2>Sign un for Ottor<h2>        
+      <h3>Sign up</h3>
       <%= render 'shared/error_messages', obj: @user %>
       <table class="settings-form">
         <tr>
           <td><%= f.label :name %></td>
-          <td><%= f.text_field :name %></td>
+          <td><%= f.text_field :name, class: "settings-input signin-input" %></td>
         </tr>
         <tr>
           <td><%= f.label :email %></td>
-          <td><%= f.text_field :email %></td>
+          <td><%= f.text_field :email, class: "settings-input signin-input" %></td>
         </tr>
         <tr>
           <td><%= f.label :password %></td>
-          <td><%= f.password_field :password %></td>
+          <td><%= f.password_field :password, class: "settings-input signin-input" %></td>
         </tr>        
         <tr>
           <td><%= f.label :password_confirmation, "Confirmation" %></td>
-          <td><%= f.password_field :password_confirmation %></td>
+          <td><%= f.password_field :password_confirmation, class: "settings-input signin-input" %></td>
         </tr>
         <tr><td>&nbsp;</td></tr>
         <tr>
-          <td colspan="2"><%= f.submit "Create my account", class: "btn btn-large btn-primary" %></td>
+          <td></td><td><%= f.submit "Sign Up", class: "btn" %></td>
         </tr>
+      </table>
     <% end %>
-  </div>
+  </div></div>
 </div>

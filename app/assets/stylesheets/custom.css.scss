@@ -547,11 +547,11 @@ a {
 }
 
 .welcome-inner {
-  border: solid 1px $darkline;
   position: fixed;
   left: 50%;
   top:100px;
-  background-color: $well-colour;
+  color: $bg1;
+  background-color: $main-bg;
   height: 300px;  
   width: 600px;
   margin-left: -300px;
