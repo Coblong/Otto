@@ -1,6 +1,6 @@
 <% provide(:title, current_branch.name) %>
 <div id="left-nav" class="tall">  
-  <%= render 'shared/properties' %>
+  <%= render 'shared/properties', filter: "" %>
 </div>
 <div id="main"> 
   <div id="main-top">   
@@ -17,7 +17,7 @@
 <% end %>
         <p>
 <% if current_branch.properties.any? %>      
-        <%= render "/shared/properties_table" %>   
+        <%= render "/shared/properties_table", filter: "" %>   
 <% end %>
   </div>
 </div>

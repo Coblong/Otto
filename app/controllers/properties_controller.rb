@@ -34,7 +34,8 @@ class PropertiesController < ApplicationController
       @property.sstc = params[:sstc]
       @property.status = Status.find(params[:status_id])    
       @property.call_date = Date.today
-      
+      @property.closed = false
+
       note = @property.notes.build
       note.content = 'Created'
       note.note_type = Note.TYPE_AUTO
@@ -45,7 +46,7 @@ class PropertiesController < ApplicationController
         add_status_note(@property, new_status)
       end
       new_sstc = params[:sstc]
-      if new_sstc != @property.sstc
+      if new_sstc.to_s != @property.sstc.to_s
         add_sstc_note(@property, new_sstc)
       end
       new_asking_price = params[:asking_price]
