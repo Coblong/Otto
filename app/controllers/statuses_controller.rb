@@ -38,7 +38,7 @@ class StatusesController < ApplicationController
 
     if @status.save
       flash[:success] = "Status created!"
-      redirect_to user_statuses_path(current_user)
+      redirect_to @current_user
     else
       render 'new'
     end
@@ -48,7 +48,7 @@ class StatusesController < ApplicationController
     begin
       @status = Status.find(params[:id])
       @status.destroy()      
-      redirect_to user_statuses_path(current_user)
+      render json: @status.to_json, :status => :ok
     rescue ActiveRecord::DeleteRestrictionError => e
       flash[:error] = "#{e}"
       redirect_to user_statuses_path(current_user)

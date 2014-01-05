@@ -64,7 +64,7 @@ class PropertiesController < ApplicationController
       render :nothing => true, :status => :service_unavailable
     end
   end
-
+  
   def external
     if !current_user
       render :nothing => true, :status => :unauthorized

@@ -35,6 +35,7 @@ $bg2: #1b5bc2;
   text-align:center;
   text-shadow:1px 1px 0px #1570cd;
 }
+
 .small {
   width:70px;
 }
@@ -44,7 +45,8 @@ $bg2: #1b5bc2;
   filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#1e62d0', endColorstr='#3d94f6');
   background-color:#1e62d0;
 }
-.btn:active {
+
+.btn:active {  
   position:relative;
   top:1px;
 }

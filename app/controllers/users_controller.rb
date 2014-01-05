@@ -18,11 +18,13 @@ class UsersController < ApplicationController
   end
 
   def update
+    puts 'Update the user'
     if @user.update_attributes(user_params)
       flash[:success] = "Profile updated"
       redirect_to @user
     else
-      render 'edit'
+      flash[:error] = "Unable to update user"
+      render 'show'
     end
   end
 
@@ -40,8 +42,12 @@ class UsersController < ApplicationController
   private
 
     def user_params
+      puts 'Updating user'
+      puts 'params = ' + params.to_yaml
+      puts 'user params = ' + params[:user].to_yaml
+      params[:user].delete(:password) if params[:user][:password].blank?
       params.require(:user).permit(:name, :email, :password,
-                                   :password_confirmation)
+                                     :password_confirmation, :expand_notes, :show_left_nav, :show_future, :show_overview)
     end
 
     # Before filters

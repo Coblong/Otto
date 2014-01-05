@@ -58,6 +58,7 @@ $(function() {
               html += "<span><img alt='Delete' class='delete_note' id='del-" + data["id"] + "' src='/assets/delete.png' width='14'></span></li>"
 
               $( "#accordian-notes-<%= property.id%> ul" ).prepend(html);                
+              $( "#va-<%= property.id%>" ).html(data["content"]);                              
               addDeleteFunction(data["id"]);              
               $( "#view-dialog<%= property.id %>" ).dialog( "close" );
             }

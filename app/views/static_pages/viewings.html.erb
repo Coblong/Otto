@@ -1,57 +1,24 @@
 <% if signed_in? %>        
 <% if current_user.show_left_nav %>
   <div id="left-nav" class="tall">  
-    <%= render 'shared/properties', filter: "all" %>
+    <%= render 'shared/properties', filter: "viewings" %>
   </div>
 <% end %>
   <div id="main">     
-<% if current_user.show_overview %>    
-    <div id="main-top">  
-    <div id="overview-accordion" class="diary-header">         
-      <h3>Overview</h3>
-    <div id="week-ahead">           
-      <table>
-        <tr>
-<% @week_ahead_hash.keys.each do |day| %>          
-          <th><%= day %></th>
-<% end %>          
-        </tr>
-        <tr>
-<% @week_ahead_hash.keys.each do |day| %>          
-          <td>
-<% @week_ahead_hash[day].each do |hash| %>
-  <% if hash.first.is_a? Numeric %>
-  <% estate_agent = @estate_agents.find(hash.first.to_i) %>
-    <span><%= link_to estate_agent.name, estate_agent %></span><%= hash.last %>
-  <% else %>
-    <span><%= hash.first %></span><%= hash.last %>
-  <% end %>
-<% end %>
-          </td>
-<% end %>          
-        </tr>
-      </table>
-    </div>
-    </div>
-    </div>
-<% end %>          
     <div id="main-top">           
-
-<div id="accordion" class="diary-header">
-
-  <% if @days_properties_hash.any? %>      
-    <% @days_properties_hash.keys.each do |day| %>
-      <h3><%= day %></h3>
-      <div class="diary-panel">   
-        <% @days_properties_hash[day].each do |property| %>
-          <%= render "/shared/diary_entry", property: property, expanded: current_user.expand_notes %>   
-        <% end %>
-      </div>      
-    <% end %>
-  <% end %> 
-
-  <br><br><br>
-</div>
+      <div id="accordion" class="diary-header">
+        <% if @days_properties_hash.any? %>      
+          <% @days_properties_hash.keys.each do |day| %>
+            <h3><%= day %></h3>
+            <div class="diary-panel">   
+              <% @days_properties_hash[day].each do |property| %>
+                <%= render "/shared/diary_entry", property: property, expanded: false %>   
+              <% end %>
+            </div>      
+          <% end %>
+      <% end %> 
+      <br><br><br>
+    </div>
 <% else %>
   <div class="welcome-inner">
     <h1>Welcome to the Ottor system</h1>
@@ -239,10 +206,6 @@ function updateStatus(propertyId, newStatus) {
       }
   });
 }
-$( "#overview-accordion" ).accordion({
-      collapsible: true,
-      heightStyle: "content"
-    });
 $( "#accordion" ).accordion({
       collapsible: true,
       heightStyle: "content"

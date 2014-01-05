@@ -1,5 +1,5 @@
 <li title="<%= property.estate_agent.name %> / <%= property.branch.name %> - <%= property.asking_price %>" onclick="location.href='<%= property_path(property) %>'">
-  <table class='left-nav-table'>
+  <table class='left-nav-table'>    
     <tr><td><%= property.address %></td><td><%= render "/shared/status", property: property %></td></tr>
     <tr><td class="<%= property.sstc? %>" colspan="2" align="right" id="call_date_<%= property.id %>"><small><%= property.call_date_formatted(:short) %></small></td></tr>    
   </table>  

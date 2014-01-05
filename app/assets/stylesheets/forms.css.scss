@@ -43,17 +43,8 @@ textarea {
   width: 40px;
 }
 
-.settings-form {
-  margin-top: 20px;
-  margin-bottom: 20px;
-  margin-left: auto;
-  margin-right: auto;
-  width: 70%;
-
-  input {
-    width: 150px;
-    border: 1px solid $darkline;
-  }
+.settings-input {
+  width: 150px;
 }
 
 .datepicker {

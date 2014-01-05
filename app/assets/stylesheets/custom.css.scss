@@ -21,7 +21,7 @@ $auto-colour: $bg1;
 $auto-bg: $well-colour;
 $action-colour: $bg1;
 $action-bg: $well-colour;
-$viewing-colour: maroon;
+$viewing-colour: crimson;
 $viewing-bg: $well-colour;
 $offer-colour: $colour;
 $offer-bg: lightyellow;
@@ -63,6 +63,10 @@ a {
 .heading {
   text-align: center;
   background: $bg2;
+}
+
+.alert {
+  padding: 5px;
 }
 
 .alert-error {
@@ -242,6 +246,53 @@ a {
   background: $bg1;
 }
 
+#thin-top {  
+  margin: 5px auto;
+  padding:0px;
+  width:50%;      
+  border: solid 1px $lightline;
+  background: $main-bg;
+  ul {
+    padding: 0px;
+    list-style: none;
+  }
+}
+
+#week-ahead {
+  padding:0px;
+  background: $main-bg;
+  display: none;
+  table {    
+    width: 100%;
+    th {
+      border-right: 1px solid $lightline;
+      border-bottom: 1px solid $lightline;
+      width: 14%;
+      &:last-child {
+        border-right: none;
+      }
+    }    
+    td {      
+      border-right: 1px solid $lightline;
+      vertical-align: top;
+      text-align: right;
+      padding: 2px 5px;
+      &:last-child {
+        border-right: none;
+      }
+      span {
+        float:left;
+        width: 90%;
+        text-align: left;
+      }
+    }
+  }
+  a:hover{
+    color: inherit;
+    background: inherit;
+  }
+}
+
 #main-top {  
   margin: 5px auto;
   padding:0px;
@@ -325,6 +376,10 @@ a {
   background: $bg1;  
 }
 
+#overview-accordion .ui-accordion-header { 
+  background: $bg1;  
+}
+
 #accordion .ui-accordion-content.accordian-notes { 
   border: none;
   display:none;
@@ -343,6 +398,44 @@ a {
 
 #accordion .ui-accordion-content.accordian-notes { 
   border: 0;  
+}
+
+.settings {
+  padding: 5px;      
+  h3 {
+    display:none;
+  }  
+}
+
+.settings-panel {
+  margin: 10px auto;
+  width: 70%;
+  border: none;
+  display: table;
+  text-align: center;
+  table {
+    padding: 2px;    
+    margin: 10px auto;
+    width: 70%;    
+    th {
+      &:last-child {
+        text-align: right;
+      }
+    }
+    td {
+      padding:5px;
+      border-bottom: 1px solid $lightline;
+      &:first-child {
+        text-align: left;
+      }
+      &:last-child {
+        text-align: right;
+      }
+    }
+    div {
+      vertical-align: middle;
+    }
+  }  
 }
 
 .diary-header {
@@ -411,6 +504,9 @@ a {
     color: $price-colour;
     background: $price-bg;
   }
+  .viewing-alert {
+    color: $viewing-colour;
+  }
   .viewing {
     color: $viewing-colour;
     background: $viewing-bg;
@@ -418,6 +514,10 @@ a {
   .offer {
     color: $offer-colour;
     background: $offer-bg;
+  }
+  a:hover{
+    color: inherit;
+    background: inherit;
   }
 }
 

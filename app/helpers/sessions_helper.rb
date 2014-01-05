@@ -81,41 +81,50 @@ module SessionsHelper
     end    
   end
 
-  def current_properties
+  def current_properties(filter)
+
+    puts 'Getting current properties based upon filter'
+
     if !current_property.nil?
-      current_property.branch.properties.where(closed: show_closed?)
+      properties = current_property.branch.properties.where(closed: show_closed?)
     else
       if !current_agent.nil?
         if current_area_code.nil?
-          current_agent.properties.where(closed: show_closed?)
+          properties = current_agent.properties.where(closed: show_closed?)
         else
-          current_agent.properties.where(area_code_id: current_area_code, closed: show_closed?)
+          properties = current_agent.properties.where(area_code_id: current_area_code, closed: show_closed?)
         end
       else
         if !current_branch.nil?
-          current_branch.properties.where(closed: show_closed?)
+          properties = current_branch.properties.where(closed: show_closed?)
           if current_area_code.nil?
-            current_branch.properties.where(closed: show_closed?)
+            properties = current_branch.properties.where(closed: show_closed?)
           else
-            current_branch.properties.where(area_code_id: current_area_code, closed: show_closed?)
+            properties = current_branch.properties.where(area_code_id: current_area_code, closed: show_closed?)
           end
         else
           if !current_estate_agent.nil?
-            current_estate_agent.properties.where(closed: show_closed?)
+            properties = current_estate_agent.properties.where(closed: show_closed?)
             if current_area_code.nil?
-              current_estate_agent.properties.where(closed: show_closed?)
+              properties = current_estate_agent.properties.where(closed: show_closed?)
             else
-              current_estate_agent.properties.where(area_code_id: current_area_code, closed: show_closed?)
+              properties = current_estate_agent.properties.where(area_code_id: current_area_code, closed: show_closed?)
             end
           else
             if current_area_code.nil?        
-              Property.where("estate_agent_id in (?)", EstateAgent.where(user_id: current_user.id).collect(&:id)).where(closed: show_closed?)
+              properties = Property.where("estate_agent_id in (?)", EstateAgent.where(user_id: current_user.id).collect(&:id)).where(closed: show_closed?)
             else        
-              Property.where("estate_agent_id in (?) and area_code_id = ?", EstateAgent.where(user_id: current_user.id).collect(&:id), current_area_code).where(closed: show_closed?)
+              properties = Property.where("estate_agent_id in (?) and area_code_id = ?", EstateAgent.where(user_id: current_user.id).collect(&:id), current_area_code).where(closed: show_closed?)
             end
           end
         end
       end
+    end
+
+    if filter == "viewings"
+      properties.where("view_date > ?", Time.now)
+    else
+      properties
     end
   end
 

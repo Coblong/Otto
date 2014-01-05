@@ -1,11 +1,115 @@
 <% provide(:title, @user.name) %>
-<div class="row">
-  <aside class="span4">
-    <section>
-      <h1>
-        <%= gravatar_for @user %>
-        <%= @user.name %>
-      </h1>
-    </section>
-  </aside>
+<div id="main">
+  <div id="container">     
+    <div id="thin-top">           
+      <div class="settings-panel">        
+        <h2>
+          <%= gravatar_for @user %>
+          <%= @user.name %>
+        </h2>
+      </div>
+    </div>
+
+    <div id="thin-top">           
+      <div class="settings-panel settings-form">        
+        <h2>Settings</h2>
+        <%= form_for(@user) do |f| %>
+        <table>
+          <tr>
+            <td colspan="2"><%= render 'shared/error_messages', obj: @user %></td>
+          </tr>
+          <tr>
+            <td><%= f.label :expand_notes %></td>
+            <td><%= f.check_box :expand_notes %></td>
+          </tr>
+          <tr>
+            <td><%= f.label "Show List" %></td>
+            <td><%= f.check_box :show_left_nav %></td>
+          </tr>
+          <tr>
+            <td><%= f.label :show_future %></td>
+            <td><%= f.check_box :show_future %></td>
+          </tr>
+          <tr>
+            <td><%= f.label :show_overview %></td>
+            <td><%= f.check_box :show_overview %></td>
+          </tr>
+          <tr>
+            <td><%= f.label :name %></td>
+            <td><%= f.text_field :name, class: "settings-input" %></td>
+          </tr>
+          <tr>
+            <td><%= f.label :email %></td>
+            <td><%= f.text_field :email, class: "settings-input" %></td>
+          </tr>
+          <tr>
+            <td><%= f.label :password %></td>
+            <td><%= f.text_field :password, class: "settings-input" %></td>
+          </tr>
+          <tr>
+            <td><%= f.label "Confirmation" %></td>
+            <td><%= f.text_field :password_confirmation, class: "settings-input" %></td>
+          </tr>
+          <tr><th colspan="2"><%= f.submit "Update", class: "btn", id: "update" %></th></tr>                      
+        </table>             
+        <% end %>
+      </div>
+    </div>
+
+    <div id="thin-top">           
+      <div class="settings-panel">        
+        <h2>Statuses</h2>
+        <table>
+          <% @user.statuses.each do |st| %>
+          <tr>
+            <td><%= link_to st.description, edit_user_status_path(user_id: @user.id, id: st.id) %></td>
+            <td><div class="rounded" style="background:#<%= st.colour %>"><%= link_to st.colour, edit_user_status_path(user_id: @user.id, id: st.id) %></div></td>
+            <td><span><%= image_tag "delete.png", width: 14, class: "delete_status", id: st.id %></span></td>
+            </tr>
+          <% end %>
+          <tr><th colspan="3"><button class="btn" id="add_status">Add Status</button></th></tr>            
+        </table>             
+        <div id="dialog" title="Are you sure?">
+          Are you sure you want to delete this?
+        </div>​        
+      </div>      
+    </div>
+    <br><br><br>
+  </div>
 </div>
+<script type="text/javascript">
+$("#add_status").click(function(e) {
+  location.href = "<%= new_user_status_path(user_id: @user.id) %>";
+});
+$(".delete_status").click(function(e) {
+  e.preventDefault();
+  var statusId = this.id
+
+  $("#dialog").dialog({
+    buttons : {
+      "Confirm" : function() {
+        $.ajax({
+          type: "DELETE",
+          url: "/statuses/" + statusId,
+          dataType: "json",
+          error: function(xhr, status, error) {
+            return false;
+          },
+          success: function (xhr, data) {
+            location.reload();
+          }
+        });
+      },
+      "Cancel" : function() {
+        $(this).dialog("close");
+      }
+    }
+  });
+
+  $("#dialog").dialog("open");
+});
+$("#dialog").dialog({
+  autoOpen: false,
+  modal: true
+});
+</script>

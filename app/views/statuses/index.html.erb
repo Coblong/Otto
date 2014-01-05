@@ -1,18 +1,71 @@
 <% provide(:title, 'All status') %>
-<div class="central">  
-  <div class="heading">Statuses</div>
-  <div>        
-    <ul>
-      <% @statuses.each do |st| %>
-        <li>
-          <div><%= link_to st.description, edit_user_status_path(id: st.id) %></div>
-          <div class="rounded" style="background:#<%= st.colour %>"><%= link_to st.colour, edit_user_status_path(id: st.id) %></div>                    
-          <div><%= link_to "delete", st, method: :delete,
-                                     data: { confirm: "Are you sure you want to delete " + st.description + "?" },
-                                     title: st.description %></div>
-        </li>
-      <% end %>
-    </ul>
-    <%= link_to "Add new status", new_user_status_path %><p>
+<% if signed_in? %>        
+<div id="main">
+  <div id="container">     
+    <div id="thin-top">           
+      <div id="accordion" class="settings">
+        <h3>Statuses</h3>
+        <div class="settings-panel">        
+          <table>
+            <% @statuses.each do |st| %>
+            <tr>
+              <td><%= link_to st.description, edit_user_status_path(id: st.id) %></td>
+              <td><div class="rounded" style="background:#<%= st.colour %>"><%= link_to st.colour, edit_user_status_path(id: st.id) %></div></td>
+              <td><span><%= image_tag "delete.png", width: 14, class: "delete_status", id: st.id %></span></td>
+              </tr>
+            <% end %>
+            <tr><td colspan="3"><button class="btn" id="add_status">Add Status</button></td></tr>            
+          </table>             
+          <div id="dialog" title="Are you sure?">
+            Are you sure you want to delete this?
+          </div>​
+        </div>
+        <h3>Preferences</h3>
+        <div class="settings-panel">        
+          Other stuff
+        </div>
+      </div>
+    </div>
   </div>
 </div>
+<% end %>
+<script type="text/javascript">
+$( "#accordion" ).accordion({
+  collapsible: true,
+  heightStyle: "content"
+});
+$("#add_status").click(function(e) {
+  location.href = "<%= new_user_status_path %>";
+});
+$(".delete_status").click(function(e) {
+  e.preventDefault();
+  var statusId = this.id
+
+  $("#dialog").dialog({
+    buttons : {
+      "Confirm" : function() {
+        $.ajax({
+          type: "DELETE",
+          url: "/statuses/" + statusId,
+          dataType: "json",
+          error: function(xhr, status, error) {
+            return false;
+          },
+          success: function (xhr, data) {
+            location.reload();
+          }
+        });
+      },
+      "Cancel" : function() {
+        $(this).dialog("close");
+      }
+    }
+  });
+
+  $("#dialog").dialog("open");
+});
+$("#dialog").dialog({
+  autoOpen: false,
+  modal: true
+});
+</script>

@@ -10,6 +10,19 @@ class StaticPagesController < ApplicationController
       render "estate_agents/show"
     end
 
+    if current_user.show_overview
+      @estate_agents = current_user.estate_agents
+
+      @week_ahead_hash = Hash.new
+      @week_ahead_hash['Monday'] = {}
+      @week_ahead_hash['Tuesday'] = {}
+      @week_ahead_hash['Wednesday'] = {}
+      @week_ahead_hash['Thursday'] = {}
+      @week_ahead_hash['Friday'] = {}
+      @week_ahead_hash['Saturday'] = {}
+      @week_ahead_hash['Sunday'] = {}
+    end    
+    
     @days_properties_hash = Hash.new
 
     if show_closed?
@@ -24,24 +37,39 @@ class StaticPagesController < ApplicationController
         @days_properties_hash[get_key("Overdue", overdue_properties.size, overdue_agents.size)] = overdue_properties
       end    
       (0..7).each do |offset|
-        properties = Property.where("call_date > ? and call_date < ?", Date.today + offset, Date.tomorrow + offset).where(closed: false)
+        properties = Property.where("call_date > ? and call_date < ?", Date.today + offset, Date.tomorrow + offset).where(closed: false)        
         agents = Branch.where("id in (?)", properties.collect(&:branch_id))
         day = (Date.today+offset).strftime('%A')
         is_sunday = day == 'Sunday'          
+
+        if current_user.show_overview
+          days_viewings = Property.where("view_date > ? and view_date < ?", Date.today + offset, Date.tomorrow + offset).where(closed: false)        
+          @week_ahead_hash[day] = build_overview_hash(properties, days_viewings)
+        end
+
         if offset == 0
           day = "Today"
         elsif offset == 1
           day = "Tomorrow"
         end
-        @days_properties_hash[get_key(day, properties.size, agents.size)] = properties
+        @days_properties_hash[get_key(day, properties.size, agents.size)] = properties        
         if is_sunday
-          future_properties = Property.where("call_date > ?", (Date.today + offset+1)).where(closed: false)
-          future_agents = Branch.where("id in (?)", future_properties.collect(&:branch_id))
-          @days_properties_hash[get_key("Future", future_properties.size, future_agents.size)] = future_properties
+          if current_user.show_future
+            future_properties = Property.where("call_date > ?", (Date.today + offset+1)).where(closed: false)
+            future_agents = Branch.where("id in (?)", future_properties.collect(&:branch_id))
+            @days_properties_hash[get_key("Future", future_properties.size, future_agents.size)] = future_properties
+          end
           break
         end
       end
     end        
+  end
+
+  def viewings
+    @days_properties_hash = Hash.new
+    properties = Property.where("view_date > ?", Date.today).where(closed: false)
+    agents = Branch.where("id in (?)", properties.collect(&:branch_id))
+    @days_properties_hash[get_key('Viewings', properties.size, agents.size)] = properties
   end
 
   def stats
@@ -93,5 +121,14 @@ class StaticPagesController < ApplicationController
       else
         day + " - " + properties.to_s + (properties == 1 ? ' call - ' : " calls - ") + agents.to_s + (agents == 1 ? ' agent' : " agents")
       end
+    end
+
+    def build_overview_hash(properties, viewings)
+      overview_hash = Hash.new
+      overview_hash["Viewings"] = viewings.size()
+      properties.each do |property|
+        overview_hash[property.estate_agent.id] = 1 + (overview_hash[property.estate_agent.id] ||= 0)
+      end            
+      overview_hash
     end
 end
