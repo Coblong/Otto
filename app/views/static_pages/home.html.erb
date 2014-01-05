@@ -4,66 +4,23 @@
   </div>
   <div id="main">     
 
-  <% if !todays_properties.any? %>
     <div id="main-top">           
-      <div class="diary-header">       
-        You don't have any calls today
-      </div>
-    </div>
-  
-  <% else %>
-    <div id="main-top">           
-      <div class="diary-header">       
-        You have <%= todays_properties.size %> calls today
-      </div>
-      <div id="diary-panel">       
-    <% todays_properties.each do |property| %>
-        <%= render "/shared/diary_entry", property: property %>   
-    <% end %>        
-      </div>
-    </div>
-  <% end %>        
-      
-  <% if tomorrows_properties.any? %>
-    <div id="main-top">         
-      <div class="diary-header">       
-        You have <%= tomorrows_properties.size %> calls tomorrow
-      </div>
-      <div id="diary-panel">       
-    <% tomorrows_properties.each do |property| %>
-        <%= render "/shared/diary_entry", property: property %>   
-    <% end %>        
-      </div>
-    </div>
-  <% end %>        
 
-  <% if rest_of_the_weeks_properties.any? %>
-    <div id="main-top">         
-      <div class="diary-header">       
-        Then you have <%= rest_of_the_weeks_properties.size %> more calls this week
-      </div>
-      <div id="diary-panel">       
-    <% rest_of_the_weeks_properties.each do |property| %>
-        <%= render "/shared/diary_entry", property: property %>   
-    <% end %>        
-      </div>
-    </div>
-  <% end %>        
+<div id="accordion" class="diary-header">
 
-    <div id="main-bottom">   
-  <% if current_properties.any? %>     
-        <%= render "/shared/statuses_table" %>   
-  <% end %>  
-    <p>
-  <% if current_user.estate_agents.any? %>     
-        <%= render "/shared/estate_agents_table" %>   
-  <% end %>  
-    <p>
-  <% if current_properties.any? %>      
-        <%= render "/shared/properties_table" %>
-  <% end %>
-    </div>
-  </div>
+  <% if @days_properties_hash.any? %>      
+    <% @days_properties_hash.keys.each do |day| %>
+      <h3><%= day %></h3>
+      <div class="diary-panel">   
+        <% @days_properties_hash[day].each do |property| %>
+          <%= render "/shared/diary_entry", property: property %>   
+        <% end %>
+      </div>      
+    <% end %>
+  <% end %> 
+
+  <br><br><br>
+</div>
 <% else %>
   <div class="welcome-inner">
     <h1>Welcome to the Ottor system</h1>
@@ -71,3 +28,169 @@
       <h3>"Whaddayamean it's spelt wrong?"</h3>
   </div>
 <% end %>
+
+<script type="text/javascript">
+$(function() {
+  $( ".datepicker" ).datepicker({
+    yearRange: '2012:2100',
+    numberOfMonths: 2,
+    showButtonPanel: true,
+    dateFormat: "DD, d M yy",
+    onSelect: function(dateText) {
+      var propertyId = this.id.toString().substring(3)
+      if (this.name == 'auto') {
+        var newDate = $("#" + this.id).datepicker('getDate');
+        updateCallDate(propertyId, newDate)
+      }
+    }
+  });
+});
+$('.change_call_date').click(function() {
+  var id = this.id.toString()
+  var type = id.substring(0,2)
+  var propertyId = id.substring(3)
+  var dpId = '#dp-' + propertyId  
+  var oldDate = $(dpId).datepicker('getDate');
+  var newDate = oldDate
+
+  if (type == 'w1') {
+    newDate.setDate(oldDate.getDate() + 7);
+  } else if (type == 'w2') {
+    newDate.setDate(oldDate.getDate() + 14);
+  } else {
+    newDate.setMonth(oldDate.getMonth() + 1);
+  }
+  if (this.name == 'auto') {
+    updateCallDate(propertyId, newDate)
+  } else {
+    $( '#nndp-' + propertyId ).datepicker("setDate", newDate );  
+  }
+});
+$(function() {
+  $( ".property-status" ).change(function() {
+    var propertyId = this.id.toString().substring(7)
+    updateStatus(propertyId, this.value)
+  });
+});
+$(function() {
+  $( ".delete_note" ).click(function() {
+    var noteId = this.id.toString().substring(4)
+    $.ajax({
+      type: "POST",
+      url: "/delete_note",
+      data: 'note_id=' + noteId,
+      dataType: "json",
+      error: function(xhr, status, error) {
+        alert('Unable to delete note')
+      },
+      success: function (xhr, data) {
+        if ($("#nli-" + noteId).length > 0) {
+          $("#nli-" + noteId).remove()
+        }
+      }
+    });
+  });
+});
+function addDeleteFunction(id) {
+  $( "#del-" + id ).click(function() {
+    $.ajax({
+      type: "POST",
+      url: "/delete_note",
+      data: 'note_id=' + id,
+      dataType: "json",
+      error: function(xhr, status, error) {
+        alert('Unable to delete note')
+      },
+      success: function (xhr, data) {
+        if ($("#nli-" + id).length > 0) {
+          $("#nli-" + id).remove()
+        }
+      }
+    });
+  });
+}
+$('.call').click(function(e) {
+  e.preventDefault();
+  var propertyId = this.id.toString().substring(2)
+  $( "#dialog" + propertyId ).dialog( "open" );
+});
+$('.view').click(function(e) {
+  e.preventDefault();
+  var propertyId = this.id.toString().substring(2)
+  $( "#view-dialog" + propertyId ).dialog( "open" );
+});
+$('.make_offer').click(function(e) {
+  e.preventDefault();
+  var propertyId = this.id.toString().substring(2)
+  $( "#offer-dialog" + propertyId ).dialog( "open" );
+});
+$('.close').click(function(e) {
+  e.preventDefault();
+  var propertyId = this.id.toString().substring(2)
+  closeProperty(propertyId)
+});
+$(".history").click(function(e) {
+    e.preventDefault();
+    var propertyId = this.id.toString().substring(2)
+    var active = $( "#accordion-" + propertyId ).accordion("option", "active");
+    if (active === false) {
+        $( "#accordion-" + propertyId ).accordion("option", "active", 0);
+    } else {
+        $( "#accordion-" + propertyId ).accordion("option", "active", false);
+    }
+});
+function updateCallDate(propertyId, newDate) {
+  $.ajax({
+      type: "POST",
+      url: "/update_call_date",
+      data: 'new_call_date=' + newDate + '&property_id=' + propertyId,
+      dataType: "json",
+      error: function(xhr, status, error) {
+        alert('Unable to update date')
+        $( "#" + propertyId ).datepicker("setDate", oldDate );  
+      },
+      success: function (xhr, data) {
+        location.reload();
+      }
+  });
+}
+function closeProperty(propertyId) {
+  $.ajax({
+      type: "POST",
+      url: "/close",
+      data: 'property_id=' + propertyId,
+      dataType: "json",
+      error: function(xhr, status, error) {
+        alert('Unable to close property')
+      },
+      success: function (xhr, data) {
+        location.reload();
+      }
+  });
+}
+function updateStatus(propertyId, newStatus) {
+  $.ajax({
+      type: "POST",
+      url: "/update_status",
+      data: 'new_status=' + newStatus + '&property_id=' + propertyId,
+      dataType: "json",
+      error: function(xhr, status, error) {
+        alert('Unable to update status')
+      },
+      success: function (data, status, response) {
+        note = JSON.parse(data["note"])
+        var html = "<li id='nli-" + note["id"] + "'' class='" + note["note_type"] + "'>"
+        html += note["formatted_date"] + " - "
+        html += note["content"]
+        html += "<span><img alt='Delete' class='delete_note' id='del-" + note["id"] + "' src='/assets/delete.png' width='14'></span></li>"
+
+        $( "#accordian-notes-" + propertyId + " ul" ).prepend(html);                
+        addDeleteFunction(note["id"]);
+      }
+  });
+}
+$( "#accordion" ).accordion({
+      collapsible: true,
+      heightStyle: "content"
+    });
+</script>

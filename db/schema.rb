@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131220150545) do
+ActiveRecord::Schema.define(version: 20140104204947) do
 
   create_table "agents", force: true do |t|
     t.string   "name"
@@ -86,6 +86,9 @@ ActiveRecord::Schema.define(version: 20131220150545) do
     t.integer  "agent_id"
     t.integer  "area_code_id"
     t.datetime "call_date"
+    t.boolean  "sstc"
+    t.boolean  "closed"
+    t.datetime "view_date"
   end
 
   add_index "properties", ["agent_id", "created_at"], name: "index_properties_on_agent_id_and_created_at"

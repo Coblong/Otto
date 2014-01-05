@@ -8,6 +8,23 @@ $main-bg: white;
 $colour: midnightblue;
 $well-colour: mintcream;
 $dark-well-colour: lightblue;
+$note-header-bg: #E3E3E3;
+$manual-colour: $colour;
+$manual-bg: $well-colour;
+$status_colour: $bg2;
+$status-bg: $well-colour;
+$sstc-colour: $colour;
+$sstc-bg: palegreen;
+$price-colour: $colour;
+$price-bg: lightpink;
+$auto-colour: $bg1;
+$auto-bg: $well-colour;
+$action-colour: $bg1;
+$action-bg: $well-colour;
+$viewing-colour: maroon;
+$viewing-bg: $well-colour;
+$offer-colour: $colour;
+$offer-bg: lightyellow;
 
 @mixin box_sizing {
   -moz-box-sizing: border-box;
@@ -164,7 +181,7 @@ a {
 
 .left-nav-table {
   width: 100%;
-  outline: 1px solid $well-colour;  
+  outline: 1px solid $well-colour;    
 }
 
 #left-nav {
@@ -193,6 +210,12 @@ a {
       }
     }    
   }
+}
+
+.sstc {
+  background-image:url('sstc.png');
+  background-size: contain;
+  background-repeat:no-repeat;
 }
 
 .tall {
@@ -259,32 +282,85 @@ a {
       text-align: right;
     }
   }  
+  table {
+    padding: 2px;    
+    margin: 0px;    
+    width: 100%;
+    td {
+      &:last-child {
+        text-align: right;
+      }
+    }
+  }
+}
+
+.toolitem {
+  width: 28px;
+  vertical-align: bottom;
+  cursor: pointer;
+  outline: 1px $main-bg;
+  &:hover {
+    outline: 1px solid $lightline;
+  }
+}
+
+.dialog {
+  display:none;  
+}
+
+#accordion .ui-accordion-content { 
+  padding: 0; 
+}
+
+#accordion .ui-accordion-header { 
+  background: $bg1;  
+}
+
+#accordion .ui-accordion-content.accordian-notes { 
+  border: none;
+  display:none;
+}
+
+#accordion .ui-accordion-header.accordian-notes { 
+  border: 0px;  
+  padding: 2px 0px;
+  background: $main-bg; 
+  text-align: right;
+  text-decoration: underline;
+  .ui-icon {
+    background: none;
+  }
+}
+
+#accordion .ui-accordion-content.accordian-notes { 
+  border: 0;  
 }
 
 .diary-header {
-  margin: 10px auto;
-  width: 98%;
-  padding: 5px;
-  background: $highlight-bg; 
+  padding: 5px;      
+  h3 {
+    display:none;
+  }
 }
 
-#diary-panel {
-  margin: 10px auto;
-  width: 98%;
-  padding: 5px;
-  display: table;
+.diary-panel {
+  text-align: left;      
+  padding: 0px;
+  margin: 0px;
+  display:none;
 }
 
 .diary {
-  display: table-row;
-  width: 100%; 
-  padding: 5px;
-  border-radius: 2px;
+  padding: 0px;
+  margin: 0px;
   table {
-    border-bottom: 1px solid $lightline;      
-    padding: 5px;    
-    width: 100%;
-    height: 100%;
+    padding: 10px 0px;    
+    margin: 5px auto;    
+    width: 98%;
+    tr:last-child {
+      height:2px;    
+      background: $bg2; 
+    }
   }
   ul {
     list-style: none;
@@ -295,8 +371,44 @@ a {
       padding: 5px;
       border-radius: 2px;
       border: 1px solid $lightline;
-      background: $bg1; 
+      background: $well-colour; 
+      span {
+        float: right;
+        padding: 3px 2px 0px  2px;
+        &:hover {
+          border: 1px solid $bg1;
+          border-radius: 3px;
+        }
+      }
     }
+  }  
+  .manual {
+    color: $manual-colour;
+    background: $manual-bg;
+  }
+  .sstc {
+    color: $sstc-colour;
+    background: $sstc-bg;
+  }
+  .auto {
+    color: $auto-colour;
+    background: $auto-bg;    
+  }
+  .status {
+    color: $status-colour;
+    background: $status-bg;
+  }
+  .price {
+    color: $price-colour;
+    background: $price-bg;
+  }
+  .viewing {
+    color: $viewing-colour;
+    background: $viewing-bg;
+  }
+  .offer {
+    color: $offer-colour;
+    background: $offer-bg;
   }
 }
 

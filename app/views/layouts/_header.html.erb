@@ -74,10 +74,12 @@
   </div>
   <div class="navbar-menus right">
     <ul>
-      <li><%= link_to "Home", root_path(area_code: -1, estate_agent: -1) %></li>
+      <li><%= link_to "Diary", root_path(area_code: -1, estate_agent: -1) %></li>
       <% if signed_in? %>
         <li><%= link_to current_user.name, current_user %>&nbsp;&nbsp;<b class="caret"></b>&nbsp;
           <ul>
+            <li><%= link_to "Stats", stats_path %></li>            
+            <li><%= link_to "Archive", root_path(area_code: -1, estate_agent: -1, closed: true) %></li>
             <li><%= link_to "Settings", user_statuses_path(current_user) %></li>
             <li>
               <%= link_to "Sign out", signout_path, method: "delete" %>

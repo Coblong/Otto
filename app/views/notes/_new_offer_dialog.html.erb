@@ -1,0 +1,49 @@
+<div id="offer-dialog<%= property.id %>" title="Make an offer on  <%= property.address %>" class="dialog">  
+  <input class="new-note-agent" id="off-<%= property.id %>" placeholder="Offer amount..."/>
+  <textarea id="onn-<%= property.id %>" class="new-note" placeholder="Add a comment..."></textarea>    
+</div>
+<script type="text/javascript">
+$(function() {
+  $( "#offer-dialog<%= property.id %>" ).dialog({
+    autoOpen: false,
+    modal: true,
+    height: 350,
+    width: 300,
+    show: {
+      effect: "blind",
+      duration: 200
+    },
+    buttons: {
+      "Save": function () {
+        var offer = $("#off-<%= property.id %>").val();
+        var note = $("#onn-<%= property.id %>").val();
+        $.ajax({
+            type: "POST",
+            url: "offers",
+            data: 'property_id=' + <%= property.id %> +'&offer=' + offer + '&note=' + note,
+            dataType: "json",
+            error: function(xhr, status, error) {
+                console.log('Unable to set viewing');
+            },
+            success: function (data, status, response) {
+              console.log(status);    
+              console.log('Data resposne is ' + status);                            
+              console.log('Status is ' + response.status);                            
+              var html = "<li id='nli-" + data["id"] + "'' class='" + data["note_type"] + "'>"
+              html += data["formatted_date"] + " - "
+              html += data["content"]
+              html += "<span><img alt='Delete' class='delete_note' id='del-" + data["id"] + "' src='/assets/delete.png' width='14'></span></li>"
+
+              $( "#accordian-notes-<%= property.id%> ul" ).prepend(html);                
+              addDeleteFunction(data["id"]);
+              $( "#offer-dialog<%= property.id %>" ).dialog( "close" );      
+            }
+        });
+      },
+      "Cancel": function () {
+        $( this ).dialog( "close" );
+      }
+    }
+  });
+});
+</script>

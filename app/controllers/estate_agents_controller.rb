@@ -1,5 +1,5 @@
 class EstateAgentsController < ApplicationController
-  before_action :set_estate_agent, only: [:new, :show, :edit, :update, :destroy]
+  before_action :set_estate_agent_in_controller, only: [:new, :show, :edit, :update, :destroy]
 
   def index
     if !current_user
@@ -25,9 +25,10 @@ class EstateAgentsController < ApplicationController
 
   def update
     puts 'Updating estate agent'
-    @estate_agent.name = params[:estate_agent][:name]
-    @estate_agent.comment = params[:estate_agent][:comment]
-    if @estate_agent.save!
+    estate_agent = current_estate_agent
+    estate_agent.name = params[:estate_agent][:name]
+    estate_agent.comment = params[:estate_agent][:comment]
+    if estate_agent.save!
       puts 'Estate agent saved'
       render 'show'
     else
@@ -47,8 +48,8 @@ class EstateAgentsController < ApplicationController
 
   private
 
-    def set_estate_agent
-      set_current_estate_agent(EstateAgent.find(params[:id]))
+    def set_estate_agent_in_controller
+      set_estate_agent(EstateAgent.find(params[:id]))
     end
 
     def estate_agent_params

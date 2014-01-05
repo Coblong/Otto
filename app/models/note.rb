@@ -8,11 +8,14 @@ class Note < ActiveRecord::Base
 
   @TYPE_MANUAL = "manual"
   @TYPE_STATUS = "status"
+  @TYPE_SSTC = "sstc"
+  @TYPE_PRICE = "price"
   @TYPE_AUTO = "auto"
-  @TYPE_ACTION = "action"
-
+  @TYPE_VIEWING = "viewing"
+  @TYPE_OFFER = "offer"
+  
   class << self
-    attr_accessor :TYPE_MANUAL, :TYPE_STATUS, :TYPE_AUTO, :TYPE_ACTION 
+    attr_accessor :TYPE_MANUAL, :TYPE_STATUS, :TYPE_SSTC, :TYPE_PRICE, :TYPE_AUTO, :TYPE_VIEWING, :TYPE_OFFER 
   end
 
   def formatted_date 
@@ -20,9 +23,6 @@ class Note < ActiveRecord::Base
   end
 
   def agent_name
-    if !self.agent.nil?
-      return self.agent.name
-    end
-    ""
+    self.agent.name unless self.agent.nil?
   end
 end

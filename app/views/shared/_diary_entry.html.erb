@@ -1,19 +1,72 @@
 <div class='diary'>
   <table>
-    <tr><td><b><%= link_to property.address, property %></b></td><td><%= render "/shared/status", property: property %></td></tr>
-    <tr><td><%= link_to property.estate_agent.name, property.estate_agent %> / <%= link_to property.branch.name, property.branch %></td><td colspan="2" align="right" id="call_date_<%= property.id %>"><small><%= property.call_date_formatted %></small></td></tr>
     <tr>
-      <td colspan="2">
-        <ul>
-<% property.last_notes.each do |note| %>          
-  <% if !note.agent.nil? %>    
-          <li><%= note.agent.name %> - <%= note.content %></li>
-  <% else %>
-          <li><%= note.content %></li>
-  <% end %>          
-<% end %>        
-        </ul>
+      <td>
+        <big><b><%= link_to property.address + ' - ' + property.post_code, property %></b></big>
+        <% if property.sstc %>        
+          <%= image_tag "sstc.png", width: 20 %>
+        <% end %>
+        <%= property.asking_price %>
+      </td>
+      <td align="right">
+<%
+  w1_id = "w1-" + property.id.to_s
+  w2_id = "w2-" + property.id.to_s
+  m1_id = "m1-" + property.id.to_s
+  call_id = "c-" + property.id.to_s
+  view_id = "v-" + property.id.to_s
+  offer_id = "o-" + property.id.to_s
+  close_id = "c-" + property.id.to_s
+  reopen_id = "r-" + property.id.to_s
+  history_id = "h-" + property.id.to_s
+%>
+        <%= image_tag "w.png", class: "toolitem change_call_date", title: "Add 1 week", name: "auto", id: w1_id %>
+        <%= image_tag "w2.png", class: "toolitem change_call_date", title: "Add 2 weeks", name: "auto", id: w2_id %>
+        <%= image_tag "m.png", class: "toolitem change_call_date", title: "Add 1 month", name: "auto", id: m1_id %>
+        <%= select_tag ("status-" + property.id.to_s), options_from_collection_for_select(current_user.statuses, "id", "description", property.status.id), class: "property-status" %>
+        <%= image_tag "call.png", class: "toolitem call", title: "Call", id: call_id %>
+        <%= image_tag "view.png", class: "toolitem view", title: "Viewing", id: view_id %>
+        <%= image_tag "offer.png", class: "toolitem make_offer", title: "Offer", id: offer_id  %>
+        <% if property.closed %>
+          <%= image_tag "reopen.png", class: "toolitem reopen", title: "Reopen", id: reopen_id %>
+        <% else %>
+          <%= image_tag "close.png", class: "toolitem close", title: "Close", id: close_id %>
+        <% end %>
+        <%= image_tag "notes.png", class: "toolitem history", title: "Notes", id: history_id %>
       </td>
     </tr>
+    <tr>
+      <td>
+        <%= link_to property.estate_agent.name, property.estate_agent %> / <%= link_to property.branch.name, property.branch %>
+      </td>
+      <td align="right">
+        <input type="text" name="auto" id='dp-<%= property.id %>' class="datepicker" value="<%= property.call_date_formatted(:long) %>">
+      </td>
+    </tr>
+    <tr>
+      <td colspan="4">
+        <div id="accordion-<%= property.id %>" class="accordian-notes">
+          <h3 class="accordian-notes"></h3>
+          <div id="accordian-notes-<%= property.id %>" class="accordian-notes">
+            <ul>
+<% property.last_notes.each do |note| %>          
+            <%= render note %>
+<% end %>   
+            </div>
+          </ul>
+        </div>
+      </td>
+    </tr>
+    <tr><td colspan="4"></td></tr>
   </table>  
 </div>
+<%= render 'notes/new_note_dialog', property: property %>
+<%= render 'notes/new_viewing_dialog', property: property %>
+<%= render 'notes/new_offer_dialog', property: property %>
+<script type="text/javascript">
+$( "#accordion-<%= property.id %>" ).accordion({
+      collapsible: true,
+      heightStyle: "content",
+      active: 0 
+    });
+</script>

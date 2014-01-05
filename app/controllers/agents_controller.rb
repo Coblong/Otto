@@ -1,5 +1,5 @@
 class AgentsController < ApplicationController
-  before_action :signed_in_user, :set_agent, only: [:show, :edit, :update, :destroy]
+  before_action :signed_in_user, :set_agent_in_controller, only: [:show, :edit, :update, :destroy]
 
   def index
     @agents = Agent.all
@@ -23,9 +23,10 @@ class AgentsController < ApplicationController
   end
 
   def update
-    @agent.name = params[:agent][:name]
-    @agent.comment = params[:agent][:comment]
-    if @agent.save!
+    agent = current_agent
+    agent.name = params[:agent][:name]
+    agent.comment = params[:agent][:comment]
+    if agent.save!
       render 'show'
     end
   end
@@ -44,8 +45,8 @@ class AgentsController < ApplicationController
 
   private
 
-    def set_agent
-      set_current_agent(Agent.find(params[:id]))
+    def set_agent_in_controller
+      set_agent(Agent.find(params[:id]))
     end
 
     def agent_params

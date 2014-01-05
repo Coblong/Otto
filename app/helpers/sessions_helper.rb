@@ -45,65 +45,73 @@ module SessionsHelper
     session[:return_to] = request.url if request.get?
   end
 
-  def home?
-    session[:hunting_mode]
-  end
-
-  def hunting?
-    session[:hunting_mode]
-  end
-
-  def set_hunting_mode(mode)
-    session[:hunting_mode] = mode
-  end
-
   def current_agents
     current_branch.agents unless current_branch.nil?
   end
 
-  def todays_properties
-    Property.where("call_date > ? and call_date < ?", Date.today, Date.tomorrow)
+  def get_futures_header(offset)
+    header = "In Future - "
+    properties = future_properties(offset)
+    agents = future_agents(offset)
+    header += properties.size.to_s + " call"
+    header += 's' unless properties.size < 2
+    header += " - " + agents.size.to_s + " agent"
+    header += 's' unless agents.size < 2
+    header
   end
 
-  def tomorrows_properties
-    Property.where("call_date > ? and call_date < ?", Date.tomorrow, (Date.tomorrow + 1))
-  end
-
-  def rest_of_the_weeks_properties
-    Property.where("call_date > ?", (Date.tomorrow + 1))
+  def get_diary_header(offset)
+    if offset == 0
+      day = "Today - "
+    elsif offset == 1
+      day = "Tomorrow - "
+    else 
+      day = (Date.today+offset).strftime('%A') + ' - '
+    end
+    properties = days_properties(offset)
+    agents = days_agents(offset)
+    if properties.size > 0
+      header = day + properties.size.to_s + " call"
+      header += 's' unless properties.size < 2
+      header += " - " + agents.size.to_s + " agent"
+      header += 's' unless agents.size < 2
+      header
+    else
+      day + 'No calls'
+    end    
   end
 
   def current_properties
     if !current_property.nil?
-      current_property.branch.properties
+      current_property.branch.properties.where(closed: show_closed?)
     else
       if !current_agent.nil?
         if current_area_code.nil?
-          current_agent.properties
+          current_agent.properties.where(closed: show_closed?)
         else
-          current_agent.properties.where(area_code_id: current_area_code)
+          current_agent.properties.where(area_code_id: current_area_code, closed: show_closed?)
         end
       else
         if !current_branch.nil?
-          current_branch.properties
+          current_branch.properties.where(closed: show_closed?)
           if current_area_code.nil?
-            current_branch.properties
+            current_branch.properties.where(closed: show_closed?)
           else
-            current_branch.properties.where(area_code_id: current_area_code)
+            current_branch.properties.where(area_code_id: current_area_code, closed: show_closed?)
           end
         else
           if !current_estate_agent.nil?
-            current_estate_agent.properties
+            current_estate_agent.properties.where(closed: show_closed?)
             if current_area_code.nil?
-              current_estate_agent.properties
+              current_estate_agent.properties.where(closed: show_closed?)
             else
-              current_estate_agent.properties.where(area_code_id: current_area_code)
+              current_estate_agent.properties.where(area_code_id: current_area_code, closed: show_closed?)
             end
           else
             if current_area_code.nil?        
-              Property.where("estate_agent_id in (?)", EstateAgent.where(user_id: current_user.id).collect(&:id))
+              Property.where("estate_agent_id in (?)", EstateAgent.where(user_id: current_user.id).collect(&:id)).where(closed: show_closed?)
             else        
-              Property.where("estate_agent_id in (?) and area_code_id = ?", EstateAgent.where(user_id: current_user.id).collect(&:id), current_area_code)
+              Property.where("estate_agent_id in (?) and area_code_id = ?", EstateAgent.where(user_id: current_user.id).collect(&:id), current_area_code).where(closed: show_closed?)
             end
           end
         end
@@ -121,6 +129,16 @@ module SessionsHelper
     else
       session[:area_code] = area_code
     end
+  end
+  
+  def show_closed(show)
+    puts 'Setting show_closed to ' + show.to_s
+    session[:closed] = show 
+  end
+  
+  def show_closed?
+    puts 'Show_closed is ' + session[:closed].to_s
+    session[:closed]
   end
   
   def set_estate_agent(estate_agent)

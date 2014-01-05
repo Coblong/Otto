@@ -1,0 +1,8 @@
+<% delete_note_id = "del-" + note.id.to_s %>
+<li id="nli-<%= note.id %>" class="<%= note.note_type %>">
+<%= note.formatted_date + ' - ' %>
+<% if !note.agent.nil? %>
+  <%= link_to note.agent.name, note.agent %> -
+<% end %>
+<%= note.content %>
+<span><%= image_tag "delete.png", width: 14, class: "delete_note", id: delete_note_id %></span></li>

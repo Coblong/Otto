@@ -1,4 +1,5 @@
 class PropertiesController < ApplicationController
+  include ActionView::Helpers::NumberHelper
   before_action :set_property_in_controller, only: [:show, :edit]  
   skip_before_filter  :verify_authenticity_token
 
@@ -15,44 +16,46 @@ class PropertiesController < ApplicationController
     if @property.nil?
       puts 'This is a new property so create it'
       estate_agent_ref = params[:estate_agent].partition(',').first
-      @estate_agent = find_or_create_estate_agent(estate_agent_ref)    
-      @branch = find_or_create_branch(@estate_agent, params[:branch]);
+      estate_agent = find_or_create_estate_agent(estate_agent_ref)    
+      branch = find_or_create_branch(estate_agent, params[:branch]);
       
       area_code = params[:post_code].partition('_').first
       post_code = params[:post_code].gsub('_', ' ')
-      @area_code = find_or_create_area_code(area_code)
+      area_code = find_or_create_area_code(area_code)
       
-      @property = @estate_agent.properties.build
-      @property.branch = @branch
+      @property = estate_agent.properties.build
+      @property.branch = branch
       @property.external_ref = params[:url]
       @property.address = params[:address].partition(',').first
-      puts 'about to set the area code to ' + @area_code.description
-      @property.area_code = @area_code
-      puts 'about to set the post code to ' + post_code
+      @property.area_code = area_code
       @property.post_code = post_code
       @property.url = params[:hostname]
       @property.asking_price = params[:asking_price]
+      @property.sstc = params[:sstc]
       @property.status = Status.find(params[:status_id])    
       @property.call_date = Date.today
       
       note = @property.notes.build
       note.content = 'Created'
-      note.note_type = Note.TYPE_AUTO      
-      puts 'Property notes ' + @property.notes.to_s
+      note.note_type = Note.TYPE_AUTO
+
     else
       new_status = Status.find(params[:status_id])    
       if new_status.id != @property.status.id
-        note = @property.notes.build
-        note.content = 'Status changed from ' + @property.status.description + ' to ' + new_status.description
-        note.note_type = Note.TYPE_STATUS
-        @property.status = new_status      
+        add_status_note(@property, new_status)
+      end
+      new_sstc = params[:sstc]
+      if new_sstc != @property.sstc
+        add_sstc_note(@property, new_sstc)
+      end
+      new_asking_price = params[:asking_price]
+      if new_asking_price != @property.asking_price
+        add_asking_price_note(@property, new_asking_price)
       end
     end
 
     if @property.save()      
       puts 'Property saved'
-      note.save
-      puts 'Note saved'
       response = build_response
       puts response.to_s
       render :json => response
@@ -68,15 +71,10 @@ class PropertiesController < ApplicationController
     else
       @property = Property.find_by(external_ref: params[:url]);
       if @property.nil?
-        puts 'Property not found'
         response = { "statuses" => current_user.statuses.to_json }
-        puts 'the response is ---------------- ' + response.to_s
         render :json => response
       else
         response = build_response
-        puts '.............................................'
-        puts response.to_s
-        puts '.............................................'
         render :json => response
       end
     end
@@ -86,12 +84,25 @@ class PropertiesController < ApplicationController
     if !current_user
       render :nothing => true, :status => :unauthorized
     else
-      @property = Property.find_by(external_ref: params[:url]);
+      puts 'Creating new note'
+      if !params[:url].nil?
+        @property = Property.find_by(external_ref: params[:url]);
+      else
+        @property = Property.find(params[:property_id]);
+      end
       if @property.nil?
-        puts 'Property not found'
         response = { "statuses" => current_user.statuses.to_json }
         render :json => response
       else      
+        old_call_date = @property.call_date
+
+        / Build the note /
+        note = @property.notes.build
+        note.note_type = Note.TYPE_MANUAL
+        note.content = params[:note]
+        note.branch_id = @property.branch_id
+        note.estate_agent_id = @property.estate_agent.id
+
         agent_name = params[:agent]
         branch = Branch.find(@property.branch_id)
         agent = branch.agents.find {|a| a.name == agent_name }
@@ -109,34 +120,153 @@ class PropertiesController < ApplicationController
             agent.save()
           end
         end
-
-        note = @property.notes.build
-        note.content = params[:note]
-        note.agent_id = agent.id
-        note.branch_id = branch.id
-        note.estate_agent_id = branch.estate_agent_id
-        note.note_type = Note.TYPE_MANUAL
-
-        note.save()
         
-        response = build_response
-        puts response.to_s
-        render :json => response
+        note.agent_id = agent.id
+        
+        if !params[:call_date].nil?            
+          @property.call_date = params[:call_date]
+          @property.save()
+          if note.content.empty?
+            note.content = 'Updated'
+            note.note_type = Note.TYPE_MANUAL
+          end            
+        end          
+        
+        note.save()
+
+        date_changed = old_call_date.strftime('%u') != @property.call_date.strftime('%u')
+        render :json => note.to_json(methods: [:formatted_date, :agent_name] ), :status => (date_changed ? :accepted : :ok)
       end
     end
   end
 
+  def create_viewing
+    puts 'Creating a new viewing'
+    if !current_user
+      render :nothing => true, :status => :unauthorized
+    else
+      @property = Property.find(params[:property_id]);
+      if @property.nil?
+        response = { "statuses" => current_user.statuses.to_json }
+        render :json => response
+      else      
+        old_call_date = @property.call_date
+
+        / Build the note /
+        note = @property.notes.build
+        note.note_type = Note.TYPE_VIEWING
+        note.content = params[:note]
+        note.branch_id = @property.branch_id
+        note.estate_agent_id = @property.estate_agent.id
+        @property.view_date = params[:call_date]
+
+        hour = params[:hours].to_i
+        min = params[:mins].to_i
+        @property.view_date = DateTime.new(@property.view_date.year, @property.view_date.month, @property.view_date.day, hour, min, 0, 0)
+        @property.save()
+
+        note.content = 'Viewing on ' + @property.view_date.strftime('%A, %d %b %Y at %H:%M')        
+        
+        note.save()
+
+        render :json => note.to_json(methods: [:formatted_date, :agent_name] )
+      end
+    end
+  end
+
+  def create_offer
+    puts 'Creating a new offer'
+    if !current_user
+      render :nothing => true, :status => :unauthorized
+    else
+      @property = Property.find(params[:property_id]);
+      if @property.nil?
+        response = { "statuses" => current_user.statuses.to_json }
+        render :json => response
+      else      
+        offer = params[:offer]
+        offer.sub! 'k', '000'
+        offer.sub! 'K', '000'
+        additional_note = params[:note]
+        
+        / Build the note /
+        note = @property.notes.build
+        note.note_type = Note.TYPE_OFFER
+        note.content = "Made an offer of " + number_to_currency(offer.to_i, unit: "£")
+        if additional_note.length > 0
+          note.content += " - " + additional_note 
+        end
+        note.branch_id = @property.branch_id
+        note.estate_agent_id = @property.estate_agent.id
+
+        note.save()
+
+        render :json => note.to_json(methods: [:formatted_date, :agent_name] ), :status => :ok
+      end
+    end
+  end
+
+  def close
+    puts 'Close property'
+    if !current_user
+      render :nothing => true, :status => :unauthorized
+    else
+      @property = Property.find(params[:property_id]);
+      if @property.nil?
+        response = { "statuses" => current_user.statuses.to_json }
+        render :json => response
+      else      
+
+        @property.closed = true
+        @property.save()
+        
+        / Build the note /
+        note = @property.notes.build
+        note.note_type = Note.TYPE_MANUAL
+        note.content = "Close"
+        note.branch_id = @property.branch_id
+        note.estate_agent_id = @property.estate_agent.id
+
+        note.save()
+
+        render :json => note.to_json(methods: [:formatted_date, :agent_name] ), :status => :ok
+      end
+    end
+  end
+
+  def delete_note
+    note = Note.find(params[:note_id])
+    @property = note.property
+    puts 'deleting note for property - ' + @property.to_yaml
+    if note.delete
+      puts 'Note deleted'
+        response = build_response
+        puts response.to_s
+        render :json => response
+    else
+      puts 'Note not deleted'
+      render :nothing => true, :status => :service_unavailable
+    end
+  end
+
   def update_call_date
-    puts 'Here we are'
-    puts params.to_yaml
-    @property = Property.find(params[:property_id])    
-    puts 'property is ' + @property.to_yaml
+    property = Property.find(params[:property_id])    
     new_date = params[:new_call_date]
-    puts 'new call date is ' + new_date.to_s
-    @property.call_date = Date.parse( new_date.gsub(/, */, '-') )
-    puts 'the new date is ' + @property.call_date_formatted
-    if @property.save()    
-      render :json => {call_date: @property.call_date_formatted}, :status => :created
+    add_call_date_note(property, new_date)
+    property.call_date = Date.parse( new_date.gsub(/, */, '-') )    
+    if property.save()    
+      render :json => {call_date: property.call_date_formatted(:short)}, :status => :created
+    else
+      render :nothing => true, :status => :internal_server_error
+    end
+  end
+
+  def update_status
+    property = Property.find(params[:property_id])    
+    new_status = Status.find(params[:new_status])
+    note = add_status_note(property, new_status)
+    if property.save()    
+      render :json => {new_status_colour: property.status.colour, note: note.to_json(methods: [:formatted_date, :agent_name] )}, :status => :created
     else
       render :nothing => true, :status => :internal_server_error
     end
@@ -202,9 +332,41 @@ class PropertiesController < ApplicationController
     end
 
     def build_response
-      { "status_id" => @property.status_id, "statuses" => current_user.statuses.to_json, 
+      { "status_id" => @property.status_id, "sstc" => @property.sstc, "asking_price" => @property.asking_price, "statuses" => current_user.statuses.to_json, 
         "estate_agent_name" => @property.estate_agent.name, "branch_name" => @property.branch.name, 
         "agents" => @property.branch.agents.to_json(only: [:id, :name] ),
         "notes" => @property.notes.to_json(only: [:content, :note_type], methods: [:formatted_date, :agent_name] ) }
+    end
+
+    def add_status_note(property, new_status)
+        note = property.notes.build
+        note.content = 'Status changed from ' + property.status.description + ' to ' + new_status.description
+        note.note_type = Note.TYPE_STATUS
+        property.status = new_status      
+        note
+    end
+
+    def add_call_date_note(property, new_call_date)
+        note = property.notes.build
+        note.content = 'Updated'
+        note.note_type = Note.TYPE_MANUAL
+    end
+
+    def add_sstc_note(property, new_sstc)
+        note = property.notes.build
+        if new_sstc == true
+          note.content = 'Sold STC'
+        else
+          note.content = 'No longer Sold STC'
+        end
+        note.note_type = Note.TYPE_SSTC
+        property.sstc = new_sstc      
+    end
+
+    def add_asking_price_note(property, new_asking_price)
+        note = property.notes.build
+        note.content = "Price changed from " + property.asking_price + " to " + new_asking_price 
+        note.note_type = Note.TYPE_PRICE
+        property.asking_price = new_asking_price      
     end
 end

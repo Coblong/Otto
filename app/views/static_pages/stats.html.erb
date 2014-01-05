@@ -1,0 +1,26 @@
+<% if signed_in? %>        
+  <div id="left-nav" class="tall">  
+    <%= render 'shared/properties' %>
+  </div>
+  <div id="main">     
+    <div id="main-bottom">   
+  <% if current_properties.any? %>     
+        <%= render "/shared/statuses_table" %>   
+  <% end %>  
+    <p>
+  <% if current_user.estate_agents.any? %>     
+        <%= render "/shared/estate_agents_table" %>   
+  <% end %>  
+    <p>
+  <% if current_properties.any? %>      
+        <%= render "/shared/properties_table" %>
+  <% end %>
+    </div>
+  </div>
+<% else %>
+  <div class="welcome-inner">
+    <h1>Welcome to the Ottor system</h1>
+      <%= image_tag("ottor.png", width: 250, id: "home_image") %><br>
+      <h3>"Whaddayamean it's spelt wrong?"</h3>
+  </div>
+<% end %>

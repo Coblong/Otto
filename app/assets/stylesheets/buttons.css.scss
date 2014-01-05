@@ -35,6 +35,9 @@ $bg2: #1b5bc2;
   text-align:center;
   text-shadow:1px 1px 0px #1570cd;
 }
+.small {
+  width:70px;
+}
 .btn:hover {
   background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #1e62d0), color-stop(1, #3d94f6) );
   background:-moz-linear-gradient( center top, #1e62d0 5%, #3d94f6 100% );

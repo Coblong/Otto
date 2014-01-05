@@ -7,7 +7,7 @@ class Property < ActiveRecord::Base
   has_many :notes, dependent: :destroy
   validates :address, presence: true, length: { maximum: 100 }
   validates :url, length: { maximum: 200 }
-  default_scope -> { order('call_date') }  
+  default_scope -> { order('call_date', 'branch_id', 'created_at') }  
 
   def full_url
     'http://' + url + external_ref
@@ -17,18 +17,26 @@ class Property < ActiveRecord::Base
     Status.all
   end
 
-  def call_date_formatted
-    if self.call_date == Date.today
-      'Today'
-    elsif self.call_date == Date.tomorrow
-      'Tomorrow'
+  def call_date_formatted(text)
+    if text == :short
+      if self.call_date == Date.today
+        'Today'
+      elsif self.call_date == Date.tomorrow
+        'Tomorrow'
+      else
+        self.call_date.strftime('%A, %d %b') unless self.call_date.nil?
+      end
     else
-      self.call_date.strftime('%A, %d %b') unless self.call_date.nil?
+      self.call_date.strftime('%A, %d %b %Y') unless self.call_date.nil?
     end
   end
 
   def last_notes
     #self.notes.where(note_type: 'manual')
     self.notes
+  end
+
+  def sstc? 
+    self.sstc ? "sstc" : ""
   end
 end
