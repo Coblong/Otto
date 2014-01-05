@@ -2,7 +2,7 @@
   <table>
     <tr>
       <td>
-        <big><b><%= link_to property.address + ' - ' + property.post_code, property %></b></big>
+        <span class="property-header"><%= link_to property.address + ' - ' + property.post_code, property %></span>
         <% if property.sstc %>        
           <%= image_tag "sstc.png", width: 20 %>
         <% end %>
