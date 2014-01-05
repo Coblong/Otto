@@ -86,46 +86,49 @@ module SessionsHelper
     puts 'Getting current properties based upon filter'
 
     if !current_property.nil?
-      properties = current_property.branch.properties.where(closed: show_closed?)
+      properties = current_property.branch.properties
     else
       if !current_agent.nil?
         if current_area_code.nil?
-          properties = current_agent.properties.where(closed: show_closed?)
+          properties = current_agent.properties
         else
-          properties = current_agent.properties.where(area_code_id: current_area_code, closed: show_closed?)
+          properties = current_agent.properties.where(area_code_id: current_area_code)
         end
       else
         if !current_branch.nil?
-          properties = current_branch.properties.where(closed: show_closed?)
+          properties = current_branch.properties
           if current_area_code.nil?
-            properties = current_branch.properties.where(closed: show_closed?)
+            properties = current_branch.properties
           else
-            properties = current_branch.properties.where(area_code_id: current_area_code, closed: show_closed?)
+            properties = current_branch.properties.where(area_code_id: current_area_code)
           end
         else
           if !current_estate_agent.nil?
-            properties = current_estate_agent.properties.where(closed: show_closed?)
+            properties = current_estate_agent.properties
             if current_area_code.nil?
-              properties = current_estate_agent.properties.where(closed: show_closed?)
+              properties = current_estate_agent.properties
             else
-              properties = current_estate_agent.properties.where(area_code_id: current_area_code, closed: show_closed?)
+              properties = current_estate_agent.properties.where(area_code_id: current_area_code)
             end
           else
             if current_area_code.nil?        
-              properties = Property.where("estate_agent_id in (?)", EstateAgent.where(user_id: current_user.id).collect(&:id)).where(closed: show_closed?)
+              properties = Property.where("estate_agent_id in (?)", EstateAgent.where(user_id: current_user.id).collect(&:id))
             else        
-              properties = Property.where("estate_agent_id in (?) and area_code_id = ?", EstateAgent.where(user_id: current_user.id).collect(&:id), current_area_code).where(closed: show_closed?)
+              properties = Property.where("estate_agent_id in (?) and area_code_id = ?", EstateAgent.where(user_id: current_user.id).collect(&:id), current_area_code)
             end
           end
         end
       end
     end
 
+    if !show_all?
+      properties = properties.where(closed: show_closed?)
+    end
     if filter == "viewings"
       properties.where("view_date > ?", Time.now)
-    else
-      properties
     end
+      
+    properties
   end
 
   def current_branches
@@ -141,13 +144,19 @@ module SessionsHelper
   end
   
   def show_closed(show)
-    puts 'Setting show_closed to ' + show.to_s
     session[:closed] = show 
   end
   
   def show_closed?
-    puts 'Show_closed is ' + session[:closed].to_s
     session[:closed]
+  end
+  
+  def show_all(show)
+    session[:all] = show 
+  end
+  
+  def show_all?
+    session[:all]
   end
   
   def set_estate_agent(estate_agent)

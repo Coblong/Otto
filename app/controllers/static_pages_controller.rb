@@ -26,12 +26,13 @@ class StaticPagesController < ApplicationController
       
       @days_properties_hash = Hash.new
 
-      if show_closed?
+      if show_all? or show_closed?
         puts 'Loading closed properties'
         closed_properties = Property.where(closed: true)
         closed_agents = Branch.where("id in (?)", closed_properties.collect(&:branch_id))
         @days_properties_hash[get_key('Closed Properties', closed_properties.size, closed_agents.size)] = closed_properties
-      else
+      end
+      if !show_closed?
         overdue_properties = Property.where("call_date < ?", Date.today).where(closed: false)
         overdue_agents = Branch.where("id in (?)", overdue_properties.collect(&:branch_id))
         if overdue_properties.any?
@@ -82,6 +83,7 @@ class StaticPagesController < ApplicationController
     def set_lists
       if signed_in?
         show_closed(params[:closed] == "true")
+        show_all(params[:all] == "true")
 
         if !params[:area_code].nil? and !params[:area_code].empty?
           if params[:area_code].to_i > 0

@@ -77,12 +77,13 @@
   <div class="navbar-menus right">
     <ul>
       <% if signed_in? %>
-      <li><%= link_to "Diary", root_path(area_code: -1, estate_agent: -1) %></li>
+      <li><%= link_to "Live", root_path(area_code: -1, estate_agent: -1) %></li>
       <li><%= link_to "Viewings", viewings_path %></li>
+      <li><%= link_to "Closed", root_path(area_code: -1, estate_agent: -1, closed: true) %></li>
+      <li><%= link_to "All", root_path(area_code: -1, estate_agent: -1, all: true) %></li>
         <li><%= link_to current_user.name, current_user %>&nbsp;&nbsp;<b class="caret"></b>&nbsp;
           <ul>
-            <li><%= link_to "Stats", stats_path %></li>            
-            <li><%= link_to "Archive", root_path(area_code: -1, estate_agent: -1, closed: true) %></li>
+            <li><%= link_to "Stats", stats_path %></li>                        
             <li><%= link_to "Sign out", signout_path, method: "delete" %></li>
           </ul>
         </li>
