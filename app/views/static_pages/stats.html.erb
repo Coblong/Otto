@@ -1,10 +1,10 @@
 <% if signed_in? %>        
   <div id="left-nav" class="tall">  
-    <%= render 'shared/properties' %>
+    <%= render 'shared/properties', filter: "" %>
   </div>
   <div id="main">     
     <div id="main-bottom">   
-  <% if current_properties.any? %>     
+  <% if current_properties("").any? %>     
         <%= render "/shared/statuses_table" %>   
   <% end %>  
     <p>
@@ -12,15 +12,13 @@
         <%= render "/shared/estate_agents_table" %>   
   <% end %>  
     <p>
-  <% if current_properties.any? %>      
-        <%= render "/shared/properties_table" %>
+  <% if current_properties("").any? %>      
+        <%= render "/shared/properties_table", filter: "" %>
   <% end %>
     </div>
   </div>
 <% else %>
   <div class="welcome-inner">
-    <h1>Welcome to the Ottor system</h1>
-      <%= image_tag("ottor.png", width: 250, id: "home_image") %><br>
-      <h3>"Whaddayamean it's spelt wrong?"</h3>
+    <%= image_tag("ottor.png", id: "home_image") %><br>
   </div>
 <% end %>
