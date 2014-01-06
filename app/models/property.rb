@@ -10,7 +10,7 @@ class Property < ActiveRecord::Base
   default_scope -> { order('call_date', 'branch_id', 'created_at') }  
 
   def full_url
-    'https://' + url + external_ref
+    '//' + url + external_ref
   end
 
   def statuses
