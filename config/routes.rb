@@ -42,7 +42,6 @@ Otto::Application.routes.draw do
   match '/update_call_date',to: 'properties#update_call_date',via: 'post'
   match '/update_status',   to: 'properties#update_status',   via: 'post'
   match '/delete_note',     to: 'properties#delete_note',     via: 'post'
-  match '/viewings',        to: 'static_pages#viewings',      via: 'get'
   
   # The priority is based upon order of creation:
   # first created -> highest priority.

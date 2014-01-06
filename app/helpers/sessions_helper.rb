@@ -221,4 +221,14 @@ module SessionsHelper
   def current_property
     Property.find(session[:property]) unless session[:property].nil?
   end
+
+  def get_header_class(day)
+    if day.start_with? "Overdue"
+      "overdue" 
+    elsif day.start_with? "Future"
+      "future"
+    else
+      ""
+    end
+  end
 end

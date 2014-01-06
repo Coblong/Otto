@@ -5,8 +5,8 @@
     <th>Properties</th>
   </tr>          
 <% current_estate_agent.branches.each do |branch| %>
-    <tr class="dark">
-      <td><%= link_to branch.name, branch %></td>
+    <tr class="light">
+      <td class="left"><%= link_to branch.name, branch %></td>
       <td><%= branch.agents.count %></td>
       <td><%= branch.properties.count %></td>
     </tr>

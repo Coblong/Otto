@@ -74,16 +74,45 @@
 <% end %>
     </ul>
   </div>
-  <div class="navbar-menus right">
+  <div class="navbar-menus menu-right">
     <ul>
       <% if signed_in? %>
-      <li><%= link_to "Live", root_path(area_code: -1, estate_agent: -1) %></li>
-      <li><%= link_to "Viewings", viewings_path %></li>
-      <li><%= link_to "Closed", root_path(area_code: -1, estate_agent: -1, closed: true) %></li>
-      <li><%= link_to "All", root_path(area_code: -1, estate_agent: -1, all: true) %></li>
+        <% if @page == 2 %>
+          <li><%= link_to "Viewings", root_path( page: 2 ) %>&nbsp;&nbsp;<b class="caret"></b>&nbsp;
+          <ul>
+            <li><%= link_to "Live", root_path( page: 1 ) %></li>
+            <li><%= link_to "Closed", root_path( page: 3 ) %></li>
+            <li><%= link_to "All", root_path( page: 4) %></li>
+          </ul>
+        </li>
+        <% elsif @page == 3 %>
+          <li><%= link_to "Closed", root_path( page: 3 ) %>&nbsp;&nbsp;<b class="caret"></b>&nbsp;
+          <ul>
+            <li><%= link_to "Live", root_path( page: 1 ) %></li>
+            <li><%= link_to "Viewings", root_path( page: 2 ) %></li>
+            <li><%= link_to "All", root_path( page: 4) %></li>
+          </ul>
+        </li>
+        <% elsif @page == 4 %>
+          <li><%= link_to "All", root_path( page: 4) %>&nbsp;&nbsp;<b class="caret"></b>&nbsp;
+          <ul>
+            <li><%= link_to "Live", root_path( page: 1 ) %></li>
+            <li><%= link_to "Viewings", root_path( page: 2 ) %></li>
+            <li><%= link_to "Closed", root_path( page: 3 ) %></li>
+          </ul>
+        </li>
+        <% else %>
+        <li><%= link_to "Live", root_path( page: 1 ) %>&nbsp;&nbsp;<b class="caret"></b>&nbsp;
+          <ul>
+            <li><%= link_to "Viewings", root_path( page: 2 ) %></li>
+            <li><%= link_to "Closed", root_path( page: 3 ) %></li>
+            <li><%= link_to "All", root_path( page: 4) %></li>
+          </ul>
+        </li>
+        <% end %>
         <li><%= link_to current_user.name, current_user %>&nbsp;&nbsp;<b class="caret"></b>&nbsp;
           <ul>
-            <li><%= link_to "Stats", stats_path %></li>                        
+            <li><%= link_to "Browse", stats_path %></li>                        
             <li><%= link_to "Sign out", signout_path, method: "delete" %></li>
           </ul>
         </li>

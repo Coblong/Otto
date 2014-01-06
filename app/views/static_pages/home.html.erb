@@ -5,7 +5,7 @@
   </div>
 <% end %>
   <div id="main">     
-<% if current_user.show_overview %>    
+<% if @show_overview %>    
     <div id="main-top">  
     <div id="overview-accordion" class="diary-header">         
       <h3>Overview</h3>
@@ -21,10 +21,10 @@
           <td>
 <% @week_ahead_hash[day].each do |hash| %>
   <% if hash.first.is_a? Numeric %>
-  <% estate_agent = @estate_agents.find(hash.first.to_i) %>
-    <span><%= link_to estate_agent.name, estate_agent %></span><%= hash.last %>
+    <% estate_agent = @estate_agents.find(hash.first.to_i) %>
+    <span><%= link_to estate_agent.name, estate_agent %></span><span><%= hash.last %></span>
   <% else %>
-    <span><%= hash.first %></span><%= hash.last %>
+    <span class="viewings"><%= hash.first %></span><span class="viewings"><%= hash.last %></span>
   <% end %>
 <% end %>
           </td>
@@ -41,7 +41,7 @@
 
   <% if @days_properties_hash.any? %>      
     <% @days_properties_hash.keys.each do |day| %>
-      <h3><%= day %></h3>
+      <h3 class="<%= get_header_class(day) %>"><%= day %></h3>
       <div class="diary-panel">   
         <% @days_properties_hash[day].each do |property| %>
           <%= render "/shared/diary_entry", property: property, expanded: current_user.expand_notes %>   

@@ -1,6 +1,13 @@
 <li title="<%= property.estate_agent.name %> / <%= property.branch.name %> - <%= property.asking_price %>" onclick="location.href='<%= property_path(property) %>'">
   <table class='left-nav-table'>    
     <tr><td><%= property.address %></td><td><%= render "/shared/status", property: property %></td></tr>
-    <tr><td class="<%= property.sstc? %>" colspan="2" align="right" id="call_date_<%= property.id %>"><small><%= property.call_date_formatted(:short) %></small></td></tr>    
+    <tr style="height:30px;">
+      <% if property.sstc %>
+        <td>&nbsp;<%= image_tag "sstc.png", height: 20 %></td>
+        <td align="right" id="call_date_<%= property.id %>"><small><%= property.call_date_formatted(:short) %></small>
+      <% else %>
+        <td colspan="2" align="right" id="call_date_<%= property.id %>"><small><%= property.call_date_formatted(:short) %></small></td></tr>    
+      <% end %>
+      </td></tr>    
   </table>  
 </li>

@@ -7,7 +7,7 @@
   </tr>          
 <% current_user.estate_agents.each do |estate_agent| %>
     <tr class='light'>
-      <td><%= link_to estate_agent.name, estate_agent %></td>
+      <td class="left"><%= link_to estate_agent.name, estate_agent %></td>
       <td><%= estate_agent.branches.count %></td>
       <td><%= estate_agent.agents.count %></td>
       <td><%= estate_agent.properties.count %></td>

@@ -46,7 +46,4 @@ class Property < ActiveRecord::Base
     self.notes
   end
 
-  def sstc? 
-    self.sstc ? "sstc" : ""
-  end
 end

@@ -2,7 +2,7 @@
   <table>
     <tr>
       <td>
-        <span class="property-header"><%= link_to property.address + ' - ' + property.post_code, property %></span>
+        <h2><%= link_to property.address + ' - ' + property.post_code, property %></h2>
         <% if property.sstc %>        
           <%= image_tag "sstc.png", width: 20 %>
         <% end %>
@@ -55,7 +55,7 @@
     <tr>
       <td colspan="4">
         <div id="accordion-<%= property.id %>" class="accordian-notes">
-          <h3 class="accordian-notes"></h3>
+          <h3 class="notes"></h3>
           <div id="accordian-notes-<%= property.id %>" class="accordian-notes">
             <ul>
 <% property.last_notes.each do |note| %>          
