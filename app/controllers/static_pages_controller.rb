@@ -33,19 +33,21 @@ class StaticPagesController < ApplicationController
         @days_properties_hash[get_key('Closed Properties', closed_properties.size, closed_agents.size)] = closed_properties
       end
       if !show_closed?
-        overdue_properties = Property.where("call_date < ?", Date.today).where(closed: false)
+        overdue_properties = Property.where("call_date > ?", Date.today.beginning_of_day).where(closed: false)
         overdue_agents = Branch.where("id in (?)", overdue_properties.collect(&:branch_id))
         if overdue_properties.any?
           @days_properties_hash[get_key("Overdue", overdue_properties.size, overdue_agents.size)] = overdue_properties
         end    
         (0..7).each do |offset|
-          properties = Property.where("call_date > ? and call_date < ?", Date.today + offset, Date.tomorrow + offset).where(closed: false)        
+          puts 'looking for properties where offset is ' + offset.to_s
+          properties = Property.where("call_date > ? and call_date < ?", (Date.today + offset).beginning_of_day, (Date.tomorrow + offset).beginning_of_day).where(closed: false)        
+          puts 'Found ' + properties.size.to_s + ' properties'
           agents = Branch.where("id in (?)", properties.collect(&:branch_id))
           day = (Date.today+offset).strftime('%A')
           is_sunday = day == 'Sunday'          
 
           if current_user.show_overview
-            days_viewings = Property.where("view_date > ? and view_date < ?", Date.today + offset, Date.tomorrow + offset).where(closed: false)        
+            days_viewings = Property.where("view_date > ? and view_date < ?", (Date.today + offset).beginning_of_day, (Date.tomorrow + offset).beginning_of_day).where(closed: false)        
             @week_ahead_hash[day] = build_overview_hash(properties, days_viewings)
           end
 
@@ -57,7 +59,7 @@ class StaticPagesController < ApplicationController
           @days_properties_hash[get_key(day, properties.size, agents.size)] = properties        
           if is_sunday
             if current_user.show_future
-              future_properties = Property.where("call_date > ?", (Date.today + offset+1)).where(closed: false)
+              future_properties = Property.where("call_date > ?", (Date.today + offset+1).beginning_of_day).where(closed: false)
               future_agents = Branch.where("id in (?)", future_properties.collect(&:branch_id))
               @days_properties_hash[get_key("Future", future_properties.size, future_agents.size)] = future_properties
             end
