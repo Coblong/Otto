@@ -219,7 +219,7 @@ a {
 }
 
 .left-nav-table {
-  width: 100%;
+  width: 100%;    
 }
 
 #left-nav {
@@ -230,7 +230,7 @@ a {
   ul {  
     list-style: none;
     padding: 0px;
-    margin: 0px;
+    margin: 0px;    
     a {
       text-decoration: none;
       background: none;
@@ -240,7 +240,7 @@ a {
       }
     }
     li {
-      padding: 2px;
+      padding: 5px 5px 0px 5px;
       border-bottom: solid 1px $highlight-bg;      
       &:hover {
         background: -webkit-gradient(linear, right top, left top, from($well-colour), to($dark-well-colour));      
