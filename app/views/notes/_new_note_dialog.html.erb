@@ -11,7 +11,7 @@
 <div id="dialog<%= property.id %>" title="Calling about <%= property.address %>" class="dialog">  
   <input class="new-note-agent" id="nna-<%= property.id %>" list="agents-<%= property.id %>" placeholder="Agent..."/>
   <datalist id='agents-<%= property.id %>'>
-<% property.agents.each do |agent| %>
+<% property.branch.agents.each do |agent| %>
     <option value='<%= agent.name %>'/>";        
 <% end %>
   </datalist>
@@ -39,7 +39,7 @@ $(function() {
         var call_date = $("#nndp-<%= property.id %>").val();
         $.ajax({
             type: "POST",
-            url: "notes",
+            url: "/notes",
             data: 'property_id=' + <%= property.id %> +'&agent=' + agent + '&note=' + note + '&call_date=' + call_date,
             dataType: "json",
             error: function(xhr, status, error) {

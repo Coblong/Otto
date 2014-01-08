@@ -19,7 +19,7 @@ $(function() {
         var note = $("#onn-<%= property.id %>").val();
         $.ajax({
             type: "POST",
-            url: "offers",
+            url: "/offers",
             data: 'property_id=' + <%= property.id %> +'&offer=' + offer + '&note=' + note,
             dataType: "json",
             error: function(xhr, status, error) {

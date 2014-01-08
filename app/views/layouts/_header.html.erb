@@ -6,7 +6,7 @@
   <% if current_area_code.nil? %>
     <li><%= link_to "All Areas", root_path(area_code: -1) %>&nbsp;&nbsp;<b class="caret"></b>
   <% else %>
-    <li><%= link_to current_area_code.description, root_path(area_code: current_area_code) %>&nbsp;&nbsp;<b class="caret"></b>
+    <li class="selected"><%= link_to current_area_code.description, root_path(area_code: current_area_code) %>&nbsp;&nbsp;<b class="caret"></b>
   <% end %>      
         <ul>
   <% if !current_area_code.nil? %>
@@ -23,7 +23,7 @@
   <% if current_estate_agent.nil? %>
       <li><%= link_to "All Estate Agents", root_path(estate_agent: -1) %>&nbsp;&nbsp;<b class="caret"></b>
   <% else %>
-      <li><%= link_to current_estate_agent.name, root_path(estate_agent: current_estate_agent) %>&nbsp;&nbsp;<b class="caret"></b>
+      <li class="selected"><%= link_to current_estate_agent.name, root_path(estate_agent: current_estate_agent) %>&nbsp;&nbsp;<b class="caret"></b>
   <% end %>      
         <ul>
   <% if !current_estate_agent.nil? %>
@@ -40,7 +40,7 @@
     <% if current_branch.nil? %>
       <li><%= link_to "All Branches", root_path(estate_agent: current_estate_agent, branch: -1) %>&nbsp;&nbsp;<b class="caret"></b>
     <% else %>
-      <li><%= link_to current_branch.name, root_path(branch: current_branch) %>&nbsp;&nbsp;<b class="caret"></b>
+      <li class="selected"><%= link_to current_branch.name, root_path(branch: current_branch) %>&nbsp;&nbsp;<b class="caret"></b>
     <% end %>
         <ul>
     <% if !current_branch.nil? %>
@@ -57,7 +57,7 @@
       <% if current_agent.nil? %>
         <li><%= link_to "All Agents", root_path(branch: current_branch, agent: -1) %>&nbsp;&nbsp;<b class="caret"></b>
       <% else %>
-        <li><%= link_to current_agent.name, root_path(agent: @agent) %>&nbsp;&nbsp;<b class="caret"></b>
+        <li class="selected"><%= link_to current_agent.name, root_path(agent: @agent) %>&nbsp;&nbsp;<b class="caret"></b>
       <% end %>
           <ul>
           <li><%= link_to "All Agents", root_path(branch: current_branch, agent: -1) %>&nbsp;&nbsp;<b class="caret"></b>      
@@ -77,6 +77,7 @@
   <div class="navbar-menus menu-right">
     <ul>
       <% if signed_in? %>
+        <li><%= link_to "Home", root_path(area_code: -1, estate_agent: -1) %></li>
         <% if @page == 2 %>
           <li><%= link_to "Viewings", root_path( page: 2 ) %>&nbsp;&nbsp;<b class="caret"></b>&nbsp;
           <ul>

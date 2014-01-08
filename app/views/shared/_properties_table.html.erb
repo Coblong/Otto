@@ -1,18 +1,23 @@
-<table class="stats-table">
-  <tr>
-    <th>Property</th>
-    <th>Estate Agent</th>
-    <th>Asking Price</th>
-    <th>Postcode</th>
-    <th>Status</th>            
-  </tr>          
-<% current_properties(filter).each do |property| %>
-    <tr class="light">
-      <td class="left"><%= link_to property.address, property %></td>
-      <td class="left"><%= link_to property.estate_agent.name, property.estate_agent %>  / <%= link_to property.branch.name, property.branch %></td>
-      <td class="right"><%= property.asking_price %></td>
-      <td><%= property.post_code %></td>
-      <td><%= link_to property.status.description, property.status %></td>
-    </tr>
-<% end %>  
-</table>
+<div id="accordion" class="accordion-table">
+  <h3>Properties</h3>
+  <div class="stats-div">
+    <table class="stats-table">
+      <tr>
+        <th class="left">Property</th>
+        <th class="left">Estate Agent</th>
+        <th class="right">Asking Price</th>
+        <th>Postcode</th>
+        <th>Status</th>            
+      </tr>          
+    <% current_properties(filter).each do |property| %>
+        <tr>
+          <td class="left"><%= link_to property.address, property %></td>
+          <td class="left"><%= link_to property.estate_agent.name, property.estate_agent %>  / <%= link_to property.branch.name, property.branch %></td>
+          <td class="right"><%= property.asking_price %></td>
+          <td><%= property.post_code %></td>
+          <td><%= link_to property.status.description, property.status %></td>
+        </tr>
+    <% end %>  
+    </table>
+  </div>
+</div>

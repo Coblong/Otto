@@ -1,12 +1,17 @@
-<table class="stats-table">
-  <tr>
-    <th>Status</th>
-    <th>Properties</th>
-  </tr>          
-<% current_user.statuses.each do |status| %>
-    <tr class='light'>
-      <td><%= link_to status.description, status %></td>
-      <td><%= status.properties.count %></td>
-    </tr>
-<% end %>  
-</table>
+<div id="accordion" class="accordion-table">
+  <h3>Statuses</h3>
+  <div class="stats-div">
+    <table class="stats-table">
+      <tr>
+        <th class="left">Status</th>
+        <th>Properties</th>
+      </tr>          
+      <% current_user.statuses.each do |status| %>
+        <tr>
+          <td class="left"><%= link_to status.description, status %></td>
+          <td><%= status.properties.count %></td>
+        </tr>
+      <% end %>  
+    </table>
+  </div>
+</div>

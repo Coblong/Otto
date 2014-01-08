@@ -1,52 +1,37 @@
-<% provide(:title, "Edit " + @property.address) %>
-<div class="container">
-  <%= render 'shared/properties' %>
-  <div class="main-box">
-    <div class="details-box">
-      <div class="edit-details">
-        <div class="breadcrumbs">
-          <%= link_to @property.estate_agent.name, @property.estate_agent %> / <%= link_to @property.branch.name, @property.branch %> / <%= link_to @property.agent.name, @property.agent %>
-        </div>
-        <p>
-        <%= form_for(@property) do |f| %>
-          <%= render 'shared/property_error_messages' %>
-
-          <table>
-            <tr>
-              <td><%= f.label :address %></td>
-              <td><%= f.text_field :address, class: "fill" %></td>
-              <td><%= f.label :estate_agent %></td> 
-              <td><%= f.collection_select :estate_agent_id, @estate_agents, :id, :name, prompt: true %></td>
-            </tr>
-            <tr>
-              <td><%= f.label :postcode %></td>
-              <td><%= f.text_field :postcode, class: "fill" %></td>
-              <td><%= f.label :branch %></td>
-              <td><%= f.collection_select :branch_id, @estate_agent.branches, :id, :name, prompt: true %></td>
-            </tr>
-            <tr>
-              <td><%= f.label :asking_price %></td>
-              <td><%= f.text_field :asking_price, class: "fill" %></td>
-              <td><%= f.label :agent %></td>
-              <td><%= f.collection_select :agent_id, @estate_agent.agents, :id, :name, prompt: true %></td>
-            </tr>
-            <tr>
-              <td></td>
-              <td></td>
-              <td><%= f.label :status %></td>
-              <td><%= f.select :status, ["Hot", "Warm", "Cold"], class: "fill" %></td>
-            </tr>
-            <tr>
-              <td><%= f.label :url %></td>
-              <td colspan="3"><%= f.text_area :url %></td>
-            </tr>
-            <tr>
-              <td></td>
-              <td><%= f.submit "Save changes" %></td>
-            </tr>
-          </table>
-        <% end %>
-      </div>
+<div id="left-nav" class="tall">  
+  <%= render 'shared/properties', filter: "" %>
+</div>
+<div id="main"> 
+  <div id="main-top">  
+    <div class="diary-panel annoying-padding">   
+        <%= render "/shared/diary_entry", property: current_property, expanded: false %>   
+    </div>      
+  </div>
+  <div id="main-top">   
+    <div id="main-top-details">
+      <table>
+        <tr>
+          <td>
+            <%= form_for(current_property) do |f| %>
+              <input type="hidden" id="new_call_date" name="new_call_date"/>
+              <%= link_to current_property.estate_agent.name, current_property.estate_agent %> / <%= link_to current_property.branch.name, current_property.branch %> / <%= current_property.post_code %> / <%= f.text_field :address %>
+            <% end %>      
+          </td>
+          <td>
+            <input type="text" class="datepicker" value="<%= current_property.call_date_formatted(:long) %>">
+            <button class="btn" id="addoneweek">+ 1 Week</button>&nbsp;
+            <button class="btn" id="addtwoweeks">+ 2 Weeks</button>&nbsp;
+            <button class="btn" id="addonemonth">+ 1 Month</button>
+          </td>
+        </tr>
+      </table>
+    </div>    
+  </div>
+  <div id="main-bottom">
+    <div id="main-bottom-iframe">          
+      <iframe src="<%= current_property.full_url %>"></iframe>          
     </div>
   </div>
 </div>
+
+<%= render 'shared/button_controls' %>

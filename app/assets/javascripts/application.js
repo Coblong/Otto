@@ -15,3 +15,102 @@
 //= require jquery.ui.all
 //= require turbolinks
 //= require_tree .
+
+$(function() {
+  $( ".datepicker" ).datepicker({
+    yearRange: '2012:2100',
+    numberOfMonths: 2,
+    showButtonPanel: true,
+    dateFormat: "DD, d M yy",
+    onSelect: function(dateText) {
+      var propertyId = this.id.toString().substring(3)
+      if (this.name == 'auto') {
+        var newDate = $("#" + this.id).datepicker('getDate');
+        updateCallDate(propertyId, newDate)
+      }
+    }
+  });
+});
+
+function addDeleteFunction(id) {
+  $( "#del-" + id ).click(function() {
+    $.ajax({
+      type: "POST",
+      url: "/delete_note",
+      data: 'note_id=' + id,
+      dataType: "json",
+      error: function(xhr, status, error) {
+        alert('Unable to delete note')
+      },
+      success: function (xhr, data) {
+        if ($("#nli-" + id).length > 0) {
+          $("#nli-" + id).remove()
+        }
+      }
+    });
+  });
+}
+function updateCallDate(propertyId, newDate) {
+  $.ajax({
+      type: "POST",
+      url: "/update_call_date",
+      data: 'new_call_date=' + newDate + '&property_id=' + propertyId,
+      dataType: "json",
+      error: function(xhr, status, error) {
+        alert('Unable to update date')
+        $( "#" + propertyId ).datepicker("setDate", oldDate );  
+      },
+      success: function (xhr, data) {
+        location.reload();
+      }
+  });
+}
+function closeProperty(propertyId) {
+  $.ajax({
+      type: "POST",
+      url: "/close",
+      data: 'property_id=' + propertyId,
+      dataType: "json",
+      error: function(xhr, status, error) {
+        alert('Unable to close property')
+      },
+      success: function (xhr, data) {
+        location.reload();
+      }
+  });
+}
+function reopenProperty(propertyId) {
+  $.ajax({
+      type: "POST",
+      url: "/reopen",
+      data: 'property_id=' + propertyId,
+      dataType: "json",
+      error: function(xhr, status, error) {
+        alert('Unable to close property')
+      },
+      success: function (xhr, data) {
+        location.reload();
+      }
+  });
+}
+function updateStatus(propertyId, newStatus) {
+  $.ajax({
+      type: "POST",
+      url: "/update_status",
+      data: 'new_status=' + newStatus + '&property_id=' + propertyId,
+      dataType: "json",
+      error: function(xhr, status, error) {
+        alert('Unable to update status')
+      },
+      success: function (data, status, response) {
+        note = JSON.parse(data["note"])
+        var html = "<li id='nli-" + note["id"] + "'' class='" + note["note_type"] + "'>"
+        html += note["formatted_date"] + " - "
+        html += note["content"]
+        html += "<span><img alt='Delete' class='delete_note' id='del-" + note["id"] + "' src='/assets/delete.png' width='14'></span></li>"
+
+        $( "#accordian-notes-" + propertyId + " ul" ).prepend(html);                
+        addDeleteFunction(note["id"]);
+      }
+  });
+}

@@ -1,0 +1,83 @@
+<script type="text/javascript">
+$('.change_call_date').click(function() {
+  var id = this.id.toString()
+  var type = id.substring(0,2)
+  var propertyId = id.substring(3)
+  var dpId = '#dp-' + propertyId  
+  var oldDate = $(dpId).datepicker('getDate');
+  var newDate = oldDate
+
+  if (type == 'w1') {
+    newDate.setDate(oldDate.getDate() + 7);
+  } else if (type == 'w2') {
+    newDate.setDate(oldDate.getDate() + 14);
+  } else {
+    newDate.setMonth(oldDate.getMonth() + 1);
+  }
+  if (this.name == 'auto') {
+    updateCallDate(propertyId, newDate)
+  } else {
+    $( '#nndp-' + propertyId ).datepicker("setDate", newDate );  
+  }
+});
+$(function() {
+  $( ".property-status" ).change(function() {
+    var propertyId = this.id.toString().substring(7)
+    updateStatus(propertyId, this.value)
+  });
+});
+$(function() {
+  $( ".delete_note" ).click(function() {
+    var noteId = this.id.toString().substring(4)
+    $.ajax({
+      type: "POST",
+      url: "/delete_note",
+      data: 'note_id=' + noteId,
+      dataType: "json",
+      error: function(xhr, status, error) {
+        alert('Unable to delete note')
+      },
+      success: function (xhr, data) {
+        if ($("#nli-" + noteId).length > 0) {
+          $("#nli-" + noteId).remove()
+        }
+      }
+    });
+  });
+});
+$('.call').click(function(e) {
+  e.preventDefault();
+  var propertyId = this.id.toString().substring(2)
+  $( "#dialog" + propertyId ).dialog( "open" );
+});
+$('.view').click(function(e) {
+  e.preventDefault();
+  var propertyId = this.id.toString().substring(2)
+  $( "#view-dialog" + propertyId ).dialog( "open" );
+});
+$('.make_offer').click(function(e) {
+  e.preventDefault();
+  var propertyId = this.id.toString().substring(2)
+  $( "#offer-dialog" + propertyId ).dialog( "open" );
+});
+$('.close').click(function(e) {
+  e.preventDefault();
+  var propertyId = this.id.toString().substring(2)
+  closeProperty(propertyId)
+});
+$('.reopen').click(function(e) {
+  e.preventDefault();
+  var propertyId = this.id.toString().substring(2)
+  reopenProperty(propertyId)
+});
+$(".history").click(function(e) {
+    e.preventDefault();
+    var propertyId = this.id.toString().substring(2)
+    var active = $( "#accordion-" + propertyId ).accordion("option", "active");
+    if (active === false) {
+        $( "#accordion-" + propertyId ).accordion("option", "active", 0);
+    } else {
+        $( "#accordion-" + propertyId ).accordion("option", "active", false);
+    }
+});
+</script>

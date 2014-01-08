@@ -135,7 +135,7 @@ class PropertiesController < ApplicationController
         
         note.save()
 
-        date_changed = old_call_date.strftime('%u') != @property.call_date.strftime('%u')
+        date_changed = old_call_date.strftime('%j') != @property.call_date.strftime('%j')
         render :json => note.to_json(methods: [:formatted_date, :agent_name] ), :status => (date_changed ? :accepted : :ok)
       end
     end
@@ -301,7 +301,12 @@ class PropertiesController < ApplicationController
     end
   end
 
+  def edit
+    @estate_agents = current_user.estate_agents
+  end
+
   def update
+    puts 'Updating property'
     @property = Property.find(params[:id])    
     @property.update_attributes!(property_params)
     redirect_to @property

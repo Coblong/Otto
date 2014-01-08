@@ -1,21 +1,26 @@
-<table class="stats-table">
-  <tr>
-    <th>Branch</th>
-    <th>Agent</th>            
-    <th>Properties</th>
-  </tr>          
-<% current_estate_agent.branches.each do |branch| %>
-    <tr class="light">
-      <td class="left"><%= link_to branch.name, branch %></td>
-      <td><%= branch.agents.count %></td>
-      <td><%= branch.properties.count %></td>
-    </tr>
-  <% branch.agents.each do |agent| %>
-      <tr class="light">
-        <td></td>
-        <td><%= link_to agent.name, agent %></td>                
-        <td><%= agent.properties.count %></td>
-      </tr>
-  <% end %>  
-<% end %>  
-</table>
+<div id="accordion" class="accordion-table">
+  <h3>Branches</h3>
+  <div class="stats-div">
+    <table class="stats-table">
+      <tr>
+        <th class="left">Branch</th>
+        <th>Agents</th>            
+        <th>Properties</th>
+      </tr>          
+    <% current_estate_agent.branches.each do |branch| %>
+        <tr>
+          <td class="left"><%= link_to branch.name, branch %></td>
+          <td><%= branch.agents.count %></td>
+          <td><%= branch.properties.count %></td>
+        </tr>
+      <% branch.agents.each do |agent| %>
+          <tr>
+            <td></td>
+            <td><%= link_to agent.name, agent %></td>                
+            <td><%= agent.properties.count %></td>
+          </tr>
+      <% end %>  
+    <% end %>  
+    </table>
+  </div>
+</div>

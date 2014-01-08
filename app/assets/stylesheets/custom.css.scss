@@ -131,6 +131,9 @@ a {
     }
   }
   ul {
+    .selected {
+      background: $highlight-bg;                        
+    }
     text-align: left;
     display: inline;
     margin: 0;
@@ -149,14 +152,12 @@ a {
       -ms-transition: all 0.2s;
       -o-transition: all 0.2s;
       transition: all 0.2s;                  
-
       .separator {
         background: $darkline; 
         padding: 0.5px;
       }
-
       &:hover {
-        background: $highlight-bg;
+        background: $highlight-bg;        
         color: $highlight-colour;
         ul {
           display: block;
@@ -165,7 +166,6 @@ a {
           border: 1px solid $darkline;
         }
       }
-
       ul {
         padding: 0;
         position: absolute;
@@ -201,7 +201,7 @@ a {
         }
       }      
     }
-  }
+  }  
 }
 
 .rounded {
@@ -326,10 +326,19 @@ a {
 
 #main-top {  
   margin: 5px auto;
-  padding:0px;
+  padding: 0px;
   width:98%;      
   border: solid 1px $lightline;
   background: $main-bg;
+}
+
+#main-update {  
+  margin: 5px auto;
+  padding: 0px;
+  width:98%;      
+  border: solid 1px $lightline;
+  background: $main-bg;
+  display:none;
 }
 
 #main-bottom {  
@@ -357,13 +366,6 @@ a {
   padding:5px;
   border-radius: 1px;
   -moz-border-radius: 1px;
-  display: table;
-  div {
-    display: table-cell;
-    &:last-child {
-      text-align: right;
-    }
-  }  
   table {
     padding: 2px;    
     margin: 0px;    
@@ -376,9 +378,94 @@ a {
   }
 }
 
+#update-details {
+  margin: 10px 10px;
+  padding:5px;
+  table {
+    padding: 2px;    
+    margin: 0px auto;    
+    width: 50%;
+    td {
+      &:first-child {
+        width: 100px;
+      }
+      &:last-child {
+        text-align: right;
+      }
+    }
+  }
+}
+
+#accordion {
+  margin: 10px;
+  .ui-accordion-header.ui-state-default{
+    font-size: 12px;
+  }
+  .ui-accordion-header.ui-state-active{
+    background: $bg1;
+  }
+  .ui-accordion-header.notes.ui-state-default{
+    background: none;
+    background-image: none;
+  }
+  .ui-accordion-header.overdue.ui-state-default{
+    color: red;
+    background-image: none;
+  }
+  .ui-accordion-header.future.ui-state-default{
+    color: $lightline;
+  }
+  .ui-accordion-content { 
+    padding: 0px;
+  }
+}
+
+.annoying-padding {
+  .ui-accordion-content.accordian-notes {
+    padding: 0px;
+  }
+}
+
+.accordian-notes {
+  .ui-accordion-header { 
+    .ui-icon {
+      background: none;
+    }
+  }
+  .ui-accordion-header.notes.ui-state-default{
+    background:none;
+  }
+  .ui-accordion-header.ui-state-default {
+    background:none;
+    border: none;
+  }
+  .ui-accordion-header.ui-state-active {
+    background:pink;
+    border: none;
+  }
+  .ui-accordion-content.accordian-notes { 
+    border: none;      
+  }
+}
+
+#overview-accordion {
+  margin: 10px;
+  .ui-accordion-header.ui-state-active{
+      color: $colour;
+      background: $bg1;
+      background-image: none;
+   }
+  .ui-accordion-header.ui-state-default{
+    font-size: 12px;
+  }
+  .viewings {
+    color: $viewing-colour;
+  }
+}
+
 .toolitem {
-  height: 28px;
-  width: 28px;
+  height: 24px;
+  width: 24px;
   vertical-align: bottom;
   cursor: pointer;
   outline: 1px $main-bg;
@@ -395,64 +482,13 @@ a {
   }
 }
 
+.change_call_date {
+  height: 28px;
+  width: 28px;
+}
+
 .dialog {
   display:none;  
-}
-
-#accordion {
-  .ui-accordion-content { 
-    padding: 0; 
-  }
-  .ui-accordion-header.ui-state-active{
-      color: $colour;
-      background: $bg1;
-      background-image: none;
-   }
-
-  .ui-accordion-header.ui-state-default{
-      font-size: 12px;
-   }
-  .ui-accordion-header.notes.ui-state-default{
-    background: $main-bg;
-    background-image: none;
-  }
-  .ui-accordion-header.overdue.ui-state-default{
-    color: red;
-    background-image: none;
-  }
-  .ui-accordion-header.future.ui-state-default{
-    color: $well-colour;
-    background-image: none;
-  }
-}
-
-.accordian-notes {
-  .ui-accordion-header { 
-    border: 0px;  
-    padding: 2px 0px;
-    background: $main-bg; 
-    text-align: right;
-    text-decoration: underline;
-    .ui-icon {
-      background: none;
-    }
-  }
-  .ui-accordion-content.accordian-notes { 
-    border: 0;  
-    display:none;
-  }
-}
-
-#overview-accordion {
-  .ui-accordion-header { 
-    background: $bg1;  
-  }
-  .ui-accordion-header.ui-state-default{
-      font-size: 12px;
-  }
-  .viewings {
-    color: $viewing-colour;
-  }
 }
 
 .settings {
@@ -504,15 +540,15 @@ a {
   text-align: left;      
   padding: 0px;
   margin: 0px;
-  display:none;
 }
 
-.diary {
+.diary {  
+  width: 100%;
   padding: 0px;
-  margin: 0px;
+  margin: 0px;  
   table {
     padding: 10px 0px;    
-    margin: 5px auto;    
+    margin: 2px auto 10px;    
     width: 98%;
     tr:last-child {
       height:2px;    
@@ -577,15 +613,15 @@ a {
 }
 
 .stats-table {
-  margin: 10px auto;
-  border: 1px solid $bg1;  
-  
-  width: 98%;
+  margin: 0;
+  width: 100%;  
   th {
+    padding:3px 5px;
     border-bottom:1px solid $bg2;      
-    background: $bg1;    
+    background: $well-colour;    
   }
   td {
+    padding: 2px 5px;
     width: 20%;
     text-align:center;
     border-bottom:1px solid $bg2;      

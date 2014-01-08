@@ -1,16 +1,21 @@
-<table class="stats-table">
-  <tr>
-    <th>Estate Agent</th>
-    <th>Branches</th>
-    <th>Agents</th>            
-    <th>Properties</th>
-  </tr>          
-<% current_user.estate_agents.each do |estate_agent| %>
-    <tr class='light'>
-      <td class="left"><%= link_to estate_agent.name, estate_agent %></td>
-      <td><%= estate_agent.branches.count %></td>
-      <td><%= estate_agent.agents.count %></td>
-      <td><%= estate_agent.properties.count %></td>
-    </tr>
-<% end %>  
-</table>
+<div id="accordion" class="accordion-table">
+  <h3>Estate Agents</h3>
+  <div class="stats-div">
+    <table class="stats-table">
+      <tr>
+        <th class="left">Estate Agent</th>
+        <th>Branches</th>
+        <th>Agents</th>            
+        <th>Properties</th>
+      </tr>          
+      <% current_user.estate_agents.each do |estate_agent| %>
+        <tr>
+          <td class="left"><%= link_to estate_agent.name, estate_agent %></td>
+          <td><%= estate_agent.branches.count %></td>
+          <td><%= estate_agent.agents.count %></td>
+          <td><%= estate_agent.properties.count %></td>
+        </tr>
+      <% end %>  
+    </table>
+  </div>
+</div>

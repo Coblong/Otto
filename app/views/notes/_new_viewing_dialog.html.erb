@@ -42,7 +42,7 @@ $(function() {
         var mins = $("#mins-<%= property.id %>").val();
         $.ajax({
             type: "POST",
-            url: "viewings",
+            url: "/viewings",
             data: 'property_id=' + <%= property.id %> +'&hours=' + hours + '&mins=' + mins + '&call_date=' + call_date,
             dataType: "json",
             error: function(xhr, status, error) {

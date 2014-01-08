@@ -1,12 +1,17 @@
-<table class="stats-table">
-  <tr>
-    <th>Agent</th>            
-    <th>Properties</th>
-  </tr>          
-<% current_branch.agents.each do |agent| %>
-  <tr class="light">
-    <td><%= link_to agent.name, agent %></td>                
-    <td><%= agent.properties.count %></td>
-  </tr>
-<% end %>  
-</table>
+<div id="accordion" class="accordion-table">
+  <h3>Agents</h3>
+  <div class="stats-div">
+    <table class="stats-table">
+      <tr>
+        <th>Agent</th>            
+        <th>Properties</th>
+      </tr>          
+    <% current_branch.agents.each do |agent| %>
+      <tr class="light">
+        <td><%= link_to agent.name, agent %></td>                
+        <td><%= agent.properties.count %></td>
+      </tr>
+    <% end %>  
+    </table>
+  </div>
+</div>
