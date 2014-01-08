@@ -35,6 +35,10 @@
             <td><%= f.check_box :show_overview %></td>
           </tr>
           <tr>
+            <td><%= f.label "Calendar Weeks" %></td>
+            <td><%= f.text_field :overview_weeks %></td>
+          </tr>
+          <tr>
             <td><%= f.label :name %></td>
             <td><%= f.text_field :name, class: "settings-input" %></td>
           </tr>

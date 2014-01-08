@@ -7,7 +7,7 @@ class Property < ActiveRecord::Base
   has_many :notes, dependent: :destroy
   validates :address, presence: true, length: { maximum: 100 }
   validates :url, length: { maximum: 200 }
-  default_scope -> { order('call_date', 'branch_id', 'created_at') }  
+  default_scope -> { order('call_date asc, branch_id asc, status_id asc') }  
 
   def full_url
     '//' + url + external_ref

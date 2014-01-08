@@ -1,16 +1,53 @@
 module StaticPagesHelper
 
   def add_overview_panel
-    @estate_agents = current_user.estate_agents
+    if current_user.show_overview
 
-    @week_ahead_hash = Hash.new
-    @week_ahead_hash['Monday'] = {}
-    @week_ahead_hash['Tuesday'] = {}
-    @week_ahead_hash['Wednesday'] = {}
-    @week_ahead_hash['Thursday'] = {}
-    @week_ahead_hash['Friday'] = {}
-    @week_ahead_hash['Saturday'] = {}
-    @week_ahead_hash['Sunday'] = {}
+      @branches = Hash.new
+      @overview_headers = Hash.new
+      @overviews_for_day = Hash.new
+
+      day = Date.today.at_beginning_of_week
+      (1..current_user.overview_weeks).each do |week_number|
+        puts 'Adding week ' + week_number.to_s
+        headers = Array.new
+        @overview_headers[week_number] = headers
+        
+        (1..7).each do |offset|  
+          / Add the header to a has for the week (Monday, TuesDay etc)/
+          header = day.strftime("%A %d/%m")
+          headers << header
+          puts "...adding " + header
+
+          / Create an array for all of the overviews for this day /
+          overviews = Array.new
+          @overviews_for_day[header] = overviews
+
+          / Add the viewings for this day /          
+          viewings = Property.where("view_date >= ? and view_date < ?", day.beginning_of_day, ( day+1 ).beginning_of_day).where(closed: false)
+          if !viewings.empty?
+            puts "......adding viewings"
+            viewings_hash = Hash.new
+            viewings_hash["Viewings"] = viewings.size
+            overviews << viewings_hash
+          end
+
+          / Add the viewings for this day /
+          properties = Property.where("call_date >= ? and call_date < ?", day.beginning_of_day, ( day+1 ).beginning_of_day).where(closed: false)
+          branches = Branch.where("id in (?)", properties.collect(&:branch_id))
+          branches.each do  |branch|
+            puts "......adding " + branch.estate_agent.name
+            branch_properties = properties.where(branch_id: branch.id)
+            branch_hash = Hash.new
+            branch_hash[branch.id] = branch_properties.size
+            overviews << branch_hash
+            @branches[branch.id] = branch
+          end
+
+          day += 1
+        end
+      end
+    end
   end
 
   def add_overdue_properties

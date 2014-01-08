@@ -294,8 +294,10 @@ a {
   table {    
     width: 100%;
     th {
+      padding: 5px;
       border-right: 1px solid $lightline;
       border-bottom: 1px solid $lightline;
+      background: $well-colour;    
       width: 14%;
       &:last-child {
         border-right: none;
@@ -303,20 +305,27 @@ a {
     }    
     td {      
       border-right: 1px solid $lightline;
+      border-bottom: 1px solid $lightline;
       vertical-align: top;
       text-align: right;
-      padding: 2px 5px;
+      padding: 5px;
       &:last-child {
         border-right: none;
-      }
-      span {
-        &:nth-child(odd) {
-          float:left;
-          width: 90%;
-          text-align: left;
-        }
-      }
+      }      
     }
+  }
+  ul {
+    list-style:none;
+    padding: 0px;
+    margin: 0px;
+    span {
+      float:left;
+      width: 90%;
+      text-align: left;
+    }
+  }
+  a {
+    color: inherit;
   }
   a:hover{
     color: inherit;

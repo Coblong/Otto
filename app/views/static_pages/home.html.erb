@@ -1,70 +1,82 @@
 <% if signed_in? %>        
+
 <% if current_user.show_left_nav %>
   <div id="left-nav" class="tall">  
     <%= render 'shared/properties', filter: "all" %>
   </div>
 <% end %>
+
   <div id="main">     
-<% if @show_overview %>    
+
+<% if defined? @overview_headers %>    
     <div id="main-top">  
-    <div id="overview-accordion" class="diary-header">         
-      <h3>Overview</h3>
-    <div id="week-ahead">           
-      <table>
-        <tr>
-<% @week_ahead_hash.keys.each do |day| %>          
-          <th><%= day %></th>
-<% end %>          
-        </tr>
-        <tr>
-<% @week_ahead_hash.keys.each do |day| %>          
-          <td>
-<% @week_ahead_hash[day].each do |hash| %>
-  <% if hash.first.is_a? Numeric %>
-    <% estate_agent = @estate_agents.find(hash.first.to_i) %>
-    <span><%= link_to estate_agent.name, estate_agent %></span><span><%= hash.last %></span>
-  <% else %>
-    <span class="viewings"><%= hash.first %></span><span class="viewings"><%= hash.last %></span>
-  <% end %>
-<% end %>
-          </td>
-<% end %>          
-        </tr>
-      </table>
+      <div id="overview-accordion" class="diary-header">         
+        <h3>Overview</h3>
+        <div id="week-ahead">           
+          <table class="overview-table">        
+  <% @overview_headers.keys.each do |week_number| %>          
+            <tr>
+    <% @overview_headers[week_number].each do |header| %>              
+              <th><%=header%></th>
+    <% end %>                  
+            </tr>
+            <tr>
+    <% @overview_headers[week_number].each do |header| %>              
+              <td nowrap>
+                <ul>
+      <% @overviews_for_day[header].each do |overview| %>                              
+        <% overview.keys.each do |key| %>                              
+          <% if key == "Viewings" %>
+                  <li><span class="viewings"><%= link_to key, root_path(page: 2) %></span><%= overview[key] %></li>
+          <% else %>
+            <% branch_id = key %>
+            <% branch = @branches[branch_id] %>
+                  <li title="<%= branch.name %> branch"><span><%= link_to branch.estate_agent.name, branch %></span><%= overview[key] %></li>
+          <% end %>                  
+        <% end %>                  
+      <% end %>                  
+                </u>
+              </td>
+    <% end %>                  
+            </tr>
+  <% end %>                  
+          </table>
+        </div>
+      </div>
     </div>
-    </div>
-    </div>
 <% end %>          
-    <div id="main-top">           
-
-<div id="accordion" class="diary-header">
-
-  <% if @days_properties_hash.any? %>      
-    <% @days_properties_hash.keys.each do |day| %>
-      <h3 class="<%= get_header_class(day) %>"><%= day %></h3>
-      <div class="diary-panel">   
-        <% @days_properties_hash[day].each do |property| %>
-          <%= render "/shared/diary_entry", property: property, expanded: current_user.expand_notes %>   
-        <% end %>
-      </div>      
-    <% end %>
-  <% end %> 
-
-  <br><br><br>
-</div>
-<% else %>
-  <div class="welcome-inner">
-    <%= image_tag("ottor.png", id: "home_image") %><br>
-  </div>
-<% end %>
-
-<%= render 'shared/button_controls' %>
-
 <script type="text/javascript">
 $( "#overview-accordion" ).accordion({
       collapsible: true,
       heightStyle: "content"
     });
+</script>
+
+
+    <div id="main-top">           
+      <div id="accordion" class="diary-header">
+<% if @days_properties_hash.any? %>      
+  <% @days_properties_hash.keys.each do |day| %>
+        <h3 class="<%= get_header_class(day) %>"><%= day %></h3>
+        <div class="diary-panel">   
+    <% @days_properties_hash[day].each do |property| %>
+      <%= render "/shared/diary_entry", property: property, expanded: current_user.expand_notes %>   
+    <% end %>
+      </div>      
+  <% end %>
+<% end %> 
+
+      <br><br><br>
+    </div>
+<% else %>
+    <div class="welcome-inner">
+  <%= image_tag("ottor.png", id: "home_image") %><br>
+  </div>
+  <% end %>
+
+<%= render 'shared/button_controls' %>
+
+<script type="text/javascript">
 $( "#accordion" ).accordion({
       collapsible: true,
       heightStyle: "content"

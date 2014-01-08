@@ -14,7 +14,6 @@ class StaticPagesController < ApplicationController
 
       if @page == @@PAGE_LIVE
         puts 'Loading data for live view'
-        @show_overview = current_user.show_overview
         @days_properties_hash = Hash.new
         add_overview_panel
         add_overdue_properties
