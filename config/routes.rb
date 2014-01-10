@@ -26,23 +26,24 @@ Otto::Application.routes.draw do
   get "static_pages/home"
   
   root  'static_pages#home'
-  match '/',                to: 'static_pages#home',          via: 'get'
-  match '/stats',           to: 'static_pages#stats',         via: 'get'
-  match '/signup',          to: 'users#new',                  via: 'get'
-  match '/signin',          to: 'sessions#new',               via: 'get'
-  match '/quietsession',    to: 'sessions#quietly',           via: 'post'
-  match '/signout',         to: 'sessions#destroy',           via: 'delete'
-  match '/validate',        to: 'sessions#validate',          via: 'get'
-  match '/external/property',to: 'properties#external',       via: 'get'
-  match '/notes',           to: 'properties#create_note',     via: 'post'
-  match '/viewings',        to: 'properties#create_viewing',  via: 'post'
-  match '/offers',          to: 'properties#create_offer',    via: 'post'
-  match '/close',           to: 'properties#close',           via: 'post'
-  match '/reopen',          to: 'properties#reopen',          via: 'post'
-  match '/update_call_date',to: 'properties#update_call_date',via: 'post'
-  match '/update_status',   to: 'properties#update_status',   via: 'post'
-  match '/delete_note',     to: 'properties#delete_note',     via: 'post'
-  
+  match '/',                      to: 'static_pages#home',          via: 'get'
+  match '/stats',                 to: 'static_pages#stats',         via: 'get'
+  match '/signup',                to: 'users#new',                  via: 'get'
+  match '/signin',                to: 'sessions#new',               via: 'get'
+  match '/quietsession',          to: 'sessions#quietly',           via: 'post'
+  match '/signout',               to: 'sessions#destroy',           via: 'delete'
+  match '/validate',              to: 'sessions#validate',          via: 'get'
+  match '/external/property',     to: 'properties#external',        via: 'get'
+  match '/notes',                 to: 'properties#create_note',     via: 'post'
+  match '/viewings',              to: 'properties#create_viewing',  via: 'post'
+  match '/offers',                to: 'properties#create_offer',    via: 'post'
+  match '/close',                 to: 'properties#close',           via: 'post'
+  match '/reopen',                to: 'properties#reopen',          via: 'post'
+  match '/update_call_date',      to: 'properties#update_call_date',via: 'post'
+  match '/update_status',         to: 'properties#update_status',   via: 'post'
+  match '/delete_note',           to: 'properties#delete_note',     via: 'post'
+  match '/update_preferences',    to: 'users#update_preferences',   via: 'post'
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 

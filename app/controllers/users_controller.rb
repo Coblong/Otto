@@ -28,6 +28,19 @@ class UsersController < ApplicationController
     end
   end
 
+  def update_preferences
+    puts 'Updating preferences'
+    user = User.find(params[:user_id])
+    if params[:overview_weeks].to_i > 0
+      puts 'Updating overview weeks'
+      user.overview_weeks = params[:overview_weeks].to_i      
+    end
+    user.expand_notes = params[:expand_notes] == "true"
+    user.show_images = params[:show_images] == "true"
+    user.save()
+    render :json => user
+  end
+
   def create
     @user = User.new(user_params)
     if @user.save
@@ -47,7 +60,7 @@ class UsersController < ApplicationController
       puts 'user params = ' + params[:user].to_yaml
       params[:user].delete(:password) if params[:user][:password].blank?
       params.require(:user).permit(:name, :email, :password,
-                                     :password_confirmation, :expand_notes, :show_left_nav, :show_future, :show_overview, :overview_weeks)
+                                     :password_confirmation, :expand_notes, :show_left_nav, :show_future, :show_overview, :show_images)
     end
 
     # Before filters

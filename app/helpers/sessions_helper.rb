@@ -84,6 +84,7 @@ module SessionsHelper
   def current_properties(filter)
 
     puts 'Getting current properties based upon filter'
+    puts 'The page is ' + @page.to_s
 
     if !current_property.nil?
       properties = current_property.branch.properties
@@ -121,11 +122,12 @@ module SessionsHelper
       end
     end
 
-    if !show_all?
-      properties = properties.where(closed: show_closed?)
-    end
-    if filter == "viewings"
-      properties.where("view_date > ?", Time.now)
+    if @page == 1
+      properties = properties.where(closed: false)
+    elsif @page == 2
+      properties = properties.where("view_date > ?", Time.now)
+    elsif @page == 3
+      properties = properties.where(closed: true)
     end
       
     properties
@@ -141,22 +143,6 @@ module SessionsHelper
     else
       session[:area_code] = area_code
     end
-  end
-  
-  def show_closed(show)
-    session[:closed] = show 
-  end
-  
-  def show_closed?
-    session[:closed]
-  end
-  
-  def show_all(show)
-    session[:all] = show 
-  end
-  
-  def show_all?
-    session[:all]
   end
   
   def set_estate_agent(estate_agent)
@@ -230,5 +216,10 @@ module SessionsHelper
     else
       ""
     end
+  end
+
+  def pluralize(text, number)
+    return text.pluralize if number != 1
+    text
   end
 end

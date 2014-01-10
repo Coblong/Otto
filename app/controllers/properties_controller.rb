@@ -30,6 +30,7 @@ class PropertiesController < ApplicationController
       @property.area_code = area_code
       @property.post_code = post_code
       @property.url = params[:hostname]
+      @property.image_url = params[:image_url]      
       @property.asking_price = params[:asking_price]
       @property.sstc = params[:sstc]
       @property.status = Status.find(params[:status_id])    
@@ -39,8 +40,8 @@ class PropertiesController < ApplicationController
       note = @property.notes.build
       note.content = 'Created'
       note.note_type = Note.TYPE_AUTO
-
     else
+      @property.image_url = params[:image_url]
       new_status = Status.find(params[:status_id])    
       if new_status.id != @property.status.id
         add_status_note(@property, new_status)

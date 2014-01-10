@@ -114,3 +114,17 @@ function updateStatus(propertyId, newStatus) {
       }
   });
 }
+function updatePreferences(userId, overviewWeeks, expandNotes, showImages) {
+  $.ajax({
+      type: "POST",
+      url: "/update_preferences",
+      data: 'user_id=' + userId + '&overview_weeks=' + overviewWeeks + '&expand_notes=' + expandNotes + '&show_images=' + showImages,
+      dataType: "json",
+      error: function(xhr, status, error) {
+        alert("Unable to update preferences - " + error)
+      },
+      success: function (data, status, response) {
+        location.reload();
+      }
+  });
+}

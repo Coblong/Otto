@@ -39,8 +39,6 @@ class StaticPagesController < ApplicationController
 
     def set_lists
       if signed_in?
-        show_closed(params[:closed] == "true")
-        show_all(params[:all] == "true")
 
         if !params[:area_code].nil? and !params[:area_code].empty?
           if params[:area_code].to_i > 0

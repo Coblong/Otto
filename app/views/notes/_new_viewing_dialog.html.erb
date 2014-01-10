@@ -55,7 +55,7 @@ $(function() {
               var html = "<li id='nli-" + data["id"] + "'' class='" + data["note_type"] + "'>"
               html += data["formatted_date"] + " - "
               html += data["content"]
-              html += "<span><img alt='Delete' class='delete_note' id='del-" + data["id"] + "' src='/assets/delete.png' width='14'></span></li>"
+              html += "<span><img alt='Delete' class='delete_note' id='del-" + data["id"] + "' src='<%=  asset_path('delete.png') %>' width='14'></span></li>"
 
               $( "#accordian-notes-<%= property.id%> ul" ).prepend(html);                
               $( "#va-<%= property.id%>" ).html(data["content"]);                              

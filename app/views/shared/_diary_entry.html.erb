@@ -1,18 +1,31 @@
 <div class='diary'>
-  <table>
-    <tr>
-      <td>
-        <% if defined? show %>
-          <h2><%= link_to_function property.address + ' - ' + property.post_code, "#", class: "show_hide" %></h2>          
-        <% else %>
-          <h2><%= link_to property.address + ' - ' + property.post_code, property %></h2>
-        <% end %>
-        <% if property.sstc %>        
-          <%= image_tag "sstc.png", width: 20 %>
-        <% end %>
-        <%= property.asking_price %>
-      </td>
-      <td align="right">
+  <div class="diary-details">
+    <div class="diary-left">
+      <h2>
+<% if defined? show %>
+        <%= link_to_function property.address + ' - ' + property.post_code, "#", class: "show_hide" %>          
+<% else %>
+        <%= link_to property.address + ' - ' + property.post_code, property %>
+<% end %>
+<% if property.sstc %>        
+        &nbsp;<%= image_tag "sstc.png", width: 20 %>
+<% end %>        
+      </h2>
+      <%= property.asking_price %><br>
+      <%= link_to property.estate_agent.name, property.estate_agent %> / <%= link_to property.branch.name, property.branch %><br>
+      <span id="va-<%= property.id %>" class="viewing-alert">
+<% if property.viewing_soon? %> 
+        Viewing : <%= property.view_date_formatted %>
+<% end %>
+      </span>
+    </div>
+    <div class="diary-middle">      
+<% if current_user.show_images and !(defined? show) %>
+      <%= image_tag property.image_url, width: 300 %>
+<% end %>
+    </div>
+    <div class="diary-right">
+      <div class="diary-buttons">
 <%
   w1_id = "w1-" + property.id.to_s
   w2_id = "w2-" + property.id.to_s
@@ -23,7 +36,9 @@
   close_id = "c-" + property.id.to_s
   reopen_id = "r-" + property.id.to_s
   history_id = "h-" + property.id.to_s
-%>
+  if property.closed %>
+        <%= image_tag "reopen.png", class: "toolitem reopen", title: "Reopen", id: reopen_id %>
+  <% else %>
         <%= image_tag "w.png", class: "toolitem change_call_date", title: "Add 1 week", name: "auto", id: w1_id %>
         <%= image_tag "w2.png", class: "toolitem change_call_date", title: "Add 2 weeks", name: "auto", id: w2_id %>
         <%= image_tag "m.png", class: "toolitem change_call_date", title: "Add 1 month", name: "auto", id: m1_id %>
@@ -31,47 +46,27 @@
         <%= image_tag "call.png", class: "toolitem call", title: "Call", id: call_id %>
         <%= image_tag "view.png", class: "toolitem view", title: "Viewing", id: view_id %>
         <%= image_tag "offer.png", class: "toolitem make_offer", title: "Offer", id: offer_id  %>
-        <% if property.closed %>
-          <%= image_tag "reopen.png", class: "toolitem reopen", title: "Reopen", id: reopen_id %>
-        <% else %>
-          <%= image_tag "close.png", class: "toolitem close", title: "Close", id: close_id %>
-        <% end %>
+        <%= image_tag "close.png", class: "toolitem close", title: "Close", id: close_id %>
+<% end %>
         <%= image_tag "notes.png", class: "toolitem history", title: "Notes", id: history_id %>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <%= link_to property.estate_agent.name, property.estate_agent %> / <%= link_to property.branch.name, property.branch %>
-      </td>
-      <td valign="top" align="right">
+      </div>
+      <div>
         <input type="text" name="auto" id='dp-<%= property.id %>' class="datepicker" value="<%= property.call_date_formatted(:long) %>">
-      </td>
-    </tr>    
-    <tr>
-      <td>
-        <span id="va-<%= property.id %>" class="viewing-alert">
-          <% if property.viewing_soon? %> 
-            Viewing : <%= property.view_date_formatted %>
-          <% end %>
-        </span>
-      </td>
-    </tr>        
-    <tr>
-      <td colspan="4">
-        <div id="accordion-<%= property.id %>" class="accordian-notes">
-          <h3 class="notes"></h3>
-          <div id="accordian-notes-<%= property.id %>" class="accordian-notes">
-            <ul>
+      </div>
+    </div>
+  </div>
+  <div class="diary-notes">
+    <div id="accordion-<%= property.id %>" class="accordian-notes">
+      <h3 class="notes"></h3>
+      <div id="accordian-notes-<%= property.id %>" class="accordian-notes">
+        <ul>
 <% property.last_notes.each do |note| %>          
-            <%= render note %>
+          <%= render note %>
 <% end %>   
-            </div>
-          </ul>
-        </div>
-      </td>
-    </tr>
-    <tr><td colspan="4"></td></tr>
-  </table>  
+        </ul>
+      </div>      
+    </div>
+  </div>  
 </div>
 <%= render 'notes/new_note_dialog', property: property %>
 <%= render 'notes/new_viewing_dialog', property: property %>

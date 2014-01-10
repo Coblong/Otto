@@ -40,16 +40,34 @@
     <% end %>                  
             </tr>
   <% end %>                  
-          </table>
+          </table>          
         </div>
+      </div>
+      <div class="change_user_prefs">           
+        Showing <input id="overview-weeks" value="<%= @overview_headers.size %>"/> <%= pluralize("week", @overview_headers.size) %></span>
       </div>
     </div>
 <% end %>          
 <script type="text/javascript">
+var overview_expanded = localStorage["overview_expanded"] || 0;
 $( "#overview-accordion" ).accordion({
-      collapsible: true,
-      heightStyle: "content"
-    });
+  collapsible: true,
+  heightStyle: "content",
+  active: overview_expanded == 0 ? 0 : false
+});
+$( "#overview-accordion > h3" ).click(function(e){  
+  active = $( "#overview-accordion" ).accordion("option", "active");
+  if (active === false) {
+    localStorage["overview_expanded"] = 'false';
+  } else {
+    localStorage["overview_expanded"] = '0';
+  }
+});
+$( "#overview-weeks" ).keyup(function(e) {  
+  if (e.which == 13) {    
+    updatePreferences(<%= current_user.id %>, $( "#overview-weeks" ).val(), $( "#expand_notes" ).is(':checked'), $( "#show_images" ).is(':checked') )
+  }
+});
 </script>
 
 
@@ -60,18 +78,22 @@ $( "#overview-accordion" ).accordion({
         <h3 class="<%= get_header_class(day) %>"><%= day %></h3>
         <div class="diary-panel">   
     <% @days_properties_hash[day].each do |property| %>
-      <%= render "/shared/diary_entry", property: property, expanded: current_user.expand_notes %>   
+          <%= render "/shared/diary_entry", property: property, expanded: current_user.expand_notes %>   
     <% end %>
-      </div>      
+        </div>      
   <% end %>
-<% end %> 
-
-      <br><br><br>
+<% end %>  
+      </div>           
+      <div class="change_user_prefs">           
+        Expand notes <%= check_box_tag "expand_notes", "Expand notes", current_user.expand_notes %>&nbsp;
+        Show images <%= check_box_tag "show_images", "Show Pictures", current_user.show_images %>
+      </div>
     </div>
+    <br><br>
 <% else %>
     <div class="welcome-inner">
-  <%= image_tag("ottor.png", id: "home_image") %><br>
-  </div>
+      <%= image_tag("ottor.png", id: "home_image") %><br>
+    </div>
   <% end %>
 
 <%= render 'shared/button_controls' %>
@@ -81,4 +103,10 @@ $( "#accordion" ).accordion({
       collapsible: true,
       heightStyle: "content"
     });
+$( "#expand_notes" ).click(function(e) {  
+  updatePreferences(<%= current_user.id %>, $( "#overview-weeks" ).val(), $( "#expand_notes" ).is(':checked'), $( "#show_images" ).is(':checked') )
+});
+$( "#show_images" ).click(function(e) {  
+  updatePreferences(<%= current_user.id %>, $( "#overview-weeks" ).val(), $( "#expand_notes" ).is(':checked'), $( "#show_images" ).is(':checked') )
+});
 </script>

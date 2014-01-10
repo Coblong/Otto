@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140108205157) do
+ActiveRecord::Schema.define(version: 20140109221349) do
 
   create_table "agents", force: true do |t|
     t.string   "name"
@@ -89,6 +89,7 @@ ActiveRecord::Schema.define(version: 20140108205157) do
     t.boolean  "sstc"
     t.boolean  "closed"
     t.datetime "view_date"
+    t.string   "image_url"
   end
 
   add_index "properties", ["agent_id", "created_at"], name: "index_properties_on_agent_id_and_created_at"
@@ -117,6 +118,7 @@ ActiveRecord::Schema.define(version: 20140108205157) do
     t.boolean  "show_future"
     t.boolean  "show_overview"
     t.integer  "overview_weeks"
+    t.boolean  "show_images"
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true

@@ -9,7 +9,6 @@ module StaticPagesHelper
 
       day = Date.today.at_beginning_of_week
       (1..current_user.overview_weeks).each do |week_number|
-        puts 'Adding week ' + week_number.to_s
         headers = Array.new
         @overview_headers[week_number] = headers
         
@@ -17,8 +16,7 @@ module StaticPagesHelper
           / Add the header to a has for the week (Monday, TuesDay etc)/
           header = day.strftime("%A %d/%m")
           headers << header
-          puts "...adding " + header
-
+      
           / Create an array for all of the overviews for this day /
           overviews = Array.new
           @overviews_for_day[header] = overviews
@@ -26,7 +24,6 @@ module StaticPagesHelper
           / Add the viewings for this day /          
           viewings = Property.where("view_date >= ? and view_date < ?", day.beginning_of_day, ( day+1 ).beginning_of_day).where(closed: false)
           if !viewings.empty?
-            puts "......adding viewings"
             viewings_hash = Hash.new
             viewings_hash["Viewings"] = viewings.size
             overviews << viewings_hash
@@ -36,7 +33,6 @@ module StaticPagesHelper
           properties = Property.where("call_date >= ? and call_date < ?", day.beginning_of_day, ( day+1 ).beginning_of_day).where(closed: false)
           branches = Branch.where("id in (?)", properties.collect(&:branch_id))
           branches.each do  |branch|
-            puts "......adding " + branch.estate_agent.name
             branch_properties = properties.where(branch_id: branch.id)
             branch_hash = Hash.new
             branch_hash[branch.id] = branch_properties.size
@@ -79,7 +75,7 @@ module StaticPagesHelper
       
       @days_properties_hash[get_key(day, properties.size, agents.size)] = properties unless properties.empty?        
       if is_sunday
-        if current_user.show_future
+        if current_user.show_future or @page == 4
           future_properties = Property.where("call_date >= ?", (Date.today + offset+1).beginning_of_day).where(closed: false)
           future_agents = Branch.where("id in (?)", future_properties.collect(&:branch_id))
           @days_properties_hash[get_key("Future", future_properties.size, future_agents.size)] = future_properties unless future_properties.empty?
