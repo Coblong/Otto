@@ -15,11 +15,11 @@
     <option value='<%= agent.name %>'/>";        
 <% end %>
   </datalist>
-  <textarea id="nn-<%= property.id %>" class="new-note" placeholder="Add a comment..."></textarea>  
+  <textarea id="nn-<%= property.id %>" class="new-note" placeholder="Add a comment..."></textarea>
   <input type="text" name="manual" id='nndp-<%= property.id %>' class="datepicker new-note" value="<%= property.call_date_formatted(:long) %>">
-  <%= image_tag "w.png", class: "toolitem change_call_date", title: "Add 1 week", name: "manual", id: w1_id %>
-  <%= image_tag "w2.png", class: "toolitem change_call_date", title: "Add 2 weeks", name: "manual", id: w2_id %>
-  <%= image_tag "m.png", class: "toolitem change_call_date", title: "Add 1 month", name: "manual", id: m1_id %>
+  <div class="toolitem txt change_call_date" id="<%= w1_id %>">+1w</div>
+  <div class="toolitem txt change_call_date" id="<%= w2_id %>">+2w</div>
+  <div class="toolitem txt change_call_date" id="<%= m1_id %>">+1m</div>
 </div>
 <script type="text/javascript">
 $(function() {

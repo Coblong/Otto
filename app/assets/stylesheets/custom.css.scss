@@ -491,10 +491,10 @@ a {
 }
 
 .toolitem {
-  height: 24px;
-  width: 24px;
+  display: inline;
   vertical-align: bottom;
-  cursor: pointer;
+  cursor: pointer;  
+  font-weight: bold;  
   outline: 1px $main-bg;
   border-radius: 5px;
   border-left: 1px solid $main-bg;
@@ -508,6 +508,15 @@ a {
     border-bottom: 2px solid gray;
   }
 }
+.icon {
+  height: 24px;
+  width: 24px;
+}
+
+.txt {
+  padding: 5px 5px;
+  vertical-align:middle;
+}
 
 .change_call_date {
   height: 28px;
@@ -516,6 +525,9 @@ a {
 
 .dialog {
   display:none;  
+  input {
+    margin: 5px 0px;
+  }
 }
 
 .settings {

@@ -1,12 +1,16 @@
 <script type="text/javascript">
 $('.change_call_date').click(function() {
-  var id = this.id.toString()
+  changeCallDate(this.id, false)
+});
+$('.quick_change_call_date').click(function() {
+  changeCallDate(this.id, true)
+});
+function changeCallDate(id, quick) {
   var type = id.substring(0,2)
   var propertyId = id.substring(3)
   var dpId = '#dp-' + propertyId  
   var oldDate = $(dpId).datepicker('getDate');
   var newDate = oldDate
-
   if (type == 'w1') {
     newDate.setDate(oldDate.getDate() + 7);
   } else if (type == 'w2') {
@@ -14,12 +18,12 @@ $('.change_call_date').click(function() {
   } else {
     newDate.setMonth(oldDate.getMonth() + 1);
   }
-  if (this.name == 'auto') {
+  if (quick) {
     updateCallDate(propertyId, newDate)
   } else {
     $( '#nndp-' + propertyId ).datepicker("setDate", newDate );  
   }
-});
+}
 $(function() {
   $( ".property-status" ).change(function() {
     var propertyId = this.id.toString().substring(7)

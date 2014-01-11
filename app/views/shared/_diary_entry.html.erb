@@ -39,16 +39,16 @@
   if property.closed %>
         <%= image_tag "reopen.png", class: "toolitem reopen", title: "Reopen", id: reopen_id %>
   <% else %>
-        <%= image_tag "w.png", class: "toolitem change_call_date", title: "Add 1 week", name: "auto", id: w1_id %>
-        <%= image_tag "w2.png", class: "toolitem change_call_date", title: "Add 2 weeks", name: "auto", id: w2_id %>
-        <%= image_tag "m.png", class: "toolitem change_call_date", title: "Add 1 month", name: "auto", id: m1_id %>
+        <div class="toolitem txt quick_change_call_date" id="<%= w1_id %>">+1w</div>
+        <div class="toolitem txt quick_change_call_date" id="<%= w2_id %>">+2w</div>
+        <div class="toolitem txt quick_change_call_date" id="<%= m1_id %>">+1m</div>
         <%= select_tag ("status-" + property.id.to_s), options_from_collection_for_select(current_user.statuses, "id", "description", property.status.id), class: "property-status" %>
-        <%= image_tag "call.png", class: "toolitem call", title: "Call", id: call_id %>
-        <%= image_tag "view.png", class: "toolitem view", title: "Viewing", id: view_id %>
-        <%= image_tag "offer.png", class: "toolitem make_offer", title: "Offer", id: offer_id  %>
-        <%= image_tag "close.png", class: "toolitem close", title: "Close", id: close_id %>
+        <%= image_tag "call.png", class: "toolitem icon call", title: "Call", id: call_id %>
+        <%= image_tag "view.png", class: "toolitem icon view", title: "Viewing", id: view_id %>
+        <%= image_tag "offer.png", class: "toolitem icon make_offer", title: "Offer", id: offer_id  %>        
+        <div class="toolitem"><%= image_tag "close.png", class: "toolitem icon close", title: "Close", id: close_id %></div>
 <% end %>
-        <%= image_tag "notes.png", class: "toolitem history", title: "Notes", id: history_id %>
+        <%= image_tag "notes.png", class: "toolitem icon history", title: "Notes", id: history_id %>
       </div>
       <div>
         <input type="text" name="auto" id='dp-<%= property.id %>' class="datepicker" value="<%= property.call_date_formatted(:long) %>">
