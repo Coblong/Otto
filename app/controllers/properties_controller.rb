@@ -34,7 +34,7 @@ class PropertiesController < ApplicationController
       @property.asking_price = params[:asking_price]
       @property.sstc = params[:sstc]
       @property.status = Status.find(params[:status_id])    
-      @property.call_date = Date.today
+      @property.call_date = Date.today      
       @property.closed = false
 
       note = @property.notes.build
@@ -53,6 +53,10 @@ class PropertiesController < ApplicationController
       new_asking_price = params[:asking_price]
       if new_asking_price != @property.asking_price
         add_asking_price_note(@property, new_asking_price)
+      end
+      new_closed_state = params[:closed]
+      if new_closed_state != @property.closed
+        add_closed_state_note(@property, new_closed_state)
       end
     end
 
@@ -77,6 +81,10 @@ class PropertiesController < ApplicationController
         render :json => response
       else
         response = build_response
+        puts 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
+        puts response
+        puts 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
+
         render :json => response
       end
     end
@@ -222,13 +230,7 @@ class PropertiesController < ApplicationController
         @property.closed = true
         @property.save()
         
-        / Build the note /
-        note = @property.notes.build
-        note.note_type = Note.TYPE_MANUAL
-        note.content = "Closed"
-        note.branch_id = @property.branch_id
-        note.estate_agent_id = @property.estate_agent.id
-
+        note = add_closed_state_note(@property, true);
         note.save()
 
         render :json => note.to_json(methods: [:formatted_date, :agent_name] ), :status => :ok
@@ -250,13 +252,7 @@ class PropertiesController < ApplicationController
         @property.closed = false
         @property.save()
         
-        / Build the note /
-        note = @property.notes.build
-        note.note_type = Note.TYPE_MANUAL
-        note.content = "Reopened"
-        note.branch_id = @property.branch_id
-        note.estate_agent_id = @property.estate_agent.id
-
+        note = add_closed_state_note(@property, false);
         note.save()
 
         render :json => note.to_json(methods: [:formatted_date, :agent_name] ), :status => :ok
@@ -367,7 +363,7 @@ class PropertiesController < ApplicationController
     end
 
     def build_response
-      { "status_id" => @property.status_id, "sstc" => @property.sstc, "asking_price" => @property.asking_price, "statuses" => current_user.statuses.to_json, 
+      { "status_id" => @property.status_id, "closed" => @property.closed, "sstc" => @property.sstc, "asking_price" => @property.asking_price, "statuses" => current_user.statuses.to_json, 
         "estate_agent_name" => @property.estate_agent.name, "branch_name" => @property.branch.name, 
         "agents" => @property.branch.agents.to_json(only: [:id, :name] ),
         "notes" => @property.notes.to_json(only: [:content, :note_type], methods: [:formatted_date, :agent_name] ) }
@@ -403,5 +399,20 @@ class PropertiesController < ApplicationController
         note.content = "Price changed from " + property.asking_price + " to " + new_asking_price 
         note.note_type = Note.TYPE_PRICE
         property.asking_price = new_asking_price      
+    end
+
+    def add_closed_state_note(property, new_closed_state)
+        note = @property.notes.build
+        note.note_type = Note.TYPE_MANUAL
+        puts 'Changing state to ' + new_closed_state.to_s
+        if new_closed_state.to_s == "true"
+          note.content = "Closed"
+        else
+          note.content = "Reopened"
+        end
+        note.branch_id = @property.branch_id
+        note.estate_agent_id = @property.estate_agent.id
+        property.closed = new_closed_state
+        note
     end
 end

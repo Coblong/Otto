@@ -37,7 +37,7 @@
   reopen_id = "r-" + property.id.to_s
   history_id = "h-" + property.id.to_s
   if property.closed %>
-        <%= image_tag "reopen.png", class: "toolitem reopen", title: "Reopen", id: reopen_id %>
+        <%= image_tag "reopen.png", class: "toolitem icon reopen", title: "Reopen", id: reopen_id %>
   <% else %>
         <div class="toolitem txt quick_change_call_date" id="<%= w1_id %>">+1w</div>
         <div class="toolitem txt quick_change_call_date" id="<%= w2_id %>">+2w</div>
@@ -46,7 +46,7 @@
         <%= image_tag "call.png", class: "toolitem icon call", title: "Call", id: call_id %>
         <%= image_tag "view.png", class: "toolitem icon view", title: "Viewing", id: view_id %>
         <%= image_tag "offer.png", class: "toolitem icon make_offer", title: "Offer", id: offer_id  %>        
-        <div class="toolitem"><%= image_tag "close.png", class: "toolitem icon close", title: "Close", id: close_id %></div>
+        <%= image_tag "close.png", class: "toolitem icon close", title: "Close", id: close_id %>
 <% end %>
         <%= image_tag "notes.png", class: "toolitem icon history", title: "Notes", id: history_id %>
       </div>
