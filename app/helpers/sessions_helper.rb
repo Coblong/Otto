@@ -81,10 +81,11 @@ module SessionsHelper
     end    
   end
 
-  def current_properties(filter)
+  def current_properties
 
     puts 'Getting current properties based upon filter'
     puts 'The page is ' + @page.to_s
+    @page = 1 if !defined? @page
 
     if !current_property.nil?
       properties = current_property.branch.properties
