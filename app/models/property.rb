@@ -41,9 +41,4 @@ class Property < ActiveRecord::Base
     end
   end
 
-  def last_notes
-    #self.notes.where(note_type: 'manual')
-    self.notes
-  end
-
 end

@@ -60,7 +60,7 @@
       <h3 class="notes"></h3>
       <div id="accordian-notes-<%= property.id %>" class="accordian-notes">
         <ul>
-<% property.last_notes.each do |note| %>          
+<% property.notes.each do |note| %>          
           <%= render note %>
 <% end %>   
         </ul>

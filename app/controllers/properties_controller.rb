@@ -55,7 +55,10 @@ class PropertiesController < ApplicationController
         add_asking_price_note(@property, new_asking_price)
       end
       new_closed_state = params[:closed]
+      puts 'New closed state is ' + new_closed_state.to_s
+      puts 'Old closed state is ' + @property.closed.to_s
       if new_closed_state.to_s != @property.closed.to_s
+        puts 'Closed state changing to ' + new_closed_state.to_s
         add_closed_state_note(@property, new_closed_state)
       end
     end
