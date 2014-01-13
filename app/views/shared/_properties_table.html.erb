@@ -9,7 +9,7 @@
         <th>Postcode</th>
         <th>Status</th>            
       </tr>          
-    <% current_properties(filter).each do |property| %>
+    <% current_properties.each do |property| %>
         <tr>
           <td class="left"><%= link_to property.address, property %></td>
           <td class="left"><%= link_to property.estate_agent.name, property.estate_agent %>  / <%= link_to property.branch.name, property.branch %></td>
