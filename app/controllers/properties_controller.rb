@@ -4,8 +4,6 @@ class PropertiesController < ApplicationController
   skip_before_filter  :verify_authenticity_token
 
   def show
-    puts 'the current property is ' + current_property.address
-    puts 'the current branch is ' + current_branch.name
   end
 
   def create
@@ -15,6 +13,7 @@ class PropertiesController < ApplicationController
     
     if @property.nil?
       puts 'This is a new property so create it'
+      
       estate_agent_ref = params[:estate_agent].partition(',').first
       estate_agent = find_or_create_estate_agent(estate_agent_ref)    
       branch = find_or_create_branch(estate_agent, params[:branch]);
@@ -23,7 +22,8 @@ class PropertiesController < ApplicationController
       post_code = params[:post_code].gsub('_', ' ')
       area_code = find_or_create_area_code(area_code)
       
-      @property = estate_agent.properties.build
+      @property = current_user.properties.build
+      @property.estate_agent = estate_agent
       @property.branch = branch
       @property.external_ref = params[:url]
       @property.address = params[:address].partition(',').first
@@ -35,15 +35,20 @@ class PropertiesController < ApplicationController
       @property.sstc = params[:sstc]      
       @property.call_date = Date.today      
       @property.closed = params[:closed]
+
+      note = @property.notes.build      
+      note.note_type = Note.TYPE_AUTO
+      note.content = 'Created'
+
       if @property.closed
         @property.status = current_user.statuses.first
+        note = @property.notes.build      
+        note.note_type = Note.TYPE_MANUAL
+        note.content = 'Closed'
       else
         @property.status = Status.find(params[:status_id])    
       end
 
-      note = @property.notes.build
-      note.content = 'Created'
-      note.note_type = Note.TYPE_AUTO
     else
       @property.image_url = params[:image_url]
       new_status = Status.find(params[:status_id])    
@@ -82,9 +87,11 @@ class PropertiesController < ApplicationController
       @property = current_user.properties.find_by(external_ref: params[:url]);
       if @property.nil?
         response = { "statuses" => current_user.statuses.to_json }
+        puts response
         render :json => response
       else
         response = build_response
+        puts response        
         render :json => response
       end
     end
@@ -363,7 +370,7 @@ class PropertiesController < ApplicationController
     end
 
     def build_response
-      { "status_id" => @property.status_id, "closed" => @property.closed, "sstc" => @property.sstc, "asking_price" => @property.asking_price, "statuses" => current_user.statuses.to_json, 
+      { "id" => @property.id, "status_id" => @property.status_id, "closed" => @property.closed, "sstc" => @property.sstc, "asking_price" => @property.asking_price, "statuses" => current_user.statuses.to_json, 
         "estate_agent_name" => @property.estate_agent.name, "branch_name" => @property.branch.name, 
         "agents" => @property.branch.agents.to_json(only: [:id, :name] ),
         "notes" => @property.notes.to_json(only: [:content, :note_type], methods: [:formatted_date, :agent_name] ) }
