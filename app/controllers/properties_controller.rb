@@ -144,7 +144,7 @@ class PropertiesController < ApplicationController
           @property.call_date = params[:call_date]
           @property.save()
           if note.content.empty?
-            note.content = 'Updated'
+            note.content = 'Updated to ' + @property.call_date_formatted(:long)
             note.note_type = Note.TYPE_MANUAL
           end            
         end          
@@ -284,9 +284,9 @@ class PropertiesController < ApplicationController
 
   def update_call_date
     property = current_user.properties.find(params[:property_id])    
-    new_date = params[:new_call_date]
-    add_call_date_note(property, new_date)
+    new_date = params[:new_call_date]    
     property.call_date = Date.parse( new_date.gsub(/, */, '-') )    
+    add_call_date_note(property, new_date)
     if property.save()    
       render :json => {call_date: property.call_date_formatted(:short)}, :status => :created
     else
@@ -386,7 +386,7 @@ class PropertiesController < ApplicationController
 
     def add_call_date_note(property, new_call_date)
         note = property.notes.build
-        note.content = 'Updated'
+        note.content = 'Updated to ' + property.call_date_formatted(:long)
         note.note_type = Note.TYPE_MANUAL
     end
 
