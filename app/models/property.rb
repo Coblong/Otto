@@ -4,6 +4,7 @@ class Property < ActiveRecord::Base
   belongs_to :branch
   belongs_to :estate_agent
   belongs_to :area_code
+  belongs_to :user
   has_many :notes, dependent: :destroy
   validates :address, presence: true, length: { maximum: 100 }
   validates :url, length: { maximum: 200 }

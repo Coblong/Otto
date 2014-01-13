@@ -2,6 +2,7 @@ class User < ActiveRecord::Base
   has_many :estate_agents, dependent: :destroy
   has_many :area_codes, dependent: :destroy
   has_many :statuses, dependent: :destroy
+  has_many :properties, dependent: :destroy
 	before_save { self.email = email.downcase }
   before_create :create_remember_token
 

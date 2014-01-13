@@ -114,9 +114,9 @@ module SessionsHelper
             end
           else
             if current_area_code.nil?        
-              properties = Property.where("estate_agent_id in (?)", EstateAgent.where(user_id: current_user.id).collect(&:id))
+              properties = current_user.properties.where("estate_agent_id in (?)", current_user.estate_agents.where(user_id: current_user.id).collect(&:id))
             else        
-              properties = Property.where("estate_agent_id in (?) and area_code_id = ?", EstateAgent.where(user_id: current_user.id).collect(&:id), current_area_code)
+              properties = current_user.properties.where("estate_agent_id in (?) and area_code_id = ?", current_user.estate_agents.where(user_id: current_user.id).collect(&:id), current_area_code)
             end
           end
         end

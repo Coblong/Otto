@@ -22,7 +22,7 @@ module StaticPagesHelper
           @overviews_for_day[header] = overviews
 
           / Add the viewings for this day /          
-          viewings = Property.where("view_date >= ? and view_date < ?", day.beginning_of_day, ( day+1 ).beginning_of_day).where(closed: false)
+          viewings = current_user.properties.where("view_date >= ? and view_date < ?", day.beginning_of_day, ( day+1 ).beginning_of_day).where(closed: false)
           if !viewings.empty?
             viewings_hash = Hash.new
             viewings_hash["Viewings"] = viewings.size
@@ -30,7 +30,7 @@ module StaticPagesHelper
           end
 
           / Add the viewings for this day /
-          properties = Property.where("call_date >= ? and call_date < ?", day.beginning_of_day, ( day+1 ).beginning_of_day).where(closed: false)
+          properties = current_user.properties.where("call_date >= ? and call_date < ?", day.beginning_of_day, ( day+1 ).beginning_of_day).where(closed: false)
           branches = Branch.where("id in (?)", properties.collect(&:branch_id))
           branches.each do  |branch|
             branch_properties = properties.where(branch_id: branch.id)
@@ -47,7 +47,7 @@ module StaticPagesHelper
   end
 
   def add_overdue_properties
-    overdue_properties = Property.where("call_date < ?", Date.today.beginning_of_day).where(closed: false)    
+    overdue_properties = current_user.properties.where("call_date < ?", Date.today.beginning_of_day).where(closed: false)    
     overdue_properties = apply_filters(overdue_properties)
     overdue_agents = Branch.where("id in (?)", overdue_properties.collect(&:branch_id))
     if overdue_properties.any?
@@ -57,13 +57,13 @@ module StaticPagesHelper
         
   def add_weeks_properties    
     (0..7).each do |offset|
-      properties = Property.where("call_date >= ? and call_date < ?", (Date.today + offset).beginning_of_day, (Date.tomorrow + offset).beginning_of_day).where(closed: false)        
+      properties = current_user.properties.where("call_date >= ? and call_date < ?", (Date.today + offset).beginning_of_day, (Date.tomorrow + offset).beginning_of_day).where(closed: false)        
       properties = apply_filters(properties)
       agents = Branch.where("id in (?)", properties.collect(&:branch_id))
       day = (Date.today+offset).strftime('%A')
       is_sunday = day == 'Sunday'          
       if @show_overview
-        days_viewings = Property.where("view_date >= ? and view_date < ?", (Date.today + offset).beginning_of_day, (Date.tomorrow + offset).beginning_of_day).where(closed: false)        
+        days_viewings = current_user.properties.where("view_date >= ? and view_date < ?", (Date.today + offset).beginning_of_day, (Date.tomorrow + offset).beginning_of_day).where(closed: false)        
         @week_ahead_hash[day] = build_overview_hash(properties, days_viewings)
       end
 
@@ -76,7 +76,7 @@ module StaticPagesHelper
       @days_properties_hash[get_key(day, properties.size, agents.size)] = properties unless properties.empty?        
       if is_sunday
         if current_user.show_future or @page == 4
-          future_properties = Property.where("call_date >= ?", (Date.today + offset+1).beginning_of_day).where(closed: false)
+          future_properties = current_user.properties.where("call_date >= ?", (Date.today + offset+1).beginning_of_day).where(closed: false)
           future_agents = Branch.where("id in (?)", future_properties.collect(&:branch_id))
           @days_properties_hash[get_key("Future", future_properties.size, future_agents.size)] = future_properties unless future_properties.empty?
         end
@@ -87,14 +87,14 @@ module StaticPagesHelper
   
   def add_viewings
     @days_properties_hash = Hash.new
-    properties = Property.where("view_date >= ?", Date.today.beginning_of_day).where(closed: false)
+    properties = current_user.properties.where("view_date >= ?", Date.today.beginning_of_day).where(closed: false)
     properties = apply_filters(properties)
     agents = Branch.where("id in (?)", properties.collect(&:branch_id))
     @days_properties_hash[get_key('Viewings', properties.size, agents.size)] = properties
   end
   
   def add_closed_properties
-    closed_properties = Property.where(closed: true)
+    closed_properties = current_user.properties.where(closed: true)
     closed_properties = apply_filters(closed_properties)
     closed_agents = Branch.where("id in (?)", closed_properties.collect(&:branch_id))
     @days_properties_hash[get_key('Closed Properties', closed_properties.size, closed_agents.size)] = closed_properties

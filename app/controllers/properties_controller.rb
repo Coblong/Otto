@@ -11,7 +11,7 @@ class PropertiesController < ApplicationController
   def create
     puts 'Trying to create or update property with url ' + params[:url].to_s
 
-    @property = Property.find_by(external_ref: params[:url])    
+    @property = current_user.properties.find_by(external_ref: params[:url])    
     
     if @property.nil?
       puts 'This is a new property so create it'
@@ -32,10 +32,14 @@ class PropertiesController < ApplicationController
       @property.url = params[:hostname]
       @property.image_url = params[:image_url]      
       @property.asking_price = params[:asking_price]
-      @property.sstc = params[:sstc]
-      @property.status = Status.find(params[:status_id])    
+      @property.sstc = params[:sstc]      
       @property.call_date = Date.today      
-      @property.closed = false
+      @property.closed = params[:closed]
+      if @property.closed
+        @property.status = current_user.statuses.first
+      else
+        @property.status = Status.find(params[:status_id])    
+      end
 
       note = @property.notes.build
       note.content = 'Created'
@@ -55,10 +59,7 @@ class PropertiesController < ApplicationController
         add_asking_price_note(@property, new_asking_price)
       end
       new_closed_state = params[:closed]
-      puts 'New closed state is ' + new_closed_state.to_s
-      puts 'Old closed state is ' + @property.closed.to_s
       if new_closed_state.to_s != @property.closed.to_s
-        puts 'Closed state changing to ' + new_closed_state.to_s
         add_closed_state_note(@property, new_closed_state)
       end
     end
@@ -78,16 +79,12 @@ class PropertiesController < ApplicationController
     if !current_user
       render :nothing => true, :status => :unauthorized
     else
-      @property = Property.find_by(external_ref: params[:url]);
+      @property = current_user.properties.find_by(external_ref: params[:url]);
       if @property.nil?
         response = { "statuses" => current_user.statuses.to_json }
         render :json => response
       else
         response = build_response
-        puts 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
-        puts response
-        puts 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
-
         render :json => response
       end
     end
@@ -99,9 +96,9 @@ class PropertiesController < ApplicationController
     else
       puts 'Creating new note'
       if !params[:url].nil?
-        @property = Property.find_by(external_ref: params[:url]);
+        @property = current_user.properties.find_by(external_ref: params[:url]);
       else
-        @property = Property.find(params[:property_id]);
+        @property = current_user.properties.find(params[:property_id]);
       end
       if @property.nil?
         response = { "statuses" => current_user.statuses.to_json }
@@ -158,7 +155,7 @@ class PropertiesController < ApplicationController
     if !current_user
       render :nothing => true, :status => :unauthorized
     else
-      @property = Property.find(params[:property_id]);
+      @property = current_user.properties.find(params[:property_id]);
       if @property.nil?
         response = { "statuses" => current_user.statuses.to_json }
         render :json => response
@@ -192,7 +189,7 @@ class PropertiesController < ApplicationController
     if !current_user
       render :nothing => true, :status => :unauthorized
     else
-      @property = Property.find(params[:property_id]);
+      @property = current_user.properties.find(params[:property_id]);
       if @property.nil?
         response = { "statuses" => current_user.statuses.to_json }
         render :json => response
@@ -224,7 +221,7 @@ class PropertiesController < ApplicationController
     if !current_user
       render :nothing => true, :status => :unauthorized
     else
-      @property = Property.find(params[:property_id]);
+      @property = current_user.properties.find(params[:property_id]);
       if @property.nil?
         response = { "statuses" => current_user.statuses.to_json }
         render :json => response
@@ -246,7 +243,7 @@ class PropertiesController < ApplicationController
     if !current_user
       render :nothing => true, :status => :unauthorized
     else
-      @property = Property.find(params[:property_id]);
+      @property = current_user.properties.find(params[:property_id]);
       if @property.nil?
         response = { "statuses" => current_user.statuses.to_json }
         render :json => response
@@ -279,7 +276,7 @@ class PropertiesController < ApplicationController
   end
 
   def update_call_date
-    property = Property.find(params[:property_id])    
+    property = current_user.properties.find(params[:property_id])    
     new_date = params[:new_call_date]
     add_call_date_note(property, new_date)
     property.call_date = Date.parse( new_date.gsub(/, */, '-') )    
@@ -291,7 +288,7 @@ class PropertiesController < ApplicationController
   end
 
   def update_status
-    property = Property.find(params[:property_id])    
+    property = current_user.properties.find(params[:property_id])    
     new_status = Status.find(params[:new_status])
     note = add_status_note(property, new_status)
     if property.save()    
@@ -307,7 +304,7 @@ class PropertiesController < ApplicationController
 
   def update
     puts 'Updating property'
-    @property = Property.find(params[:id])    
+    @property = current_user.properties.find(params[:id])    
     @property.update_attributes!(property_params)
     redirect_to @property
   end
@@ -315,7 +312,7 @@ class PropertiesController < ApplicationController
   private
 
     def find_or_create_estate_agent(estate_agent_ref)      
-      estate_agent = EstateAgent.find_by(external_ref: estate_agent_ref);
+      estate_agent = current_user.estate_agents.find_by(external_ref: estate_agent_ref);
       if estate_agent.nil?
         puts 'Creating new estate agent'
         estate_agent = current_user.estate_agents.create(name: estate_agent_ref, external_ref: estate_agent_ref)      
@@ -346,7 +343,7 @@ class PropertiesController < ApplicationController
     end
 
     def find_or_create_area_code(area_code_desc)      
-      area_code = AreaCode.find_by(user_id: current_user.id, description: area_code_desc);
+      area_code = current_user.area_codes.find_by(user_id: current_user.id, description: area_code_desc);
       if area_code.nil?
         puts 'Creating new area code'
         area_code = current_user.area_codes.create(description: area_code_desc)      
@@ -358,7 +355,7 @@ class PropertiesController < ApplicationController
     end
 
     def set_property_in_controller
-      set_property(Property.find(params[:id]))
+      set_property(current_user.properties.find(params[:id]))
     end
 
     def property_params

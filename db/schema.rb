@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140109221349) do
+ActiveRecord::Schema.define(version: 20140113210412) do
 
   create_table "agents", force: true do |t|
     t.string   "name"
@@ -90,11 +90,13 @@ ActiveRecord::Schema.define(version: 20140109221349) do
     t.boolean  "closed"
     t.datetime "view_date"
     t.string   "image_url"
+    t.integer  "user_id"
   end
 
   add_index "properties", ["agent_id", "created_at"], name: "index_properties_on_agent_id_and_created_at"
   add_index "properties", ["branch_id", "created_at"], name: "index_properties_on_branch_id_and_created_at"
   add_index "properties", ["estate_agent_id", "created_at"], name: "index_properties_on_estate_agent_id_and_created_at"
+  add_index "properties", ["user_id", "created_at"], name: "index_properties_on_user_id_and_created_at"
 
   create_table "statuses", force: true do |t|
     t.string   "description"
