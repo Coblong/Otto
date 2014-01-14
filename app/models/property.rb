@@ -53,14 +53,15 @@ class Property < ActiveRecord::Base
       http.request(req)
     }
 
-    @doc = Nokogiri::XML(res.body)
+    @doc = Nokogiri::HTML(res.body)
     new_asking_price = @doc.css("#propertyprice").text.strip
     new_sstc = @doc.css(".propertystatus").text.length > 0
     
     dirty = false
 
+    output = self.address
     if self.asking_price != new_asking_price
-      puts 'Price changed from ' + self.asking_price + ' to ' + new_asking_price
+      output += ' - price changed from ' + self.asking_price + ' to ' + new_asking_price
       note = self.notes.build
       note.content = "Price changed from " + self.asking_price + " to " + new_asking_price 
       note.note_type = Note.TYPE_PRICE
@@ -69,7 +70,7 @@ class Property < ActiveRecord::Base
     end
 
     if self.sstc != new_sstc
-      puts 'SSTC changed from ' + self.sstc.to_s + ' to ' + new_sstc.to_s
+      output += ' - SSTC changed from ' + self.sstc.to_s + ' to ' + new_sstc.to_s
       note = self.notes.build
       if new_sstc == true
         note.content = 'Sold STC'
@@ -77,20 +78,17 @@ class Property < ActiveRecord::Base
         note.content = 'No longer Sold STC'
       end
       note.note_type = Note.TYPE_SSTC
-      property.sstc = new_sstc      
+      self.sstc = new_sstc      
       dirty = true
     end
 
     if dirty
-      puts 'Saving'
       if self.save()
-        puts 'Saved ok'
+        puts output + ' - saved ok'
       end
     else
-      puts 'No changes'
+      puts output + ' - no changes'
     end
-
-    puts '--------------------------------------------------'
   end
 end
 
