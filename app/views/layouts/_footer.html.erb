@@ -1,11 +1,11 @@
 <footer class="footer">
   <small>
-    <a href="#">Ottor</a>
+    <%= link_to "The Ottor System", root_path(area_code: -1, estate_agent: -1) %>
     by Paul Cobley
   </small>
   <nav>
     <ul>
-      <li><%= Rails.env %></li>
+      <li><small><%= Rails.env %></small></li>
     </ul>
   </nav>
 </footer>

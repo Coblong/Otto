@@ -42,4 +42,11 @@ class Property < ActiveRecord::Base
     end
   end
 
+  def check_for_updates
+    puts 'Robot checking for updates'
+    puts '  ' + self.address
+    puts '  ' + self.asking_price
+    puts '  ' + self.sstc.to_s
+    puts '--------------------------------------------------'
+  end
 end
