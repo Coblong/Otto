@@ -1,3 +1,6 @@
+require 'net/http'
+require 'nokogiri'
+
 class Property < ActiveRecord::Base
   belongs_to :status, class_name: "Status", foreign_key: "status_id"
   has_and_belongs_to_many :agents
@@ -43,10 +46,20 @@ class Property < ActiveRecord::Base
   end
 
   def check_for_updates
-    puts 'Robot checking for updates'
-    puts '  ' + self.address
-    puts '  ' + self.asking_price
-    puts '  ' + self.sstc.to_s
+    puts 'Getting live page for ' + self.address
+    
+    live_url = URI.parse(self.full_url)
+    req = Net::HTTP::Get.new(live_url.path)
+    res = Net::HTTP.start(live_url.host, live_url.port) { |http|
+      http.request(req)
+    }
+
+    @doc = Nokogiri::XML(res.body)
+    puts 'Asking price [' + self.asking_price + '][' + @doc.css("#propertyprice").text.strip + "]"
+    puts 'SSTC         [' + self.sstc.to_s + '][' + @doc.css(".propertystatus").text + "]"
     puts '--------------------------------------------------'
   end
 end
+
+
+
