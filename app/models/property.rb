@@ -46,7 +46,6 @@ class Property < ActiveRecord::Base
   end
 
   def check_for_updates
-    puts 'Getting live page for ' + self.address
     
     live_url = URI.parse(self.full_url)
     req = Net::HTTP::Get.new(live_url.path)
@@ -55,8 +54,42 @@ class Property < ActiveRecord::Base
     }
 
     @doc = Nokogiri::XML(res.body)
-    puts 'Asking price [' + self.asking_price + '][' + @doc.css("#propertyprice").text.strip + "]"
-    puts 'SSTC         [' + self.sstc.to_s + '][' + @doc.css(".propertystatus").text + "]"
+    new_asking_price = @doc.css("#propertyprice").text.strip
+    new_sstc = @doc.css(".propertystatus").text.length > 0
+    
+    dirty = false
+
+    if self.asking_price != new_asking_price
+      puts 'Price changed from ' + self.asking_price + ' to ' + new_asking_price
+      note = self.notes.build
+      note.content = "Price changed from " + self.asking_price + " to " + new_asking_price 
+      note.note_type = Note.TYPE_PRICE
+      self.asking_price = new_asking_price      
+      dirty = true
+    end
+
+    if self.sstc != new_sstc
+      puts 'SSTC changed from ' + self.sstc.to_s + ' to ' + new_sstc.to_s
+      note = self.notes.build
+      if new_sstc == true
+        note.content = 'Sold STC'
+      else
+        note.content = 'No longer Sold STC'
+      end
+      note.note_type = Note.TYPE_SSTC
+      property.sstc = new_sstc      
+      dirty = true
+    end
+
+    if dirty
+      puts 'Saving'
+      if self.save()
+        puts 'Saved ok'
+      end
+    else
+      puts 'No changes'
+    end
+
     puts '--------------------------------------------------'
   end
 end
