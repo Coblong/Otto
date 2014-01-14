@@ -19,7 +19,7 @@
               </tr>
               <tr>
       <% @overview_headers[week_number].each do |header| %>              
-                <td nowrap>
+                <td nowrap class="<%= header == "Today" ? "today" : "" %>">
                   <ul>
         <% @overviews_for_day[header].each do |overview| %>                              
           <% overview.keys.each do |key| %>                              

@@ -14,7 +14,11 @@ module StaticPagesHelper
         
         (1..7).each do |offset|  
           / Add the header to a has for the week (Monday, TuesDay etc)/
-          header = day.strftime("%A %d/%m")
+          if day == Date.today
+            header = "Today"
+          else
+            header = day.strftime("%A %d/%m")
+          end
           headers << header
       
           / Create an array for all of the overviews for this day /
