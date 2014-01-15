@@ -4,7 +4,7 @@
   </div>
   <div id="main">     
     <div id="main-bottom">   
-  <% if current_properties("").any? %>     
+  <% if current_properties.any? %>     
         <%= render "/shared/statuses_table" %>   
   <% end %>  
     <p>
@@ -12,7 +12,7 @@
         <%= render "/shared/estate_agents_table" %>   
   <% end %>  
     <p>
-  <% if current_properties("").any? %>      
+  <% if current_properties.any? %>      
         <%= render "/shared/properties_table", filter: "" %>
   <% end %>
     </div>

@@ -9,8 +9,9 @@ class PropertiesController < ApplicationController
   def create
     puts 'Trying to create or update property with url ' + params[:url].to_s
 
-    @property = current_user.properties.find_by(external_ref: params[:url])    
-    
+    @property = current_user.properties.find_by(external_ref: params[:url])        
+    update = true
+
     if @property.nil?
       puts 'This is a new property so create it'
       
@@ -30,45 +31,20 @@ class PropertiesController < ApplicationController
       @property.area_code = area_code
       @property.post_code = post_code
       @property.url = params[:hostname]
-      @property.image_url = params[:image_url]      
-      @property.asking_price = params[:asking_price]
-      @property.sstc = params[:sstc]      
       @property.call_date = Date.today      
-      @property.closed = params[:closed]
-
+      
       note = @property.notes.build      
       note.note_type = Note.TYPE_AUTO
       note.content = 'Created'
-
-      if @property.closed
-        @property.status = current_user.statuses.first
-        note = @property.notes.build      
-        note.note_type = Note.TYPE_MANUAL
-        note.content = 'Closed'
-      else
-        @property.status = Status.find(params[:status_id])    
-      end
-
-    else
-      @property.image_url = params[:image_url]
-      new_status = Status.find(params[:status_id])    
-      if new_status.id != @property.status.id
-        add_status_note(@property, new_status)
-      end
-      new_sstc = params[:sstc]
-      if new_sstc.to_s != @property.sstc.to_s
-        add_sstc_note(@property, new_sstc)
-      end
-      new_asking_price = params[:asking_price]
-      if new_asking_price != @property.asking_price
-        add_asking_price_note(@property, new_asking_price)
-      end
-      new_closed_state = params[:closed]
-      if new_closed_state.to_s != @property.closed.to_s
-        add_closed_state_note(@property, new_closed_state)
-      end
+      update = false
     end
 
+    @property.image_url = params[:image_url]
+    @property.update_status(params[:status_id], update)
+    @property.update_sstc(params[:sstc], update)
+    @property.update_asking_price(params[:asking_price], update)
+    @property.update_closed_yn(params[:closed], update)      
+    
     if @property.save()      
       puts 'Property saved'
       response = build_response
@@ -144,8 +120,10 @@ class PropertiesController < ApplicationController
           @property.call_date = params[:call_date]
           @property.save()
           if note.content.empty?
-            note.content = 'Updated to ' + @property.call_date_formatted(:long)
-            note.note_type = Note.TYPE_MANUAL
+            note.content = 'Next call on ' + @property.call_date_formatted(:long)
+          else
+            new_content = 'Next call on ' + @property.call_date_formatted(:long) + ' - ' + note.content
+            note.content = new_content
           end            
         end          
         
@@ -167,25 +145,8 @@ class PropertiesController < ApplicationController
         response = { "statuses" => current_user.statuses.to_json }
         render :json => response
       else      
-        old_call_date = @property.call_date
-
-        / Build the note /
-        note = @property.notes.build
-        note.note_type = Note.TYPE_VIEWING
-        note.content = params[:note]
-        note.branch_id = @property.branch_id
-        note.estate_agent_id = @property.estate_agent.id
-        @property.view_date = params[:call_date]
-
-        hour = params[:hours].to_i
-        min = params[:mins].to_i
-        @property.view_date = DateTime.new(@property.view_date.year, @property.view_date.month, @property.view_date.day, hour, min, 0, 0)
+        note = @property.update_view_date(params[:view_date], params[:note], params[:hours].to_i, params[:mins].to_i)
         @property.save()
-
-        note.content = 'Viewing on ' + @property.view_date.strftime('%A, %d %b %Y at %H:%M')        
-        
-        note.save()
-
         render :json => note.to_json(methods: [:formatted_date, :agent_name] )
       end
     end
@@ -234,11 +195,8 @@ class PropertiesController < ApplicationController
         render :json => response
       else      
 
-        @property.closed = true
+        note = @property.update_closed_yn(true, true)      
         @property.save()
-        
-        note = add_closed_state_note(@property, true);
-        note.save()
 
         render :json => note.to_json(methods: [:formatted_date, :agent_name] ), :status => :ok
       end
@@ -256,12 +214,9 @@ class PropertiesController < ApplicationController
         render :json => response
       else      
 
-        @property.closed = false
+        note = @property.update_closed_yn(false, true)      
         @property.save()
         
-        note = add_closed_state_note(@property, false);
-        note.save()
-
         render :json => note.to_json(methods: [:formatted_date, :agent_name] ), :status => :ok
       end
     end
@@ -286,7 +241,7 @@ class PropertiesController < ApplicationController
     property = current_user.properties.find(params[:property_id])    
     new_date = params[:new_call_date]    
     property.call_date = Date.parse( new_date.gsub(/, */, '-') )    
-    add_call_date_note(property, new_date)
+    property.update_call_date(new_date)
     if property.save()    
       render :json => {call_date: property.call_date_formatted(:short)}, :status => :created
     else
@@ -296,8 +251,7 @@ class PropertiesController < ApplicationController
 
   def update_status
     property = current_user.properties.find(params[:property_id])    
-    new_status = Status.find(params[:new_status])
-    note = add_status_note(property, new_status)
+    note = property.update_status(params[:new_status], true)
     if property.save()    
       render :json => {new_status_colour: property.status.colour, note: note.to_json(methods: [:formatted_date, :agent_name] )}, :status => :created
     else
@@ -366,7 +320,7 @@ class PropertiesController < ApplicationController
     end
 
     def property_params
-      params.require(:property).permit(:address, :post_code, :asking_price, :url, :status, :estate_agent, :branch_id, :agent_id, :call_date)
+      params.require(:property).permit(:address, :post_code, :asking_price, :url, :status, :sstc, :estate_agent, :branch_id, :agent_id, :call_date)
     end
 
     def build_response
@@ -374,52 +328,5 @@ class PropertiesController < ApplicationController
         "estate_agent_name" => @property.estate_agent.name, "branch_name" => @property.branch.name, 
         "agents" => @property.branch.agents.to_json(only: [:id, :name] ),
         "notes" => @property.notes.to_json(only: [:content, :note_type], methods: [:formatted_date, :agent_name] ) }
-    end
-
-    def add_status_note(property, new_status)
-        note = property.notes.build
-        note.content = 'Status changed from ' + property.status.description + ' to ' + new_status.description
-        note.note_type = Note.TYPE_STATUS
-        property.status = new_status      
-        note
-    end
-
-    def add_call_date_note(property, new_call_date)
-        note = property.notes.build
-        note.content = 'Updated to ' + property.call_date_formatted(:long)
-        note.note_type = Note.TYPE_MANUAL
-    end
-
-    def add_sstc_note(property, new_sstc)
-        note = property.notes.build
-        if new_sstc == true
-          note.content = 'Sold STC'
-        else
-          note.content = 'No longer Sold STC'
-        end
-        note.note_type = Note.TYPE_SSTC
-        property.sstc = new_sstc      
-    end
-
-    def add_asking_price_note(property, new_asking_price)
-        note = property.notes.build
-        note.content = "Price changed from " + property.asking_price + " to " + new_asking_price 
-        note.note_type = Note.TYPE_PRICE
-        property.asking_price = new_asking_price      
-    end
-
-    def add_closed_state_note(property, new_closed_state)
-        note = @property.notes.build
-        note.note_type = Note.TYPE_MANUAL
-        puts 'Changing state to ' + new_closed_state.to_s
-        if new_closed_state.to_s == "true"
-          note.content = "Closed"
-        else
-          note.content = "Reopened"
-        end
-        note.branch_id = @property.branch_id
-        note.estate_agent_id = @property.estate_agent.id
-        property.closed = new_closed_state
-        note
     end
 end

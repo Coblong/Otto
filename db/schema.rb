@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140113210412) do
+ActiveRecord::Schema.define(version: 20140114201444) do
 
   create_table "agents", force: true do |t|
     t.string   "name"
@@ -28,6 +28,16 @@ ActiveRecord::Schema.define(version: 20140113210412) do
   create_table "agents_properties", id: false, force: true do |t|
     t.integer "agent_id"
     t.integer "property_id"
+  end
+
+  create_table "alerts", force: true do |t|
+    t.integer  "user_id"
+    t.string   "msg"
+    t.integer  "property_id"
+    t.string   "alert_type"
+    t.boolean  "read",        default: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "area_codes", force: true do |t|
@@ -93,9 +103,9 @@ ActiveRecord::Schema.define(version: 20140113210412) do
     t.integer  "user_id"
   end
 
-  add_index "properties", ["agent_id", "created_at"], name: "index_properties_on_agent_id_and_created_at"
-  add_index "properties", ["branch_id", "created_at"], name: "index_properties_on_branch_id_and_created_at"
-  add_index "properties", ["estate_agent_id", "created_at"], name: "index_properties_on_estate_agent_id_and_created_at"
+  add_index "properties", ["created_at"], name: "index_properties_on_agent_id_and_created_at"
+  add_index "properties", ["created_at"], name: "index_properties_on_branch_id_and_created_at"
+  add_index "properties", ["created_at"], name: "index_properties_on_estate_agent_id_and_created_at"
   add_index "properties", ["user_id", "created_at"], name: "index_properties_on_user_id_and_created_at"
 
   create_table "statuses", force: true do |t|

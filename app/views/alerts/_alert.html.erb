@@ -1,0 +1,13 @@
+<% delete_alert_id = "del-" + alert.id.to_s %>
+<li>
+  <span><%= alert.formatted_date %></span>
+  <span>
+    <% if !alert.property.nil? %>
+      <%= link_to alert.property.address + ' - ' + alert.msg, alert.property %>
+    <% else %>
+      <%= alert.msg %>
+    <% end %>
+  </span>  
+  <span><%= check_box_tag "Read", alert.read, alert.read, class: "read-alert", id: alert.id %></span>
+  <span><%= link_to image_tag("delete.png", width: 14), alert, confirm: 'Are you sure you want to delete this?', method: "delete" %></span>
+</li>

@@ -86,7 +86,7 @@ function reopenProperty(propertyId) {
       data: 'property_id=' + propertyId,
       dataType: "json",
       error: function(xhr, status, error) {
-        alert('Unable to close property')
+        alert('Unable to reopen property')
       },
       success: function (xhr, data) {
         location.reload();
@@ -122,6 +122,20 @@ function updatePreferences(userId, overviewWeeks, expandNotes, showImages) {
       dataType: "json",
       error: function(xhr, status, error) {
         alert("Unable to update preferences - " + error)
+      },
+      success: function (data, status, response) {
+        location.reload();
+      }
+  });
+}
+function updateAlert(id, read) {
+  $.ajax({
+      type: "PUT",
+      url: "/alerts/" + id,
+      data: 'read=' + read,
+      dataType: "json",
+      error: function(xhr, status, error) {
+        alert("Unable to update alert");
       },
       success: function (data, status, response) {
         location.reload();

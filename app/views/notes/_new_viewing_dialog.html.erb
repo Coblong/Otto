@@ -43,7 +43,7 @@ $(function() {
         $.ajax({
             type: "POST",
             url: "/viewings",
-            data: 'property_id=' + <%= property.id %> +'&hours=' + hours + '&mins=' + mins + '&call_date=' + call_date,
+            data: 'property_id=' + <%= property.id %> +'&hours=' + hours + '&mins=' + mins + '&view_date=' + call_date,
             dataType: "json",
             error: function(xhr, status, error) {
                 console.log('Unable to set viewing');

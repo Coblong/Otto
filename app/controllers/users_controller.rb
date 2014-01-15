@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  before_action :signed_in_user, only: [:edit, :update]
+  before_action :signed_in_user, only: [:index, :show, :new, :edit, :update]
   before_action :correct_user,   only: [:edit, :update]
 
   def index
@@ -51,7 +51,7 @@ class UsersController < ApplicationController
       render 'new'
     end
   end
-
+  
   private
 
     def user_params

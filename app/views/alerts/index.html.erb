@@ -1,0 +1,30 @@
+<% provide(:title, current_user.name + ' Alerts') %>
+<div id="main">
+  <div id="container">     
+    <div id="thin-top">           
+      <div id="alerts">
+        <h3>New Alerts</h3>
+        <ul>
+          <% @new_alerts.each do |alert| %>
+            <%= render alert %>
+          <% end %>   
+        </ul>
+      
+        <h3>Read Alerts</h3>
+        <ul>
+          <% @read_alerts.each do |alert| %>
+            <%= render alert %>
+          <% end %>   
+        </ul>
+      </div>      
+    </div>
+  </div>  
+</div>
+<script type="text/javascript">
+$( ".read-alert" ).change(function() {
+  updateAlert(this.id, this.checked);
+});
+$( ".delete-alert" ).click(function() {
+  deleteAlert(this.id);
+});
+</script>

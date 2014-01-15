@@ -78,6 +78,11 @@
     <ul>
       <% if signed_in? %>
         <li><%= link_to "Home", root_path(area_code: -1, estate_agent: -1) %></li>
+        <li><%= link_to "Alerts", alerts_path %>
+          <% if current_user.active_alerts > 0 %>
+            <div class="badge"><%= current_user.active_alerts.to_s %></div>
+          <% end %>
+        </li>
         <% if @page == 2 %>
           <li><%= link_to "Viewings", root_path( page: 2 ) %>&nbsp;&nbsp;<b class="caret"></b>&nbsp;
           <ul>

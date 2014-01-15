@@ -7,15 +7,15 @@
         <th class="left">Estate Agent</th>
         <th class="right">Asking Price</th>
         <th>Postcode</th>
-        <th>Status</th>            
+        <th>Next Call</th>            
       </tr>          
     <% current_properties.each do |property| %>
         <tr>
-          <td class="left"><%= link_to property.address, property %></td>
+          <td class="left"><%= link_to property.address, property %><%= render "/shared/status", property: property %></td>
           <td class="left"><%= link_to property.estate_agent.name, property.estate_agent %>  / <%= link_to property.branch.name, property.branch %></td>
           <td class="right"><%= property.asking_price %></td>
           <td><%= property.post_code %></td>
-          <td><%= link_to property.status.description, property.status %></td>
+          <td><%= property.call_date_formatted(:short) %></td>
         </tr>
     <% end %>  
     </table>

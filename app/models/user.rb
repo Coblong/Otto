@@ -3,6 +3,7 @@ class User < ActiveRecord::Base
   has_many :area_codes, dependent: :destroy
   has_many :statuses, dependent: :destroy
   has_many :properties, dependent: :destroy
+  has_many :alerts, dependent: :destroy
 	before_save { self.email = email.downcase }
   before_create :create_remember_token
 
@@ -19,6 +20,10 @@ class User < ActiveRecord::Base
 
   def User.encrypt(token)
     Digest::SHA1.hexdigest(token.to_s)
+  end
+
+  def active_alerts
+    self.alerts.where(read: false).size
   end
 
   private
