@@ -6,8 +6,8 @@ task :run_robot => :environment do
   properties = Property.all
   puts 'Found ' + properties.size.to_s + ' properties'
   
-  properties.each do |property|
-    property.check_for_updates
+  properties.each_with_index do |property, index|
+    puts index + '. ' + property.check_for_updates
   end
 
   puts "Done."

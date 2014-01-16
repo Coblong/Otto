@@ -69,7 +69,6 @@ class Property < ActiveRecord::Base
   def update_sstc(new_sstc, update, robot)
     puts 'Updating sstc [' + self.sstc.to_s + '] to [' + new_sstc.to_s + ']'    
     if new_sstc.to_s != self.sstc.to_s
-      puts '...updating sstc'
       if new_sstc.to_s == "true"
         msg = 'Sold STC'
       else
@@ -95,8 +94,6 @@ class Property < ActiveRecord::Base
   def update_asking_price(new_asking_price, update, robot)
     puts 'Updating asking_price [' + self.asking_price.to_s + '] to [' + new_asking_price + ']'    
     if new_asking_price != self.asking_price
-      puts '...updating asking_price'
-      msg = "Price changed from " + self.asking_price + " to " + new_asking_price 
       if update
         note = self.notes.build
         note.content = msg
@@ -126,7 +123,6 @@ class Property < ActiveRecord::Base
 
   def update_view_date(new_view_date, content, hour, min)
     puts 'Updating view date to ' + new_view_date.to_s
-    puts 'Updating content to ' + content.to_s
     note = self.notes.build
     note.note_type = Note.TYPE_VIEWING
     note.branch_id = self.branch_id
@@ -146,7 +142,6 @@ class Property < ActiveRecord::Base
   def update_closed_yn(new_closed_yn, update)
     puts 'Updating closed [' + self.closed.to_s + '] to [' + new_closed_yn.to_s + ']'    
     if self.closed.to_s != new_closed_yn.to_s            
-      puts '...updating closed'
       if update
         note = self.notes.build      
         if new_closed_yn.to_s == "true"
@@ -177,25 +172,27 @@ class Property < ActiveRecord::Base
     new_sstc = @doc.css(".propertystatus").text.length > 0
     
     dirty = false
-
+    
     output = self.address
     if self.asking_price != new_asking_price
       update_asking_price(new_asking_price, true, true)
       dirty = true
+      output += ' - asking price changed'
     end
 
     if self.sstc != new_sstc
       update_sstc(new_sstc, true, true)
       dirty = true
+      output += ' - sstc changed'
     end
 
     if dirty
       if self.save()
-        puts output + ' - saved ok'
+        output + ' - saved ok'
       end
-    else
-      puts output + ' - no changes'
     end
+
+    output
   end
 end
 
