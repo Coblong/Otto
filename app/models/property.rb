@@ -83,7 +83,7 @@ class Property < ActiveRecord::Base
       end
       if robot
         alert = self.alerts.build
-        alert.content = msg
+        alert.msg = msg
         alert.alert_type = Alert.TYPE_SSTC
         alert.user = self.user
         alert.save
@@ -105,7 +105,7 @@ class Property < ActiveRecord::Base
       end
       if robot
         alert = self.alerts.build
-        alert.content = msg
+        alert.msg = msg
         alert.alert_type = Alert.TYPE_PRICE
         alert.user = self.user
         alert.save
