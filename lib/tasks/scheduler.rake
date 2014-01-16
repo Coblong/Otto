@@ -7,7 +7,7 @@ task :run_robot => :environment do
   puts 'Found ' + properties.size.to_s + ' properties'
   
   properties.each_with_index do |property, index|
-    puts index + '. ' + property.check_for_updates
+    puts index.to_s + '. ' + property.check_for_updates
   end
 
   puts "Done."
