@@ -41,8 +41,8 @@ class PropertiesController < ApplicationController
 
     @property.image_url = params[:image_url]
     @property.update_status(params[:status_id], update)
-    @property.update_sstc(params[:sstc], update)
-    @property.update_asking_price(params[:asking_price], update)
+    @property.update_sstc(params[:sstc], update, false)
+    @property.update_asking_price(params[:asking_price], update, false)
     @property.update_closed_yn(params[:closed], update)      
     
     if @property.save()      

@@ -66,33 +66,49 @@ class Property < ActiveRecord::Base
     note
   end
 
-  def update_sstc(new_sstc, update)
+  def update_sstc(new_sstc, update, robot)
     puts 'Updating sstc [' + self.sstc.to_s + '] to [' + new_sstc.to_s + ']'    
     if new_sstc.to_s != self.sstc.to_s
       puts '...updating sstc'
+      if new_sstc.to_s == "true"
+        msg = 'Sold STC'
+      else
+        msg = 'No longer Sold STC'
+      end
       if update
         note = self.notes.build
-        if new_sstc.to_s == "true"
-          note.content = 'Sold STC'
-        else
-          note.content = 'No longer Sold STC'
-        end
+        note.content = msg
         note.note_type = Note.TYPE_SSTC
         note.save      
+      end
+      if robot
+        alert = self.alerts.build
+        alert.content = msg
+        alert.alert_type = Alert.TYPE_SSTC
+        alert.user = self.user
+        alert.save
       end
       self.sstc = new_sstc
     end
   end
 
-  def update_asking_price(new_asking_price, update)
+  def update_asking_price(new_asking_price, update, robot)
     puts 'Updating asking_price [' + self.asking_price.to_s + '] to [' + new_asking_price + ']'    
     if new_asking_price != self.asking_price
       puts '...updating asking_price'
+      msg = "Price changed from " + self.asking_price + " to " + new_asking_price 
       if update
         note = self.notes.build
-        note.content = "Price changed from " + self.asking_price + " to " + new_asking_price 
+        note.content = msg
         note.note_type = Note.TYPE_PRICE
         note.save
+      end
+      if robot
+        alert = self.alerts.build
+        alert.content = msg
+        alert.alert_type = Alert.TYPE_PRICE
+        alert.user = self.user
+        alert.save
       end
       self.asking_price = new_asking_price      
     end
@@ -164,24 +180,12 @@ class Property < ActiveRecord::Base
 
     output = self.address
     if self.asking_price != new_asking_price
-      output += ' - price changed from ' + self.asking_price + ' to ' + new_asking_price
-      note = self.notes.build
-      note.content = "Price changed from " + self.asking_price + " to " + new_asking_price 
-      note.note_type = Note.TYPE_PRICE
-      self.asking_price = new_asking_price      
+      update_asking_price(new_asking_price, true, true)
       dirty = true
     end
 
     if self.sstc != new_sstc
-      output += ' - SSTC changed from ' + self.sstc.to_s + ' to ' + new_sstc.to_s
-      note = self.notes.build
-      if new_sstc == true
-        note.content = 'Sold STC'
-      else
-        note.content = 'No longer Sold STC'
-      end
-      note.note_type = Note.TYPE_SSTC
-      self.sstc = new_sstc      
+      update_sstc(new_sstc, true, true)
       dirty = true
     end
 
