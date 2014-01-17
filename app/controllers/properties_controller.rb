@@ -145,9 +145,11 @@ class PropertiesController < ApplicationController
         response = { "statuses" => current_user.statuses.to_json }
         render :json => response
       else      
+        old_call_date = @property.call_date
         note = @property.update_view_date(params[:view_date], params[:note], params[:hours].to_i, params[:mins].to_i)
         @property.save()
-        render :json => note.to_json(methods: [:formatted_date, :agent_name] )
+        date_changed = old_call_date.strftime('%j') != @property.call_date.strftime('%j')
+        render :json => note.to_json(methods: [:formatted_date, :agent_name] ), :status => (date_changed ? :accepted : :ok)
       end
     end
   end

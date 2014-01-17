@@ -94,6 +94,7 @@ class Property < ActiveRecord::Base
   def update_asking_price(new_asking_price, update, robot)
     puts 'Updating asking_price [' + self.asking_price.to_s + '] to [' + new_asking_price + ']'    
     if new_asking_price != self.asking_price
+      msg = 'Asking price changed from ' + self.asking_price.to_s + ' to ' + new_asking_price
       if update
         note = self.notes.build
         note.content = msg
