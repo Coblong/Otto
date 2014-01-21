@@ -70,19 +70,6 @@
     <% end %>
 
   <% end %>
-<% end %>
-<% end %>
-    </ul>
-  </div>
-  <div class="navbar-menus menu-right">
-    <ul>
-      <% if signed_in? %>
-        <li><%= link_to "Home", root_path(area_code: -1, estate_agent: -1) %></li>
-        <li><%= link_to "Alerts", alerts_path %>
-          <% if current_user.active_alerts > 0 %>
-            <div class="badge"><%= current_user.active_alerts.to_s %></div>
-          <% end %>
-        </li>
         <% if @page == 2 %>
           <li><%= link_to "Viewings", root_path( page: 2 ) %>&nbsp;&nbsp;<b class="caret"></b>&nbsp;
           <ul>
@@ -116,6 +103,20 @@
           </ul>
         </li>
         <% end %>
+<% end %>
+<% end %>
+    </ul>
+  </div>
+  <div class="navbar-menus menu-right">
+    <ul>
+      <% if signed_in? %>
+        <li><%= link_to image_tag("home.png", title: "Home"), root_path(area_code: -1, estate_agent: -1) %></li>
+        <li><%= link_to image_tag("quickadd.png", width: 16, title: "Add property or note"), new_property_path %></li>
+        <li><%= link_to image_tag("alerts.png", width: 16, title: "Alerts"), alerts_path %>
+          <% if current_user.active_alerts > 0 %>
+            <div class="badge"><%= current_user.active_alerts.to_s %></div>
+          <% end %>
+        </li>
         <li><%= link_to current_user.name, current_user %>&nbsp;&nbsp;<b class="caret"></b>&nbsp;
           <ul>
             <li><%= link_to "Browse", stats_path %></li>                        

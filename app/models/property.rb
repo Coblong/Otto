@@ -15,7 +15,7 @@ class Property < ActiveRecord::Base
   default_scope -> { order('call_date asc, branch_id asc, status_id asc') }  
 
   def full_url
-    '//' + url + external_ref
+    '//' + url
   end
 
   def statuses

@@ -1,6 +1,18 @@
 class BranchesController < ApplicationController
   before_action :signed_in_user, :set_branch_in_controller, only: [:new, :show, :edit, :update, :destroy]
 
+  def index
+    puts 'Getting branches'
+    if params[:estate_agent_id].nil?
+      branches = Branch.where("estate_agent_id in (?)", current_user.estate_agents.collect(&:id))  
+    else
+      branches = Branch.where(estate_agent_id: params[:estate_agent_id])  
+    end
+
+    response = { "branches" => branches.to_json(only: [:id, :name] ) }
+    render json: response
+  end
+
   def new
     @estate_agents = current_user.estate_agents
     @estate_agent = EstateAgent.find(params[:estate_agent_id])

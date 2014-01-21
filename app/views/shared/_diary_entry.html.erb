@@ -3,7 +3,7 @@
     <div class="diary-left">
       <h2>
 <% if defined? show %>
-        <%= link_to_function property.address + ' - ' + property.post_code, "#", class: "show_hide" %>          
+        <%= link_to_function property.address + ' - ' + property.post_code, "#", class: "show_hide" %>
 <% else %>
         <%= link_to property.address + ' - ' + property.post_code, property %>
 <% end %>
@@ -18,6 +18,7 @@
         Viewing : <%= property.view_date_formatted %>
 <% end %>
       </span>
+       <%= link_to "View listing", property.full_url, target: "_new" %>         
     </div>
     <div class="diary-middle">      
 <% if current_user.show_images and !(defined? show) %>

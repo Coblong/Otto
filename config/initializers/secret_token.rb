@@ -19,4 +19,4 @@ def secure_token
   end
 end
 
-Otto::Application.config.secret_key_base = secure_token
+Ottor::Application.config.secret_key_base = secure_token

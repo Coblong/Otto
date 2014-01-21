@@ -6,6 +6,7 @@ $highlight-colour: gray;
 $highlight-bg: #9CC2CF;
 $main-bg: white;
 $colour: midnightblue;
+$menu-colour: black;
 $well-colour: mintcream;
 $dark-well-colour: lightblue;
 $note-header-bg: #E3E3E3;
@@ -108,16 +109,16 @@ a {
 }
 
 #navbar {
-  height: 40px;
+  height: 32px;
   width:100%;
   background-color: $bg2;
-  border-bottom: 1px solid $darkline;  
+  border-bottom: 1px solid $darkline;    
 }
 
 .caret {
   border-right: 6px solid transparent;
   border-left: 6px solid transparent;
-  border-top: 6px solid black;
+  border-top: 6px solid $menu-colour;
   display: inline-block;
   height: 0;
   opacity: 0.3;
@@ -127,11 +128,12 @@ a {
 
 .navbar-menus {
   display:inline-block;
+  color: black;
   a {
     text-decoration:none;
     &:hover {
       background: $highlight-bg;
-      color: $highlight-colour;
+      color: $menu-colour;
     }
   }
   ul {
@@ -146,10 +148,15 @@ a {
     text-decoration:none;
 
     li {
+      img {
+        padding: 0px;
+        margin: 0px;
+        vertical-align: bottom;
+      }
       display: inline-block;
       margin-right: -4px;
       position: relative;
-      padding: 11px 10px;
+      padding: 7px 10px;
       cursor: pointer;
       -webkit-transition: all 0.2s;
       -moz-transition: all 0.2s;
@@ -173,7 +180,7 @@ a {
       ul {
         padding: 0;
         position: absolute;
-        top: 40px;
+        top: 32px;
         left: 0;
         width: 150px;
         display: none;
@@ -297,10 +304,11 @@ a {
   font-size: 10px;
   position: absolute;  
   padding: 0px 5px;
-  right: 1px;
-  top: 1px;
+  right: -6px;
+  top: 0px;
   border-radius: 10px;  
   border: 1px solid rgba(255,255,255,0.7);    
+  z-index: 1;        
 }
 
 #alerts {
@@ -448,21 +456,27 @@ a {
   }
 }
 
-#update-details {
+#property-form {
   margin: 10px 10px;
-  padding:5px;
+  padding: 5px;
   table {
     padding: 2px;    
-    margin: 0px auto;    
-    width: 50%;
+    margin: 0px auto;        
+    width: 90%;
     td {
-      &:first-child {
-        width: 100px;
-      }
       &:last-child {
         text-align: right;
       }
     }
+  }
+  input {
+    width: 90%;
+  }
+  select {
+    width: 90%;
+  }
+  .btn {
+    width: 150px;
   }
 }
 
@@ -582,7 +596,7 @@ a {
 
 .settings-panel {
   margin: 10px auto;
-  width: 70%;
+  width: 90%;
   border: none;
   display: table;
   text-align: center;

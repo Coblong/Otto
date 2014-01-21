@@ -9,7 +9,7 @@ if defined?(Bundler)
   # Bundler.require(:default, :assets, Rails.env)
 end
 
-module Otto
+module Ottor
   class Application < Rails::Application
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
@@ -54,5 +54,7 @@ module Otto
     config.assets.version = '1.0'
 
     config.assets.precompile += %w(*.png *.jpg *.jpeg *.gif)
+
+    OTTOR_VERSION = 1.1
   end
 end

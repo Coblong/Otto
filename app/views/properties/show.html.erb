@@ -8,7 +8,7 @@
     </div>      
   </div>
   <div id="main-update" class="settings-panel">        
-    <div id="update-details" class="settings-form">
+    <div id="property-form" class="settings-form">
         <%= form_for(current_property) do |f| %>
         <table>
           <tr>
@@ -24,12 +24,15 @@
             <td><%= f.label :sstc %></td><td><%= f.check_box :sstc %></td>
           </tr>
           <tr>
+            <td><%= f.label :url %></td><td><%= f.text_field :url %></td>
+          </tr>
+          <tr>
             <td colspan="2"><%= f.submit "Update", class: "btn" %></td>
           </tr>
         </table>      
       <% end %>      
     </div>    
-  </div>
+  </div>  
   <div id="main-bottom">
     <div id="main-bottom-iframe">          
       <iframe src="<%= current_property.full_url %>"></iframe>          

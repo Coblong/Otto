@@ -1,0 +1,108 @@
+<% provide(:title, 'New Property') %>
+<div id="main">
+  <div id="container">     
+    <div id="thin-top" class="settings-panel">        
+      <div id="property-form">
+        <%= form_for(@property) do |f| %>
+        <h3>New Property</h3>
+        <table>
+          <tr>
+            <td colspan="2"><%= render 'shared/error_messages', obj: @property %></td>
+          </tr>
+          <tr>
+            <td><%= f.label :estate_agent_id %></td>
+            <td><%= f.select :estate_agent_id, options_from_collection_for_select(current_user.estate_agents, :id, :name) %></td>            
+          </tr>
+          <tr>
+            <td><%= f.label :branch_id %></td>
+            <td><%= f.select :branch_id, options_from_collection_for_select(@property.estate_agent.branches, :id, :name) %></td>
+          </tr>
+          <tr>
+            <td><%= f.label :agent_id %></td>
+            <td><%= f.select :agent_id, options_from_collection_for_select(@property.branch.agents, :id, :name) %></td>
+          </tr>
+          <tr>
+            <td><%= f.label :address %></td>
+            <td><%= f.text_field :address %></td>
+          </tr>
+          <tr>
+            <td><%= f.label :post_code %></td>
+            <td><%= f.text_field :post_code %></td>
+          </tr>
+          <tr>
+            <td><%= f.label :asking_price %></td>
+            <td><%= f.text_field :asking_price %></td>
+          </tr>
+          <tr>
+            <td><%= f.label :status_id %></td>
+            <td><%= f.select :status_id, options_from_collection_for_select(current_user.statuses, :id, :description) %></td>
+          </tr>
+          <tr>
+            <td><%= f.label :post_code %></td>
+            <td><%= f.text_field :post_code %></td>
+          </tr>
+          <tr>
+            <td><%= f.label :url %></td>
+            <td><%= f.text_field :url %></td>
+          </tr>
+          <tr>
+            <td><%= f.label :sstc %></td>
+            <td><%= f.check_box :sstc %></td>
+          </tr>
+          <tr>
+            <td><%= f.label :closed %></td>
+            <td><%= f.check_box :closed %></td>
+          </tr>
+          <tr>
+            <td></td>
+            <td><%= f.button "Create", class: "btn", id: "create_property" %></td>
+          </tr>
+        </table>             
+        <% end %>
+      </div>
+  </div>
+</div>
+<script type="text/javascript">
+$("#create_property").click(function(e) {
+  $("form").submit();
+});
+$("#property_estate_agent_id").change(function(){
+  reloadBranches();  
+});
+$("#property_branch_id").change(function(){
+  reloadAgents();
+});
+function reloadBranches() {
+  $.ajax({
+    type: "GET",
+    url: "/estate_agents/" + $("#property_estate_agent_id").val() + "/branches",
+    dataType: "json",
+    error: function(xhr, status, error) {
+      alert('Unable to load branches')
+    },
+    success: function (data, status) {
+      $('#property_branch_id option').remove();
+      $.each( $.parseJSON(data['branches']), function( index, value ){        
+        $('#property_branch_id').append('<option value="' + value["id"] + '">' + value["name"] + '</option>');
+      });
+      reloadAgents();
+    }
+  });
+}
+function reloadAgents() {
+  $.ajax({
+    type: "GET",
+    url: "/branches/" + $("#property_branch_id").val() + "/agents",
+    dataType: "json",
+    error: function(xhr, status, error) {
+      alert('Unable to load agents')
+    },
+    success: function (data, status) {
+      $('#property_agent_id option').remove();
+      $.each( $.parseJSON(data['agents']), function( index, value ){        
+        $('#property_agent_id').append('<option value="' + value["id"] + '">' + value["name"] + '</option>');
+      });
+    }
+  });
+}
+</script>

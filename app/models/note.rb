@@ -3,7 +3,7 @@ class Note < ActiveRecord::Base
   belongs_to :agent
   belongs_to :branch
   belongs_to :estate_agent
-  validates :content, length: { maximum: 200 }
+  validates :content, length: { maximum: 500 }
   default_scope -> { order('created_at DESC') }
 
   @TYPE_MANUAL = "manual"

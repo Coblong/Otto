@@ -3,13 +3,55 @@ class PropertiesController < ApplicationController
   before_action :set_property_in_controller, only: [:show, :edit]  
   skip_before_filter  :verify_authenticity_token
 
+  def new
+    @property = current_user.properties.build
+    @property.estate_agent = current_user.estate_agents.first
+    @property.branch = @property.estate_agent.branches.first
+  end
+
   def show
   end
 
   def create
-    puts 'Trying to create or update property with url ' + params[:url].to_s
+    @property = Property.new(property_params)
+    @property.call_date = Date.today      
+    @property.user_id = current_user.id
 
-    @property = current_user.properties.find_by(external_ref: params[:url])        
+    / Get the post code and area code /
+    if @property.post_code.empty?
+      area_code = find_or_create_area_code("TEMP")
+      @property.area_code = area_code
+      @property.post_code = area_code.description
+    else
+      area_code = @property.post_code.partition(' ').first
+      area_code = find_or_create_area_code(area_code)
+      @property.area_code = area_code
+    end
+
+    / Get the url /
+    if @property.url.empty?
+      @property.url = "www.rightmove.co.uk"
+    end
+
+    note = @property.notes.build      
+    note.note_type = Note.TYPE_MANUAL
+    note.content = 'Created manually'
+
+    if @property.save!()      
+      puts 'Temp property saved'
+      response = build_response
+      puts response.to_s
+      flash[:success] = "Property created"
+      redirect_to root_path
+    else
+      puts 'Temp property not saved'
+      render :nothing => true, :status => :service_unavailable
+    end
+  end
+
+  def create_external
+    puts 'Trying to create or update a property with url ' + params[:url].to_s
+    @property = current_user.properties.find_by(url: params[:url])        
     update = true
 
     if @property.nil?
@@ -26,11 +68,10 @@ class PropertiesController < ApplicationController
       @property = current_user.properties.build
       @property.estate_agent = estate_agent
       @property.branch = branch
-      @property.external_ref = params[:url]
       @property.address = params[:address].partition(',').first
       @property.area_code = area_code
       @property.post_code = post_code
-      @property.url = params[:hostname]
+      @property.url = params[:url]
       @property.call_date = Date.today      
       
       note = @property.notes.build      
@@ -56,11 +97,11 @@ class PropertiesController < ApplicationController
     end
   end
   
-  def external
+  def find_external
     if !current_user
       render :nothing => true, :status => :unauthorized
     else
-      @property = current_user.properties.find_by(external_ref: params[:url]);
+      @property = current_user.properties.find_by(url: params[:url]);
       if @property.nil?
         response = { "statuses" => current_user.statuses.to_json }
         puts response
@@ -79,7 +120,7 @@ class PropertiesController < ApplicationController
     else
       puts 'Creating new note'
       if !params[:url].nil?
-        @property = current_user.properties.find_by(external_ref: params[:url]);
+        @property = current_user.properties.find_by(url: params[:url]);
       else
         @property = current_user.properties.find(params[:property_id]);
       end
@@ -127,7 +168,7 @@ class PropertiesController < ApplicationController
           end            
         end          
         
-        note.save()
+        note.save!
 
         date_changed = old_call_date.strftime('%j') != @property.call_date.strftime('%j')
         render :json => note.to_json(methods: [:formatted_date, :agent_name] ), :status => (date_changed ? :accepted : :ok)
@@ -267,8 +308,15 @@ class PropertiesController < ApplicationController
 
   def update
     puts 'Updating property'
+    params[:property][:url] = params[:property][:url].gsub('https://', '')
+    params[:property][:url] = params[:property][:url].gsub('http://', '')
     @property = current_user.properties.find(params[:id])    
     @property.update_attributes!(property_params)
+    if @property.post_code != 'TEMP' and @property.area_code.description == "TEMP"
+      area_code = @property.post_code.partition(' ').first
+      @property.area_code = find_or_create_area_code(area_code)
+      @property.save()
+    end
     redirect_to @property
   end
 
@@ -322,7 +370,7 @@ class PropertiesController < ApplicationController
     end
 
     def property_params
-      params.require(:property).permit(:address, :post_code, :asking_price, :url, :status, :sstc, :estate_agent, :branch_id, :agent_id, :call_date)
+      params.require(:property).permit(:address, :post_code, :asking_price, :url, :status_id, :sstc, :closed, :estate_agent_id, :branch_id, :agent_id, :call_date)
     end
 
     def build_response

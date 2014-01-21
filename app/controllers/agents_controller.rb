@@ -2,7 +2,16 @@ class AgentsController < ApplicationController
   before_action :signed_in_user, :set_agent_in_controller, only: [:show, :edit, :update, :destroy]
 
   def index
-    @agents = Agent.all
+    puts 'Getting agents'
+    puts params.to_yaml
+    if params[:branch_id].nil?
+      agents = Agent.where("branch_id in (?)", Branch.where("estate_agent_id in (?)", current_user.estate_agents.collect(&:id)).collect(&:id))  
+    else
+      agents = Agent.where(branch_id: params[:branch_id])  
+    end
+
+    response = { "agents" => agents.to_json(only: [:id, :name] ) }
+    render json: response
   end
 
   def show

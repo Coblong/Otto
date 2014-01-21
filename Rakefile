@@ -4,4 +4,4 @@
 
 require File.expand_path('../config/application', __FILE__)
 
-Otto::Application.load_tasks
+Ottor::Application.load_tasks

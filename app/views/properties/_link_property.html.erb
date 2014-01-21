@@ -1,0 +1,63 @@
+<div id="link-dialog" title="Link to another property" class="dialog">  
+  <input class="link-property" list="properties" placeholder="Agent..."/>
+  <datalist id='properties'>
+<% @properties.each do |property| %>
+    <option value='<%= property.address %>'/>";        
+<% end %>
+  </datalist>  
+</div>
+<script type="text/javascript">
+$(function() {
+  $( "#dialog<%= property.id %>" ).dialog({
+    autoOpen: false,
+    modal: true,
+    height: 450,
+    width:520,
+    show: {
+      effect: "blind",
+      duration: 200
+    },
+    buttons: {
+      "Save": function () {
+        var agent = $("#nna-<%= property.id %>").val();
+        var note = $("#nn-<%= property.id %>").val();
+        var call_date = $("#nndp-<%= property.id %>").val();
+        $.ajax({
+            type: "POST",
+            url: "/notes",
+            data: 'property_id=' + <%= property.id %> +'&agent=' + agent + '&note=' + note + '&call_date=' + call_date,
+            dataType: "json",
+            error: function(xhr, status, error) {
+                console.log('Unable to save property');
+            },
+            success: function (data, status, response) {
+              console.log(status);    
+              console.log('Data resposne is ' + status);                            
+              console.log('Status is ' + response.status);                                                          
+              var html = "<li id='nli-" + data["id"] + "'' class='" + data["note_type"] + "'>"
+              html += data["formatted_date"] + " - "
+              if (data["agent_id"] > 0) {
+                html += "<a href='/agents/" + data["agent_id"] + "'>" + data["agent_name"]+ "</a> - "
+              }
+              html += data["content"]
+              html += "<span><img alt='Delete' class='delete_note' id='del-" + data["id"] + "' src='<%=  asset_path('delete.png') %>' width='14'></span></li>"
+
+              if (response.status == 200) {
+                $( "#accordian-notes-<%= property.id%> ul" ).prepend(html);                                
+                $("#nna-<%= property.id %>").val("");
+                $("#nn-<%= property.id %>").val("")
+                addDeleteFunction(data["id"]);
+                $( "#dialog<%= property.id %>" ).dialog( "close" );
+              } else {
+                location.reload();
+              }
+            }
+        });
+      },
+      "Cancel": function () {
+        $( this ).dialog( "close" );
+      }
+    }
+  });
+});
+</script>

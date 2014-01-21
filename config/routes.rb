@@ -1,4 +1,4 @@
-Otto::Application.routes.draw do
+Ottor::Application.routes.draw do
   resources :users do
     resources :estate_agents
     resources :statuses    
@@ -34,7 +34,8 @@ Otto::Application.routes.draw do
   match '/quietsession',          to: 'sessions#quietly',           via: 'post'
   match '/signout',               to: 'sessions#destroy',           via: 'delete'
   match '/validate',              to: 'sessions#validate',          via: 'get'
-  match '/external/property',     to: 'properties#external',        via: 'get'
+  match '/external/find',         to: 'properties#find_external',   via: 'get'
+  match '/external/create',       to: 'properties#create_external', via: 'post'  
   match '/notes',                 to: 'properties#create_note',     via: 'post'
   match '/viewings',              to: 'properties#create_viewing',  via: 'post'
   match '/offers',                to: 'properties#create_offer',    via: 'post'
