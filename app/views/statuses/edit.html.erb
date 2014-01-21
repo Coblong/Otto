@@ -1,11 +1,13 @@
 <% provide(:title, 'Update Status') %>
-<%= form_for(@status) do |f| %>
-  <div class="central">  
-    <div class="heading">Update Status</div>  
-    <div>                  
-        <table class="settings-form">
+<div id="main">
+  <div id="container">     
+    <div id="thin-top">           
+      <div class="settings-panel settings-form">        
+        <%= form_for(@status) do |f| %>
+        <h3>Update Status</h3>
+        <table>
           <tr>
-            <td><%= render 'shared/error_messages', obj: @status %></td>
+            <td colspan="2"><%= render 'shared/error_messages', obj: @status %></td>
           </tr>
           <tr>
             <td><%= f.label :description %></td>
@@ -15,14 +17,18 @@
             <td><%= f.label :colour %></td>
             <td><%= f.text_field :colour, class: 'color' %></td>           
           </tr>
-          <tr><td>&nbsp;</td></tr>
           <tr>
             <td></td>
-            <td><%= f.submit "Update status" %></td>
+            <td><%= f.button "Update", class: "btn", id: "update_status" %></td>
           </tr>
         </table>
+        <% end %>
+      </div>
     </div>
   </div>
-<% end %>
-
-
+</div>
+<script type="text/javascript">
+$("#update_status").click(function(e) {
+  $("form").submit();
+});
+</script>

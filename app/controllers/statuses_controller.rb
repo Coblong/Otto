@@ -14,14 +14,12 @@ class StatusesController < ApplicationController
   end
 
   def new
+    puts 'Creating new status'
     @status = current_user.statuses.build
   end
 
   def edit
     @status = Status.find(params[:id])
-  end
-
-  def show    
   end
 
   def update
