@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140120232653) do
+ActiveRecord::Schema.define(version: 20140122131255) do
 
   create_table "agents", force: true do |t|
     t.string   "name"
@@ -103,6 +103,7 @@ ActiveRecord::Schema.define(version: 20140120232653) do
     t.integer  "user_id"
     t.string   "price_qualifier"
     t.integer  "sstc_count"
+    t.boolean  "listed",                               default: true
   end
 
   add_index "properties", ["created_at"], name: "index_properties_on_agent_id_and_created_at"

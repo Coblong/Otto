@@ -2,12 +2,10 @@
   <table class='left-nav-table'>    
     <tr><td colspan="2"><%= property.address %><%= render "/shared/status", property: property %></td></tr>
     <tr style="height:30px;">
-      <% if property.sstc %>
-        <td>&nbsp;<%= image_tag "sstc.png", height: 20 %></td>
-        <td align="right" id="call_date_<%= property.id %>"><small><%= property.call_date_formatted(:short) %></small>
-      <% else %>
-        <td colspan="2" align="right" id="call_date_<%= property.id %>"><small><%= property.call_date_formatted(:short) %></small></td></tr>    
-      <% end %>
+      <td>
+        <%= render "shared/sstc_badges", property: property %>
+      </td>
+      <td align="right" id="call_date_<%= property.id %>"><small><%= property.call_date_formatted(:short) %></small></td></tr>    
       </td></tr>    
   </table>  
 </li>

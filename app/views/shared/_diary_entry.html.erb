@@ -7,11 +7,9 @@
 <% else %>
         <%= link_to property.address + ' - ' + property.post_code, property %>
 <% end %>
-<% if property.sstc %>        
-        &nbsp;<%= image_tag "sstc.png", width: 20 %>
-<% end %>        
+        &nbsp;<%= render "shared/sstc_badges", property: property %>        
       </h2>
-      <%= property.asking_price %><br>
+      <%= property.full_asking_price %><br>
       <%= link_to property.estate_agent.name, property.estate_agent %> / <%= link_to property.branch.name, property.branch %><br>
       <span id="va-<%= property.id %>" class="viewing-alert">
 <% if property.viewing_soon? %> 

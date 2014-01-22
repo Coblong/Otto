@@ -2,7 +2,7 @@
   <div class="navbar-menus menu-left">
     <ul>
 <% if signed_in? %>
-<% if !current_user.area_codes.nil? %>
+<% if !current_user.area_codes.empty? and !current_user.area_codes.nil? %>
   <% if current_area_code.nil? %>
     <li><%= link_to "All Areas", root_path(area_code: -1) %>&nbsp;&nbsp;<b class="caret"></b>
   <% else %>
@@ -19,7 +19,7 @@
         </ul>
       </li> 
 <% end %>      
-<% if !current_user.estate_agents.nil? %>
+<% if !current_user.estate_agents.empty? and !current_user.estate_agents.nil? %>
   <% if current_estate_agent.nil? %>
       <li><%= link_to "All Estate Agents", root_path(estate_agent: -1) %>&nbsp;&nbsp;<b class="caret"></b>
   <% else %>

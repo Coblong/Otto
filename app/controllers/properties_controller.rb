@@ -3,6 +3,10 @@ class PropertiesController < ApplicationController
   before_action :set_property_in_controller, only: [:show, :edit]  
   skip_before_filter  :verify_authenticity_token
 
+  def index
+    render json: Property.all.to_json(only: [:id, :address, :sstc, :asking_price, :price_qualifier, :listed, :url])
+  end
+
   def new
     @property = current_user.properties.build
     @property.estate_agent = current_user.estate_agents.first
@@ -31,6 +35,15 @@ class PropertiesController < ApplicationController
     / Get the url /
     if @property.url.empty?
       @property.url = "www.rightmove.co.uk"
+    else
+      @property.url = @property.url.gsub('https://', '')
+      @property.url = @property.url.gsub('http://', '')
+    end
+
+    if @property.sstc
+      @property.sstc_count = 1
+    else
+      @property.sstc_count = 0
     end
 
     note = @property.notes.build      
@@ -72,6 +85,8 @@ class PropertiesController < ApplicationController
       @property.area_code = area_code
       @property.post_code = post_code
       @property.url = params[:url]
+      @property.price_qualifier = params[:price_qualifier]
+      @property.sstc_count = 0
       @property.call_date = Date.today      
       
       note = @property.notes.build      
@@ -370,7 +385,7 @@ class PropertiesController < ApplicationController
     end
 
     def property_params
-      params.require(:property).permit(:address, :post_code, :asking_price, :url, :status_id, :sstc, :closed, :estate_agent_id, :branch_id, :agent_id, :call_date)
+      params.require(:property).permit(:address, :post_code, :asking_price, :url, :status_id, :sstc, :sstc_count, :closed, :estate_agent_id, :branch_id, :agent_id, :call_date)
     end
 
     def build_response

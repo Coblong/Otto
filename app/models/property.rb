@@ -18,6 +18,14 @@ class Property < ActiveRecord::Base
     '//' + url
   end
 
+  def full_asking_price
+    if sstc or price_qualifier.nil? or price_qualifier.length == 0
+      asking_price unless asking_price.nil?
+    else
+      price_qualifier + ' ' + asking_price unless asking_price.nil?
+    end
+  end
+
   def statuses
     Status.all
   end
@@ -71,6 +79,7 @@ class Property < ActiveRecord::Base
     if new_sstc.to_s != self.sstc.to_s
       if new_sstc.to_s == "true"
         msg = 'Sold STC'
+        self.sstc_count = self.sstc_count + 1
       else
         msg = 'No longer Sold STC'
       end
@@ -94,7 +103,7 @@ class Property < ActiveRecord::Base
   def update_asking_price(new_asking_price, update, robot)
     puts 'Updating asking_price [' + self.asking_price.to_s + '] to [' + new_asking_price + ']'    
     if new_asking_price != self.asking_price
-      msg = 'Asking price changed from ' + self.asking_price.to_s + ' to ' + new_asking_price
+      msg = "Asking price changed from '" + self.asking_price.to_s + "' to '" + new_asking_price + "'"
       if update
         note = self.notes.build
         note.content = msg
@@ -162,38 +171,16 @@ class Property < ActiveRecord::Base
 
   def check_for_updates
     
-    live_url = URI.parse(self.full_url)
-    req = Net::HTTP::Get.new(live_url.path)
-    res = Net::HTTP.start(live_url.host, live_url.port) { |http|
-      http.request(req)
-    }
+    #live_url = URI.parse(self.full_url)
+    #req = Net::HTTP::Get.new(live_url.path)
+    #res = Net::HTTP.start(live_url.host, live_url.port) { |http|
+    #  http.request(req)
+    #}
 
-    @doc = Nokogiri::HTML(res.body)
-    new_asking_price = @doc.css("#propertyprice").text.strip
-    new_sstc = @doc.css(".propertystatus").text.length > 0
-    
-    dirty = false
-    
-    output = self.address
-    if self.asking_price != new_asking_price
-      update_asking_price(new_asking_price, true, true)
-      dirty = true
-      output += ' - asking price changed'
-    end
+    #@doc = Nokogiri::HTML(res.body)
 
-    if self.sstc != new_sstc
-      update_sstc(new_sstc, true, true)
-      dirty = true
-      output += ' - sstc changed'
-    end
-
-    if dirty
-      if self.save()
-        output + ' - saved ok'
-      end
-    end
-
-    output
+    #puts 'Been closed = ' + @doc.css(".property-header-qualifier").text
+    puts 'Robot disabled'
   end
 end
 

@@ -3,9 +3,8 @@
     <%= link_to "The Ottor System", root_path(area_code: -1, estate_agent: -1) %>
     by Paul Cobley
   </small>
-  <nav>
-    <ul>
-      <li><small><%= Rails.env %> <%= Ottor::Application::OTTOR_VERSION %></small></li>
-    </ul>
-  </nav>
+  <small>
+    Ottor <%= Ottor::Application::OTTOR_VERSION %> | Plugin <%= Ottor::Application::PLUGIN_VERSION %>
+  </small>
+
 </footer>

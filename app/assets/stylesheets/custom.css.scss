@@ -15,7 +15,7 @@ $manual-bg: $well-colour;
 $status_colour: $bg2;
 $status-bg: $well-colour;
 $sstc-colour: $colour;
-$sstc-bg: palegreen;
+$sstc-bg: lightgreen;
 $price-colour: $colour;
 $price-bg: lightpink;
 $auto-colour: $bg1;
@@ -296,6 +296,21 @@ a {
     padding: 0px;
     list-style: none;
   }
+}
+
+.sstc-badge {
+  background: $sstc-bg;
+  border-radius: 5px 0px 5px 0px;  
+  width: 6px;
+  height: 15px;
+  display:inline-block;
+  border: 1px solid $bg1;    
+}
+
+.available {
+  background: $sstc-bg;
+  border: 1px solid red;    
+  box-shadow: 0px 0px 5px red; 
 }
 
 .badge {
@@ -610,12 +625,12 @@ a {
       }
     }
     td {
-      padding:5px;
+      padding:5px;    
       border-bottom: 1px solid $lightline;
       &:first-child {
         text-align: left;
       }
-      &:last-child {
+      &:last-child {      
         text-align: right;
       }
     }
@@ -707,13 +722,14 @@ a {
   padding: 0px;
   margin: 0px;    
   h2 {
-    height: 15px;
+    height: 18px;      
   }
   .diary-left {
-    padding-left: 10px;
+    padding-left: 10px;    
     display:table-cell;
     width:30%;    
     vertical-align: top;
+    white-space: nowrap;
   }
   .diary-middle {
     padding: 10px;
@@ -789,7 +805,7 @@ footer {
   position:fixed;
   left:0px;
   bottom:0px;
-  height:30px;
+  height:20px;
   width:100%;
   background: $well-colour;
   padding:5px 10px;
@@ -797,6 +813,10 @@ footer {
 
   small {
     float: left;
+    &:last-child {
+      float: right;
+      margin-right: 20px;      
+    }
   }
   ul {
     float: right;
