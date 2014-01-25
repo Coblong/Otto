@@ -26,4 +26,40 @@ class AlertsController < ApplicationController
 
     redirect_to alerts_path
   end
+
+  def read_all
+    puts 'read all alerts'
+    current_user.alerts.each do |a| 
+      a.update_attributes(read: true)
+    end
+    
+    render :json => {}
+  end
+
+  def unread_all
+    puts 'unread all alerts'
+    current_user.alerts.each do |a| 
+      a.update_attributes(read: false)
+    end
+    
+    render :json => {}
+  end
+
+  def delete_read
+    puts 'delete read alerts'
+    current_user.alerts.where(read: true).each do |a| 
+      a.destroy
+    end
+    
+    render :json => {}
+  end
+
+  def delete_unread
+    puts 'delete unread alerts'
+    current_user.alerts.where(read: false).each do |a| 
+      a.destroy
+    end
+
+    render :json => {}
+  end
 end

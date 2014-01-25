@@ -10,6 +10,9 @@
               <%= render alert %>
             <% end %>   
           </ul>
+          <div class="change_user_prefs">           
+            <%= link_to "Mark all as read" , "#", id: "read-all" %> | <%= link_to "Delete all", "#", id: "delete-all-unread" %>
+          </div>
         </div>        
         <h3>Read Alerts</h3>
         <div class="alerts">        
@@ -18,6 +21,9 @@
               <%= render alert %>
             <% end %>   
           </ul>
+          <div class="change_user_prefs">           
+            <%= link_to "Mark all as unread" , "#", id: "unread-all" %> | <%= link_to "Delete all", "#", id: "delete-all-read" %>
+          </div>
         </div>      
       </div>      
     </div>
@@ -29,6 +35,18 @@ $( ".read-alert" ).change(function() {
 });
 $( ".delete-alert" ).click(function() {
   deleteAlert(this.id);
+});
+$( "#read-all" ).click(function() {
+  readAllAlerts();
+});
+$( "#unread-all" ).click(function() {
+  unreadAllAlerts();
+});
+$( "#delete-all-read" ).click(function() {
+  deleteAllReadAlerts();
+});
+$( "#delete-all-unread" ).click(function() {
+  deleteAllUnreadAlerts();
 });
 $( "#accordion" ).accordion({
   collapsible: true,

@@ -142,3 +142,55 @@ function updateAlert(id, read) {
       }
   });
 }
+function readAllAlerts() {
+  $.ajax({
+      type: "POST",
+      url: "/alerts/readall",
+      dataType: "json",
+      error: function(xhr, status, error) {
+        alert("Unable to update alerts");
+      },
+      success: function (data, status, response) {
+        location.reload();
+      }
+  });
+}
+function unreadAllAlerts() {
+  $.ajax({
+      type: "POST",
+      url: "/alerts/unreadall",
+      dataType: "json",
+      error: function(xhr, status, error) {
+        alert("Unable to update alerts");
+      },
+      success: function (data, status, response) {
+        location.reload();
+      }
+  });
+}
+function deleteAllReadAlerts() {
+  $.ajax({
+      type: "POST",
+      url: "/alerts/deleteread",
+      dataType: "json",
+      error: function(xhr, status, error) {
+        alert("Unable to delete alerts");
+      },
+      success: function (data, status, response) {
+        location.reload();
+      }
+  });
+}
+function deleteAllUnreadAlerts() {
+  $.ajax({
+      type: "POST",
+      url: "/alerts/deleteunread",
+      dataType: "json",
+      error: function(xhr, status, error) {
+        alert("Unable to delete alerts");
+      },
+      success: function (data, status, response) {
+        location.reload();
+      }
+  });
+}

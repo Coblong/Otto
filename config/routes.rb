@@ -46,6 +46,10 @@ Ottor::Application.routes.draw do
   match '/delete_note',           to: 'properties#delete_note',     via: 'post'
   match '/update_preferences',    to: 'users#update_preferences',   via: 'post'
   match '/robot',                 to: 'properties#robot_update',    via: 'post'
+  match '/alerts/readall',        to: 'alerts#read_all',            via: 'post'
+  match '/alerts/unreadall',      to: 'alerts#unread_all',          via: 'post'
+  match '/alerts/deleteread',     to: 'alerts#delete_read',         via: 'post'
+  match '/alerts/deleteunread',   to: 'alerts#delete_unread',       via: 'post'
   
   # The priority is based upon order of creation:
   # first created -> highest priority.
