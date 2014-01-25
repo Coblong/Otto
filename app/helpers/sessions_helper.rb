@@ -83,39 +83,52 @@ module SessionsHelper
 
   def current_properties
 
-    puts 'Getting current properties based upon filter'
     puts 'The page is ' + @page.to_s
     @page = 1 if !defined? @page
 
     if !current_property.nil?
-      properties = current_property.branch.properties
+      if current_area_code.nil?
+        puts 'Getting properties by current property'
+        properties = current_property.branch.properties
+      else 
+        puts 'Getting properties by current property and area code'
+        properties = current_property.branch.properties.where(area_code_id: current_area_code)
+      end
     else
       if !current_agent.nil?
         if current_area_code.nil?
+          puts 'Getting properties by agent'
           properties = current_agent.properties
         else
+          puts 'Getting properties by agent and area code'
           properties = current_agent.properties.where(area_code_id: current_area_code)
         end
       else
         if !current_branch.nil?
           properties = current_branch.properties
           if current_area_code.nil?
+            puts 'Getting properties by branch'
             properties = current_branch.properties
           else
+            puts 'Getting properties by branch and area code'
             properties = current_branch.properties.where(area_code_id: current_area_code)
           end
         else
           if !current_estate_agent.nil?
             properties = current_estate_agent.properties
             if current_area_code.nil?
+              puts 'Getting properties by estate agent'
               properties = current_estate_agent.properties
             else
+              puts 'Getting properties by estate agent and area code'
               properties = current_estate_agent.properties.where(area_code_id: current_area_code)
             end
           else
             if current_area_code.nil?        
+              puts 'Getting properties by user'
               properties = current_user.properties.where("estate_agent_id in (?)", current_user.estate_agents.where(user_id: current_user.id).collect(&:id))
             else        
+              puts 'Getting properties by user and area code'
               properties = current_user.properties.where("estate_agent_id in (?) and area_code_id = ?", current_user.estate_agents.where(user_id: current_user.id).collect(&:id), current_area_code)
             end
           end

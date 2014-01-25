@@ -55,7 +55,7 @@ class Property < ActiveRecord::Base
   end
 
   def update_status(new_status_id, update)
-    puts 'Updating status [' + self.status_id.to_s + '] to [' + new_status_id.to_s + ']'    
+    puts 'Updating status from [' + self.status_id.to_s + '] to [' + new_status_id.to_s + ']'    
     if new_status_id.to_i > 0
       new_status = Status.find(new_status_id)
     else
@@ -74,51 +74,58 @@ class Property < ActiveRecord::Base
     note
   end
 
-  def update_sstc(new_sstc, update, robot)
-    puts 'Updating sstc [' + self.sstc.to_s + '] to [' + new_sstc.to_s + ']'    
-    if new_sstc.to_s != self.sstc.to_s
-      if new_sstc.to_s == "true"
-        msg = 'Sold STC'
-        self.sstc_count = self.sstc_count + 1
+  def update_important_attributes(new_sstc, new_asking_price, new_price_qualifier, new_listed, add_alert)
+    puts 'Updating important attributes'
+    puts 'SSTC from [' + self.sstc.to_s + '] to [' + new_sstc.to_s + ']'
+    puts 'Asking price from [' + self.asking_price.to_s + '] to [' + new_asking_price.to_s + ']'
+    puts 'Price qualifier from [' + self.price_qualifier.to_s + '] to [' + new_price_qualifier + ']'
+    puts 'Listed from [' + self.listed.to_s + '] to [' + new_listed.to_s + ']'
+    if !new_listed.nil? and new_listed.to_s == "false"      
+      msg = 'No longer listed'
+      add_note(msg, Note.TYPE_LISTED)
+      add_alert(msg, Alert.TYPE_LISTED) if add_alert
+    else
+      if self.sstc.nil? and new_sstc.to_s == "true"
+        self.sstc_count = 1
+      end
+      if !self.sstc.nil? and self.sstc.to_s != new_sstc
+        # SSTC changed so changed that and leave everything else
+        if new_sstc
+          msg = 'Sold STC'
+          self.sstc_count = self.sstc_count + 1
+        else
+          msg = new_sstc = 'No longer Sold STC' 
+        end
+        add_note(msg, Note.TYPE_SSTC)
+        add_alert(msg, Alert.TYPE_SSTC) if add_alert
       else
-        msg = 'No longer Sold STC'
+        if !self.asking_price.nil? and self.asking_price != new_asking_price
+          msg = "Price changed from '" + self.asking_price + "' to '" + new_asking_price + "'"
+          add_note(msg, Note.TYPE_PRICE)
+          add_alert(msg, Alert.TYPE_PRICE) if add_alert
+        end
       end
-      if update
-        note = self.notes.build
-        note.content = msg
-        note.note_type = Note.TYPE_SSTC
-        note.save      
-      end
-      if robot
-        alert = self.alerts.build
-        alert.msg = msg
-        alert.alert_type = Alert.TYPE_SSTC
-        alert.user = self.user
-        alert.save
-      end
-      self.sstc = new_sstc
     end
+    update_attributes(sstc: new_sstc, asking_price: new_asking_price, price_qualifier: new_price_qualifier, listed: new_listed)
   end
 
-  def update_asking_price(new_asking_price, update, robot)
-    puts 'Updating asking_price [' + self.asking_price.to_s + '] to [' + new_asking_price + ']'    
-    if new_asking_price != self.asking_price
-      msg = "Asking price changed from '" + self.asking_price.to_s + "' to '" + new_asking_price + "'"
-      if update
-        note = self.notes.build
-        note.content = msg
-        note.note_type = Note.TYPE_PRICE
-        note.save
-      end
-      if robot
-        alert = self.alerts.build
-        alert.msg = msg
-        alert.alert_type = Alert.TYPE_PRICE
-        alert.user = self.user
-        alert.save
-      end
-      self.asking_price = new_asking_price      
-    end
+  def add_note(msg, note_type)
+    note = self.notes.build
+    note.content = msg
+    note.note_type = note_type
+    note.branch_id = self.branch_id
+    note.estate_agent_id = self.estate_agent.id
+    note.save 
+    note     
+  end
+
+  def add_alert(msg, alert_type)
+    alert = self.alerts.build
+    alert.msg = msg
+    alert.alert_type = alert_type
+    alert.user = self.user
+    alert.save
+    alert
   end
 
   def update_call_date(new_call_date)
@@ -169,19 +176,6 @@ class Property < ActiveRecord::Base
     note
   end
 
-  def check_for_updates
-    
-    #live_url = URI.parse(self.full_url)
-    #req = Net::HTTP::Get.new(live_url.path)
-    #res = Net::HTTP.start(live_url.host, live_url.port) { |http|
-    #  http.request(req)
-    #}
-
-    #@doc = Nokogiri::HTML(res.body)
-
-    #puts 'Been closed = ' + @doc.css(".property-header-qualifier").text
-    puts 'Robot disabled'
-  end
 end
 
 

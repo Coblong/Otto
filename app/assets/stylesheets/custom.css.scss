@@ -127,32 +127,27 @@ a {
 }
 
 .navbar-menus {
-  display:inline-block;
-  color: black;
-  a {
-    text-decoration:none;
-    &:hover {
-      background: $highlight-bg;
-      color: $menu-colour;
-    }
-  }
+  display:inline-block;  
   ul {
-    .selected {
-      background: $highlight-bg;                        
-    }
     text-align: left;
     display: inline;
     margin: 0;
     padding: 15px 0px 15px 0;
     list-style: none;
-    text-decoration:none;
-
-    li {
+    text-decoration:none;        
+    li {      
+      a {
+        color: $highlight-colour;
+        &:hover {
+          text-decoration:none; 
+          background: $highlight-bg;               
+        }        
+      }
       img {
         padding: 0px;
         margin: 0px;
         vertical-align: bottom;
-      }
+      }        
       display: inline-block;
       margin-right: -4px;
       position: relative;
@@ -169,7 +164,6 @@ a {
       }
       &:hover {
         background: $highlight-bg;        
-        color: $highlight-colour;
         ul {
           display: block;
           opacity: 2;
@@ -197,8 +191,7 @@ a {
           font-weight: normal;
           padding: 5px;
           margin-right:1px;
-          background: $main-bg;
-          color: $colour;
+          background: $main-bg;          
           display: block; 
           &:hover {           
             background: $main-bg;          
@@ -211,6 +204,18 @@ a {
           }
         }
       }      
+    }
+    li.selected {
+      a {
+        color: $main-bg;
+        text-shadow: -1px 1px 1px $colour;
+      }
+      ul {
+        a {
+          color: $menu-colour;  
+          text-shadow: none;
+        }
+      }
     }
   }  
 }
@@ -267,6 +272,7 @@ a {
 
 .status-icon {
   position: relative;
+  box-shadow: 2px 2px 2px $bg1;
   float: right;
   top: 5px;
   border: solid 1px $highlight-bg;      
@@ -299,19 +305,29 @@ a {
 }
 
 .sstc-badge {
-  background: $sstc-bg;
-  border-radius: 5px 0px 5px 0px;  
+  background: green;  
+  border-radius: 2px;    
+  border: 1px solid $bg1;
+  box-shadow: 2px 2px 2px $bg1;
   width: 6px;
   height: 15px;
-  display:inline-block;
-  border: 1px solid $bg1;    
+  display: inline-block;
 }
 
 .available {
-  background: $sstc-bg;
-  border: 1px solid red;    
-  box-shadow: 0px 0px 5px red; 
+  background: lime;      
 }
+
+.sstc1 {
+  height: 6px;
+}
+.sstc2 {
+  height: 9px;
+}
+.sstc3 {
+  height: 12px;
+}
+
 
 .badge {
   background-color: rgba(0,255,0,0.6);
@@ -326,11 +342,11 @@ a {
   z-index: 1;        
 }
 
-#alerts {
+.alerts {
   padding:10px;
   ul {    
     li {
-      border: 1px solid $bg2;
+      border-bottom: 1px solid $bg2;
       padding: 5px;
       margin: 5px;
       a:hover {
@@ -348,9 +364,28 @@ a {
           width: 75%;
           padding-left: 5px;
           border-left: 1px solid $bg2;
-        }        
+        }
+        h2 {
+          padding-top: 0px;
+          margin-top: 0px;
+          height: 8px;
+        }
+        h4 {
+          padding-top: 0px;
+          margin-top: 0px;
+          height: 8px;
+          font-weight: normal;
+          font-size: 0.8em;
+        }
+        .alert-msg {
+          padding: 5px;
+          width: 100%;
+        }
       }
     }
+  }
+  div {
+    text-align: right;
   }
 }
 

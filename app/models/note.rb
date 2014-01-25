@@ -7,6 +7,7 @@ class Note < ActiveRecord::Base
   default_scope -> { order('created_at DESC') }
 
   @TYPE_MANUAL = "manual"
+  @TYPE_LISTED = "listed"
   @TYPE_STATUS = "status"
   @TYPE_SSTC = "sstc"
   @TYPE_PRICE = "price"
@@ -15,7 +16,7 @@ class Note < ActiveRecord::Base
   @TYPE_OFFER = "offer"
   
   class << self
-    attr_accessor :TYPE_MANUAL, :TYPE_STATUS, :TYPE_SSTC, :TYPE_PRICE, :TYPE_AUTO, :TYPE_VIEWING, :TYPE_OFFER 
+    attr_accessor :TYPE_MANUAL, :TYPE_LISTED, :TYPE_STATUS, :TYPE_SSTC, :TYPE_PRICE, :TYPE_AUTO, :TYPE_VIEWING, :TYPE_OFFER 
   end
 
   def formatted_date 

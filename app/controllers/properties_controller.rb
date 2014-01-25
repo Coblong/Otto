@@ -4,22 +4,24 @@ class PropertiesController < ApplicationController
   skip_before_filter  :verify_authenticity_token
 
   def index
-    render json: Property.all.to_json(only: [:id, :address, :sstc, :asking_price, :price_qualifier, :listed, :url])
+    render json: Property.where(temp: false).to_json(only: [:user_id, :id, :address, :sstc, :asking_price, :price_qualifier, :listed, :url])
   end
 
   def new
     @property = current_user.properties.build
     @property.estate_agent = current_user.estate_agents.first
-    @property.branch = @property.estate_agent.branches.first
+    @property.branch = @property.estate_agent.branches.first    
   end
 
   def show
   end
 
   def create
+    puts 'Attempting to create a manual property'
     @property = Property.new(property_params)
     @property.call_date = Date.today      
     @property.user_id = current_user.id
+    @property.temp = true
 
     / Get the post code and area code /
     if @property.post_code.empty?
@@ -34,7 +36,7 @@ class PropertiesController < ApplicationController
 
     / Get the url /
     if @property.url.empty?
-      @property.url = "www.rightmove.co.uk"
+      @property.url = "www.rightmove.co.uk"      
     else
       @property.url = @property.url.gsub('https://', '')
       @property.url = @property.url.gsub('http://', '')
@@ -46,9 +48,11 @@ class PropertiesController < ApplicationController
       @property.sstc_count = 0
     end
 
-    note = @property.notes.build      
-    note.note_type = Note.TYPE_MANUAL
-    note.content = 'Created manually'
+    if params[:note].nil? or params[:note].empty?
+      @property.add_note('Created manually', Note.TYPE_MANUAL)
+    else
+      @property.add_note(params[:note], Note.TYPE_MANUAL)
+    end
 
     if @property.save!()      
       puts 'Temp property saved'
@@ -58,12 +62,13 @@ class PropertiesController < ApplicationController
       redirect_to root_path
     else
       puts 'Temp property not saved'
+      flash[:error] = "Unable to create property"
       render :nothing => true, :status => :service_unavailable
     end
   end
 
-  def create_external
-    puts 'Trying to create or update a property with url ' + params[:url].to_s
+  def save_via_plugin
+    puts 'Save called by the plugin for url ' + params[:url].to_s
     @property = current_user.properties.find_by(url: params[:url])        
     update = true
 
@@ -89,17 +94,14 @@ class PropertiesController < ApplicationController
       @property.sstc_count = 0
       @property.call_date = Date.today      
       
-      note = @property.notes.build      
-      note.note_type = Note.TYPE_AUTO
-      note.content = 'Created'
+      @property.add_note('Created', Note.TYPE_AUTO)
       update = false
     end
 
     @property.image_url = params[:image_url]
     @property.update_status(params[:status_id], update)
-    @property.update_sstc(params[:sstc], update, false)
-    @property.update_asking_price(params[:asking_price], update, false)
     @property.update_closed_yn(params[:closed], update)      
+    @property.update_important_attributes(params[:sstc], params[:asking_price], params[:price_qualifier], true, false)
     
     if @property.save()      
       puts 'Property saved'
@@ -112,7 +114,7 @@ class PropertiesController < ApplicationController
     end
   end
   
-  def find_external
+  def find_for_plugin
     if !current_user
       render :nothing => true, :status => :unauthorized
     else
@@ -146,11 +148,7 @@ class PropertiesController < ApplicationController
         old_call_date = @property.call_date
 
         / Build the note /
-        note = @property.notes.build
-        note.note_type = Note.TYPE_MANUAL
-        note.content = params[:note]
-        note.branch_id = @property.branch_id
-        note.estate_agent_id = @property.estate_agent.id
+        note = @property.add_note(params[:note], Note.TYPE_MANUAL)
 
         agent_name = params[:agent]
         branch = Branch.find(@property.branch_id)
@@ -226,16 +224,11 @@ class PropertiesController < ApplicationController
         additional_note = params[:note]
         
         / Build the note /
-        note = @property.notes.build
-        note.note_type = Note.TYPE_OFFER
-        note.content = "Made an offer of " + number_to_currency(offer.to_i, unit: "£")
+        note = @property.add_note("Made an offer of " + number_to_currency(offer.to_i, unit: "£"), Note.TYPE_OFFER)
         if additional_note.length > 0
           note.content += " - " + additional_note 
+          note.save()
         end
-        note.branch_id = @property.branch_id
-        note.estate_agent_id = @property.estate_agent.id
-
-        note.save()
 
         render :json => note.to_json(methods: [:formatted_date, :agent_name] ), :status => :ok
       end
@@ -326,6 +319,11 @@ class PropertiesController < ApplicationController
     params[:property][:url] = params[:property][:url].gsub('https://', '')
     params[:property][:url] = params[:property][:url].gsub('http://', '')
     @property = current_user.properties.find(params[:id])    
+
+    if params[:property][:url] != @property.url
+      @property.add_note("Linked to new url", Note.TYPE_MANUAL)
+      @property.temp = false
+    end
     @property.update_attributes!(property_params)
     if @property.post_code != 'TEMP' and @property.area_code.description == "TEMP"
       area_code = @property.post_code.partition(' ').first
@@ -333,6 +331,16 @@ class PropertiesController < ApplicationController
       @property.save()
     end
     redirect_to @property
+  end
+
+  def robot_update
+    puts 'Robot updating property'
+    puts params.to_yaml
+    puts '---------------------------------'
+    user = User.find(params[:user_id])    
+    @property = user.properties.find_by(url: params[:url])        
+    @property.update_important_attributes(params[:sstc], params[:asking_price], params[:price_qualifier], params[:listed], true)    
+    render json: build_response
   end
 
   private
@@ -389,7 +397,7 @@ class PropertiesController < ApplicationController
     end
 
     def build_response
-      { "id" => @property.id, "status_id" => @property.status_id, "closed" => @property.closed, "sstc" => @property.sstc, "asking_price" => @property.asking_price, "statuses" => current_user.statuses.to_json, 
+      { "id" => @property.id, "status_id" => @property.status_id, "closed" => @property.closed, "sstc" => @property.sstc, "asking_price" => @property.asking_price, "statuses" => @property.user.statuses.to_json, 
         "estate_agent_name" => @property.estate_agent.name, "branch_name" => @property.branch.name, 
         "agents" => @property.branch.agents.to_json(only: [:id, :name] ),
         "notes" => @property.notes.to_json(only: [:content, :note_type], methods: [:formatted_date, :agent_name] ) }

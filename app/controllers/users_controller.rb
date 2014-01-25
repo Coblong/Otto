@@ -61,7 +61,7 @@ class UsersController < ApplicationController
       puts 'user params = ' + params[:user].to_yaml
       params[:user].delete(:password) if params[:user][:password].blank?
       params.require(:user).permit(:name, :email, :password,
-                                     :password_confirmation, :expand_notes, :show_left_nav, :show_future, :show_overview, :show_images)
+                                     :password_confirmation, :expand_notes, :show_left_nav, :show_future, :show_overview, :overview_weeks, :show_images)
     end
 
     # Before filters

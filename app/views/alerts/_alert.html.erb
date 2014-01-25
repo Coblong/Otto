@@ -3,10 +3,15 @@
   <span><%= alert.formatted_date %></span>
   <span>
     <% if !alert.property.nil? %>
-      <%= link_to alert.property.address + ' - ' + alert.msg, alert.property %>
-    <% else %>
-      <%= alert.msg %>
-    <% end %>
+      <h2><%= link_to alert.property.address, alert.property %></h2>
+      <h4>
+      <%= link_to alert.property.estate_agent.name, alert.property.estate_agent %> / <%= link_to alert.property.branch.name, alert.property.branch %> - <%= link_to alert.property.status.description, alert.property.status %>
+      <% if alert.property.closed %>
+         - <%= link_to 'CLOSED', root_path(page: 3) %>
+      <% end %>
+      </h4>
+      <span class="alert-msg"><%= alert.msg %></span>
+    <% end %>    
   </span>  
   <span><%= check_box_tag "Read", alert.read, alert.read, class: "read-alert", id: alert.id %></span>
   <span><%= link_to image_tag("delete.png", width: 14), alert, confirm: 'Are you sure you want to delete this?', method: "delete" %></span>

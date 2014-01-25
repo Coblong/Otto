@@ -34,8 +34,8 @@ Ottor::Application.routes.draw do
   match '/quietsession',          to: 'sessions#quietly',           via: 'post'
   match '/signout',               to: 'sessions#destroy',           via: 'delete'
   match '/validate',              to: 'sessions#validate',          via: 'get'
-  match '/external/find',         to: 'properties#find_external',   via: 'get'
-  match '/external/create',       to: 'properties#create_external', via: 'post'  
+  match '/find_for_plugin',       to: 'properties#find_for_plugin', via: 'get'
+  match '/save_via_plugin',       to: 'properties#save_via_plugin', via: 'post'  
   match '/notes',                 to: 'properties#create_note',     via: 'post'
   match '/viewings',              to: 'properties#create_viewing',  via: 'post'
   match '/offers',                to: 'properties#create_offer',    via: 'post'
@@ -45,6 +45,7 @@ Ottor::Application.routes.draw do
   match '/update_status',         to: 'properties#update_status',   via: 'post'
   match '/delete_note',           to: 'properties#delete_note',     via: 'post'
   match '/update_preferences',    to: 'users#update_preferences',   via: 'post'
+  match '/robot',                 to: 'properties#robot_update',    via: 'post'
   
   # The priority is based upon order of creation:
   # first created -> highest priority.

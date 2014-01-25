@@ -7,9 +7,10 @@ class Alert < ActiveRecord::Base
   @TYPE_MANUAL = "manual"
   @TYPE_SSTC = "sstc"
   @TYPE_PRICE = "price"
+  @TYPE_LSITED = "listed"
   
   class << self
-    attr_accessor :TYPE_MANUAL, :TYPE_SSTC, :TYPE_PRICE
+    attr_accessor :TYPE_MANUAL, :TYPE_SSTC, :TYPE_PRICE, :TYPE_LISTED
   end
 
   def formatted_date 

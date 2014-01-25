@@ -1,21 +1,24 @@
 <% provide(:title, current_user.name + ' Alerts') %>
 <div id="main">
   <div id="container">     
-    <div id="thin-top">           
-      <div id="alerts">
+    <div id="thin-top">        
+      <div id="accordion" class="diary-header">         
         <h3>New Alerts</h3>
-        <ul>
-          <% @new_alerts.each do |alert| %>
-            <%= render alert %>
-          <% end %>   
-        </ul>
-      
+        <div class="alerts">        
+          <ul>
+            <% @new_alerts.each do |alert| %>
+              <%= render alert %>
+            <% end %>   
+          </ul>
+        </div>        
         <h3>Read Alerts</h3>
-        <ul>
-          <% @read_alerts.each do |alert| %>
-            <%= render alert %>
-          <% end %>   
-        </ul>
+        <div class="alerts">        
+          <ul>
+            <% @read_alerts.each do |alert| %>
+              <%= render alert %>
+            <% end %>   
+          </ul>
+        </div>      
       </div>      
     </div>
   </div>  
@@ -26,5 +29,10 @@ $( ".read-alert" ).change(function() {
 });
 $( ".delete-alert" ).click(function() {
   deleteAlert(this.id);
+});
+$( "#accordion" ).accordion({
+  collapsible: true,
+  heightStyle: "content",
+  active: 0
 });
 </script>

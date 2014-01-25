@@ -55,7 +55,7 @@ module Ottor
 
     config.assets.precompile += %w(*.png *.jpg *.jpeg *.gif)
 
-    OTTOR_VERSION = 1.1
-    PLUGIN_VERSION = 2.2
+    OTTOR_VERSION = 1.2
+    PLUGIN_VERSION = 2.3
   end
 end

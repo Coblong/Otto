@@ -38,10 +38,6 @@
             <td><%= f.select :status_id, options_from_collection_for_select(current_user.statuses, :id, :description) %></td>
           </tr>
           <tr>
-            <td><%= f.label :post_code %></td>
-            <td><%= f.text_field :post_code %></td>
-          </tr>
-          <tr>
             <td><%= f.label :url %></td>
             <td><%= f.text_field :url %></td>
           </tr>
@@ -52,6 +48,10 @@
           <tr>
             <td><%= f.label :closed %></td>
             <td><%= f.check_box :closed %></td>
+          </tr>
+          <tr>
+            <td>Note</td>
+            <td><%= text_area_tag :Note %></td>
           </tr>
           <tr>
             <td></td>
