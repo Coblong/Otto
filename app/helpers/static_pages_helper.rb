@@ -59,33 +59,40 @@ module StaticPagesHelper
     end    
   end
         
-  def add_weeks_properties    
-    (0..7).each do |offset|
-      properties = current_user.properties.where("call_date >= ? and call_date < ?", (Date.today + offset).beginning_of_day, (Date.tomorrow + offset).beginning_of_day).where(closed: false)        
-      properties = apply_filters(properties)
-      agents = Branch.where("id in (?)", properties.collect(&:branch_id))
-      day = (Date.today+offset).strftime('%A')
-      is_sunday = day == 'Sunday'          
-      if @show_overview
-        days_viewings = current_user.properties.where("view_date >= ? and view_date < ?", (Date.today + offset).beginning_of_day, (Date.tomorrow + offset).beginning_of_day).where(closed: false)        
-        @week_ahead_hash[day] = build_overview_hash(properties, days_viewings)
-      end
-
-      if offset == 0
-        day = "Today"
-      elsif offset == 1
-        day = "Tomorrow"
-      end
-      
-      @days_properties_hash[get_key(day, properties.size, agents.size)] = properties unless properties.empty?        
-      if is_sunday
-        if current_user.show_future or @page == 4
-          future_properties = current_user.properties.where("call_date >= ?", (Date.today + offset+1).beginning_of_day).where(closed: false)
-          future_agents = Branch.where("id in (?)", future_properties.collect(&:branch_id))
-          @days_properties_hash[get_key("Future", future_properties.size, future_agents.size)] = future_properties unless future_properties.empty?
+  def add_weeks_properties 
+    end_index = 7 * current_user.overview_weeks - 1
+    start_date = Date.today.at_beginning_of_week
+    puts 'Start date is ' + start_date.to_s
+    (0..end_index).each do |offset|
+      this_day = start_date + offset
+      puts 'Getting agenda for ' + this_day.to_s
+      if this_day >= Date.today
+        properties = current_user.properties.where("call_date >= ? and call_date < ?", this_day.beginning_of_day, this_day.end_of_day).where(closed: false)        
+        properties = apply_filters(properties)
+        agents = Branch.where("id in (?)", properties.collect(&:branch_id))
+        day = this_day.strftime('%A %d/%m')
+        is_sunday = day == 'Sunday'          
+        if @show_overview
+          days_viewings = current_user.properties.where("view_date >= ? and view_date < ?", this_day.beginning_of_day, this_day.end_of_day).where(closed: false)        
+          @week_ahead_hash[day] = build_overview_hash(properties, days_viewings)
         end
-        break
+
+        if this_day == Date.today
+          day = "Today"
+        elsif this_day == Date.tomorrow
+          day = "Tomorrow"
+        end
+        
+        @days_properties_hash[get_key(day, properties.size, agents.size)] = properties unless properties.empty?        
       end
+      #if is_sunday
+      #  if current_user.show_future or @page == 4
+      #    future_properties = current_user.properties.where("call_date >= ?", (Date.today + offset+1).beginning_of_day).where(closed: false)
+      #    future_agents = Branch.where("id in (?)", future_properties.collect(&:branch_id))
+      #    @days_properties_hash[get_key("Future", future_properties.size, future_agents.size)] = future_properties unless future_properties.empty?
+      #  end
+      #  break
+      #end
     end
   end
   

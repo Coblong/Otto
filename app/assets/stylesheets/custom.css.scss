@@ -416,7 +416,7 @@ a {
       }      
     }
     .today {
-      background: $well-colour;    
+      background: honeydew;    
     }
   }
   ul {
@@ -770,6 +770,12 @@ a {
     vertical-align: top;
     white-space: nowrap;
   }
+  .not-listed {
+    color: $bg1;
+    a {
+      color: $bg1;
+    }
+  }
   .diary-middle {
     padding: 10px;
   }
@@ -817,6 +823,12 @@ a {
   }
   .right {
     text-align:right;
+  }
+  .not-listed {
+    color: $bg1;
+    a {
+      color: $bg1;
+    }
   }
 }
 

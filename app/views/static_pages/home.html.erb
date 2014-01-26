@@ -14,7 +14,7 @@
     <% @overview_headers.keys.each do |week_number| %>          
               <tr>
       <% @overview_headers[week_number].each do |header| %>              
-                <th><%=header%></th>
+                <th class="<%= header == "Today" ? "today" : "" %>"><%=header%></th>
       <% end %>                  
               </tr>
               <tr>

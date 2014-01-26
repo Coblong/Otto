@@ -3,7 +3,7 @@
   <div id="container">     
     <div id="thin-top">        
       <div id="accordion" class="diary-header">         
-        <h3>New Alerts</h3>
+        <h3>New Alerts - <%= @new_alerts.size.to_s %></h3>
         <div class="alerts">        
           <ul>
             <% @new_alerts.each do |alert| %>
@@ -14,7 +14,7 @@
             <%= link_to "Mark all as read" , "#", id: "read-all" %> | <%= link_to "Delete all", "#", id: "delete-all-unread" %>
           </div>
         </div>        
-        <h3>Read Alerts</h3>
+        <h3>Read Alerts - <%= @read_alerts.size.to_s %></h3>
         <div class="alerts">        
           <ul>
             <% @read_alerts.each do |alert| %>

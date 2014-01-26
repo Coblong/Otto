@@ -11,7 +11,7 @@
       </tr>          
     <% current_properties.each do |property| %>
         <tr>
-          <td class="left"><%= link_to property.address, property %><%= render "/shared/status", property: property %></td>
+          <td class="left <%= "not-listed" if !property.listed %>"><%= link_to property.address, property %><%= render "/shared/status", property: property %></td>
           <td class="left"><%= link_to property.estate_agent.name, property.estate_agent %>  / <%= link_to property.branch.name, property.branch %></td>
           <td class="right"><%= property.asking_price %></td>
           <td><%= property.post_code %></td>
