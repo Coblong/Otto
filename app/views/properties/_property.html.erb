@@ -1,5 +1,5 @@
 <li title="<%= property.estate_agent.name %> / <%= property.branch.name %> - <%= property.asking_price %>" onclick="location.href='<%= property_path(property) %>'">
-  <table class='left-nav-table'>    
+  <table class='left-nav-table <%= "not-listed" if !property.listed %>'>    
     <tr><td colspan="2"><%= "* " if property.temp %><%= property.address %><%= render "/shared/status", property: property %></td></tr>
     <tr style="height:30px;">
       <td>

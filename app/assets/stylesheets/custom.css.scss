@@ -238,6 +238,13 @@ a {
   width: 100%;    
 }
 
+.not-listed {
+  color: $bg1;
+  a {
+    color: $bg1;
+  }
+}
+
 #left-nav {
   display: table-cell;
   height: 100%;  
