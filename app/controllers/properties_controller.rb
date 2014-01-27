@@ -4,7 +4,7 @@ class PropertiesController < ApplicationController
   skip_before_filter  :verify_authenticity_token
 
   def index
-    render json: Property.where(temp: false).to_json(only: [:user_id, :id, :address, :sstc, :asking_price, :price_qualifier, :listed, :url])
+    render json: Property.where(temp: false, listed: true).to_json(only: [:user_id, :id, :address, :sstc, :asking_price, :price_qualifier, :listed, :url])
   end
 
   def new
