@@ -7,7 +7,7 @@
       end
     %>
     <option value="<%= h.to_s %>"><%= h.to_s %></optnio>
-  <% end %>
+    <% end %>
   </select> : 
   <select id="mins-<%= property.id %>" class="minutes">
     <option value="00">00</option>
@@ -21,16 +21,26 @@
     <option value="45">45</option>
     <option value="50">50</option>
     <option value="55">55</option>
-  </select><p>
-  <div name="manual" id='avdp-<%= property.id %>' class="datepicker viewing" value="<%= property.view_date %>"></div>  
+  </select>
+  <input name="manual" id='avdp-<%= property.id %>' class="datepicker viewing" value="<%= property.view_date_formatted(:long) %>"/>    
+  <textarea id="vnn-<%= property.id %>" class="new-note" placeholder="Add a comment..."></textarea>
 </div>
 <script type="text/javascript">
+<% if !property.view_date.nil? 
+  hours = property.view_date.strftime('%H')
+  mins = property.view_date.strftime('%M')
+  if hours.to_i < 12
+    hours = '0' + hours
+  end %>
+  $("#hours-<%= property.id %>").val('<%=hours%>');
+  $("#mins-<%= property.id %>").val('<%=mins%>');
+<% end %>
 $(function() {
   $( "#view-dialog<%= property.id %>" ).dialog({
     autoOpen: false,
     modal: true,
     height: 450,
-    width: 450,
+    width: 400,
     show: {
       effect: "blind",
       duration: 200
@@ -38,12 +48,13 @@ $(function() {
     buttons: {
       "Save": function () {
         var call_date = $("#avdp-<%= property.id %>").val();
+        var note = $("#vnn-<%= property.id %>").val();
         var hours = $("#hours-<%= property.id %>").val();
         var mins = $("#mins-<%= property.id %>").val();
         $.ajax({
             type: "POST",
             url: "/viewings",
-            data: 'property_id=' + <%= property.id %> +'&hours=' + hours + '&mins=' + mins + '&view_date=' + call_date,
+            data: 'property_id=' + <%= property.id %> +'&hours=' + hours + '&mins=' + mins + '&view_date=' + call_date + '&note=' + note,
             dataType: "json",
             error: function(xhr, status, error) {
                 console.log('Unable to set viewing');
@@ -57,14 +68,26 @@ $(function() {
               html += data["content"]
               html += "<span><img alt='Delete' class='delete_note' id='del-" + data["id"] + "' src='<%=  asset_path('delete.png') %>' width='14'></span></li>"
 
-              if (response.status == 200) {
-                $( "#accordian-notes-<%= property.id%> ul" ).prepend(html);                
-                $( "#va-<%= property.id%>" ).html(data["content"]);                              
-                addDeleteFunction(data["id"]);              
-                $( "#view-dialog<%= property.id %>" ).dialog( "close" );
-              } else {
-                location.reload();
-              }
+              location.reload();
+            }
+        });
+      },
+      "Delete": function () {
+        var note = $("#vnn-<%= property.id %>").val();
+        $.ajax({
+            type: "DELETE",
+            url: "/viewings",
+            data: 'property_id=' + <%= property.id %> + '&note=' + note,
+            dataType: "json",
+            error: function(xhr, status, error) {
+                console.log('Unable to remove viewing');
+            },
+            success: function (data, status, response) {
+              console.log(status);    
+              console.log('Data resposne is ' + status);                            
+              console.log('Status is ' + response.status);                            
+              
+              location.reload();
             }
         });
       },

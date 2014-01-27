@@ -44,8 +44,16 @@ class Property < ActiveRecord::Base
     end
   end
 
-  def view_date_formatted
-    self.view_date.strftime('%A, %d %b %H:%M') unless self.view_date.nil?
+  def view_date_formatted(text)
+    if text == :long
+      if self.view_date.nil?
+        Date.today.strftime('%A, %d %b %Y')
+      else
+        self.call_date.strftime('%A, %d %b %Y')
+      end
+    else
+      self.view_date.strftime('%A, %d %b %H:%M') unless self.view_date.nil?
+    end
   end
 
   def viewing_soon?
@@ -148,7 +156,7 @@ class Property < ActiveRecord::Base
     self.call_date = new_view_date
     self.view_date = DateTime.new(self.call_date.year, self.call_date.month, self.call_date.day, hour, min, 0, 0)            
     note.content = 'Viewing on ' + self.view_date.strftime('%A, %d %b %Y at %H:%M')  
-    if !content.nil?
+    if !content.nil? and content.length > 0
       note.content += ' - ' + content 
     end
   

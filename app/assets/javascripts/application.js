@@ -20,7 +20,7 @@ $(function() {
   $( ".datepicker" ).datepicker({
     yearRange: '2012:2100',
     numberOfMonths: 2,
-    showButtonPanel: true,
+    showButtonPanel: false,
     dateFormat: "DD, d M yy",
     onSelect: function(dateText) {
       var propertyId = this.id.toString().substring(3)

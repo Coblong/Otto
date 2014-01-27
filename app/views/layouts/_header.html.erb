@@ -2,7 +2,7 @@
   <div class="navbar-menus menu-left">
     <ul>
 <% if signed_in? %>
-<% if !current_user.area_codes.empty? and !current_user.area_codes.nil? %>
+<% if @page != 2 and !current_user.area_codes.empty? and !current_user.area_codes.nil? %>
   <% if current_area_code.nil? %>
     <li><%= link_to "All Areas", root_path(area_code: -1) %>&nbsp;&nbsp;<b class="caret"></b>
   <% else %>
@@ -19,7 +19,7 @@
         </ul>
       </li> 
 <% end %>      
-<% if !current_user.estate_agents.empty? and !current_user.estate_agents.nil? %>
+<% if @page != 2 and !current_user.estate_agents.empty? and !current_user.estate_agents.nil? %>
   <% if current_estate_agent.nil? %>
       <li><%= link_to "All Estate Agents", root_path(estate_agent: -1) %>&nbsp;&nbsp;<b class="caret"></b>
   <% else %>
@@ -70,36 +70,25 @@
     <% end %>
 
   <% end %>
-        <% if @page == 2 %>
-          <li><%= link_to "Viewings", root_path( page: 2 ) %>&nbsp;&nbsp;<b class="caret"></b>&nbsp;
-          <ul>
-            <li><%= link_to "Live", root_path( page: 1 ) %></li>
-            <li><%= link_to "Closed", root_path( page: 3 ) %></li>
-            <li><%= link_to "All", root_path( page: 4) %></li>
-          </ul>
-        </li>
+        <% if @page == 1 %>
+          <li><%= link_to "Open", root_path( page: 1 ) %>&nbsp;&nbsp;<b class="caret"></b>&nbsp;
+            <ul>
+              <li><%= link_to "Closed", root_path( page: 3 ) %></li>
+              <li><%= link_to "All", root_path( page: 4) %></li>
+            </ul>
+          </li>
         <% elsif @page == 3 %>
           <li><%= link_to "Closed", root_path( page: 3 ) %>&nbsp;&nbsp;<b class="caret"></b>&nbsp;
           <ul>
-            <li><%= link_to "Live", root_path( page: 1 ) %></li>
-            <li><%= link_to "Viewings", root_path( page: 2 ) %></li>
+            <li><%= link_to "Open", root_path( page: 1 ) %></li>
             <li><%= link_to "All", root_path( page: 4) %></li>
           </ul>
         </li>
         <% elsif @page == 4 %>
           <li><%= link_to "All", root_path( page: 4) %>&nbsp;&nbsp;<b class="caret"></b>&nbsp;
           <ul>
-            <li><%= link_to "Live", root_path( page: 1 ) %></li>
-            <li><%= link_to "Viewings", root_path( page: 2 ) %></li>
+            <li><%= link_to "Open", root_path( page: 1 ) %></li>
             <li><%= link_to "Closed", root_path( page: 3 ) %></li>
-          </ul>
-        </li>
-        <% else %>
-        <li><%= link_to "Live", root_path( page: 1 ) %>&nbsp;&nbsp;<b class="caret"></b>&nbsp;
-          <ul>
-            <li><%= link_to "Viewings", root_path( page: 2 ) %></li>
-            <li><%= link_to "Closed", root_path( page: 3 ) %></li>
-            <li><%= link_to "All", root_path( page: 4) %></li>
           </ul>
         </li>
         <% end %>
@@ -112,6 +101,7 @@
       <% if signed_in? %>
         <li><%= link_to image_tag("home.png", title: "Home"), root_path(area_code: -1, estate_agent: -1) %></li>
         <li><%= link_to image_tag("quickadd.png", width: 16, title: "Add property or note"), new_property_path %></li>
+        <li><%= link_to image_tag("viewings.png", width: 16, title: "Viewings"), root_path( page: 2 ) %></li>
         <li><%= link_to image_tag("alerts.png", width: 16, title: "Alerts"), alerts_path %>
           <% if current_user.active_alerts > 0 %>
             <div class="badge"><%= current_user.active_alerts.to_s %></div>
@@ -119,7 +109,8 @@
         </li>
         <li><%= link_to current_user.name, current_user %>&nbsp;&nbsp;<b class="caret"></b>&nbsp;
           <ul>
-            <li><%= link_to "Browse", stats_path %></li>                        
+            <li><%= link_to "Filters", filters_path %></li>                        
+            <li><%= link_to "FAQ", faq_path %></li>                        
             <li><%= link_to "Sign out", signout_path, method: "delete" %></li>
           </ul>
         </li>

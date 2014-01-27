@@ -28,7 +28,8 @@ Ottor::Application.routes.draw do
   
   root  'static_pages#home'
   match '/',                      to: 'static_pages#home',          via: 'get'
-  match '/stats',                 to: 'static_pages#stats',         via: 'get'
+  match '/filters',               to: 'static_pages#filters',       via: 'get'
+  match '/faq',                   to: 'static_pages#faq',           via: 'get'
   match '/signup',                to: 'users#new',                  via: 'get'
   match '/signin',                to: 'sessions#new',               via: 'get'
   match '/quietsession',          to: 'sessions#quietly',           via: 'post'
@@ -38,6 +39,7 @@ Ottor::Application.routes.draw do
   match '/save_via_plugin',       to: 'properties#save_via_plugin', via: 'post'  
   match '/notes',                 to: 'properties#create_note',     via: 'post'
   match '/viewings',              to: 'properties#create_viewing',  via: 'post'
+  match '/viewings',              to: 'properties#delete_viewing',  via: 'delete'
   match '/offers',                to: 'properties#create_offer',    via: 'post'
   match '/close',                 to: 'properties#close',           via: 'post'
   match '/reopen',                to: 'properties#reopen',          via: 'post'

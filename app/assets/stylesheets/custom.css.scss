@@ -307,7 +307,6 @@ a {
   background: $main-bg;
   ul {
     padding: 0px;
-    list-style: none;
   }
 }
 
@@ -605,6 +604,26 @@ a {
   }
   .viewings {
     color: $viewing-colour;
+  }
+}
+
+.faq {  
+  ul {
+    margin: 10px 40px;
+  }
+  li {
+    list-style-type:disk;
+    list-style-position:outside;
+    padding: 10px 0px;
+    a:hover {
+      background: inherit;
+    }
+    img {
+      padding: 5px 0px;
+      width: 50%;
+      position: relative;
+      left: 25%;
+    }
   }
 }
 

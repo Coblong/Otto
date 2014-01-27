@@ -1,5 +1,5 @@
 <% if signed_in? %>        
-  <% if current_user.show_left_nav %>  
+  <% if @page != 2 and current_user.show_left_nav %>  
     <div id="left-nav" class="tall">  
       <%= render 'shared/properties', filter: "all" %>
     </div>
@@ -76,17 +76,19 @@
           <h3 class="<%= get_header_class(day) %>"><%= day %></h3>
           <div class="diary-panel">   
       <% @days_properties_hash[day].each do |property| %>
-            <%= render "/shared/diary_entry", property: property, expanded: current_user.expand_notes %>   
+            <%= render "/shared/diary_entry", property: property, expanded: @page == 2 ? false : current_user.expand_notes %>   
       <% end %>
           </div>      
     <% end %>
   <% end %>  
         </div>           
+  <% if @page != 2 %>
         <div class="change_user_prefs">           
           Expand notes <%= check_box_tag "expand_notes", "Expand notes", current_user.expand_notes %>&nbsp;
           Show images <%= check_box_tag "show_images", "Show Pictures", current_user.show_images %>
         </div>
       </div>
+  <% end %>
       <br><br>
 
       <%= render 'shared/button_controls' %>

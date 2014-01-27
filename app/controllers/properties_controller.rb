@@ -208,6 +208,29 @@ class PropertiesController < ApplicationController
     end
   end
 
+  def delete_viewing
+    puts 'Delete a viewing'
+    if !current_user
+      render :nothing => true, :status => :unauthorized
+    else
+      @property = current_user.properties.find(params[:property_id]);
+      if @property.nil?
+        response = { "statuses" => current_user.statuses.to_json }
+        render :json => response
+      else      
+        if !@property.view_date.nil?
+          @property.update_attributes(view_date: nil)
+          msg = "Viewing cancelled"
+          if !params[:note].nil? and params[:note].length > 0
+            msg = msg + " - " + params[:note]
+          end
+          note = @property.add_note(msg, Note.TYPE_VIEWING)
+        end
+        render :json => build_response
+      end
+    end
+  end
+
   def create_offer
     puts 'Creating a new offer'
     if !current_user

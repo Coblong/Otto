@@ -98,7 +98,7 @@ module StaticPagesHelper
   
   def add_viewings
     @days_properties_hash = Hash.new
-    properties = current_user.properties.where("view_date >= ?", Date.today.beginning_of_day).where(closed: false)
+    properties = current_user.properties.where("view_date >= ?", Date.today.beginning_of_day).where(closed: false).order(:view_date)
     properties = apply_filters(properties)
     agents = Branch.where("id in (?)", properties.collect(&:branch_id))
     @days_properties_hash[get_key('Viewings', properties.size, agents.size)] = properties

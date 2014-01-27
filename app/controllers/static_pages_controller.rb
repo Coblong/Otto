@@ -1,5 +1,5 @@
 class StaticPagesController < ApplicationController
-  before_action :set_lists, only: [:home, :stats]
+  before_action :set_lists, only: [:home, :filters, :faq]
 
   @@PAGE_LIVE = 1
   @@PAGE_VIEWINGS = 2

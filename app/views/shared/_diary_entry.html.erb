@@ -13,13 +13,13 @@
       <%= link_to property.estate_agent.name, property.estate_agent %> / <%= link_to property.branch.name, property.branch %><br>
       <span id="va-<%= property.id %>" class="viewing-alert">
 <% if property.viewing_soon? %> 
-        Viewing : <%= property.view_date_formatted %>
+        Viewing : <%= property.view_date_formatted(:short) %><br>
 <% end %>
       </span>
        <%= link_to "View listing", property.full_url, target: "_new" %>         
     </div>
     <div class="diary-middle">      
-<% if current_user.show_images and !(defined? show) %>
+<% if @page == 2 ? false : current_user.show_images and !(defined? show) %>
       <%= image_tag property.image_url, width: 300 %>
 <% end %>
     </div>
