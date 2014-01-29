@@ -31,7 +31,7 @@
        <%= link_to "View listing", property.full_url, target: "_new" %>         
     </div>
     <div class="diary-middle">      
-<% if @page == 2 ? false : current_user.show_images and !(defined? show) %>
+<% if state_viewings? ? false : current_user.show_images and !(defined? show) %>
       <%= image_tag property.image_url, width: 300 %>
 <% end %>
     </div>
