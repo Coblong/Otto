@@ -3,23 +3,20 @@ class StaticPagesController < ApplicationController
 
   def home 
     if signed_in?
-      puts 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
-      puts 'the state filter is ' + state_filter?.to_s
-      puts 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
-      if state_filter? == "open"
+      if state_open?
         puts 'Loading open'
         @days_properties_hash = Hash.new
         add_overview_panel
         add_overdue_properties
         add_weeks_properties
-      elsif state_filter? == "viewings"
+      elsif state_viewings?
         puts 'Loading viewings'
         add_viewings
-      elsif state_filter? == "closed"
+      elsif state_closed?
         puts 'Loading closed'
         @days_properties_hash = Hash.new
         add_closed_properties
-      elsif state_filter? == "all"
+      elsif state_all?
         puts 'Loading all'
         @days_properties_hash = Hash.new
         add_closed_properties
