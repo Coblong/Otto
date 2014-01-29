@@ -210,7 +210,8 @@ module SessionsHelper
 
   def state_filter?
     if session[:state_filter].nil?
-      session[:state_filter] = :open
+      puts 'State filter not set yet so default it to open'
+      session[:state_filter] = "open"
     end
     session[:state_filter]
   end

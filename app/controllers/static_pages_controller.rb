@@ -3,6 +3,7 @@ class StaticPagesController < ApplicationController
 
   def home 
     if signed_in?
+      puts 'The state filter is ' + state_filter?
       if state_open?
         puts 'Loading open'
         @days_properties_hash = Hash.new
