@@ -35,12 +35,30 @@
             <td><%= f.check_box :show_overview %></td>
           </tr>
           <tr>
-            <td><%= f.label "Show weeks" %></td>
+            <td><%= f.label "Show pictures" %></td>
+            <td><%= f.check_box :show_images %></td>
+          </tr>
+          <tr>
+            <td><%= f.label "Overview weeks to show" %></td>
             <td><%= f.text_field :overview_weeks %></td>
           </tr>
           <tr>
-            <td><%= f.label "Show pictures" %></td>
-            <td><%= f.check_box :show_images %></td>
+            <td><%= f.label "Properties per page" %></td>
+            <td><%= f.text_field :properties_per_page %></td>
+          </tr>
+          <tr><th colspan="2"><%= f.submit "Update", class: "btn", id: "update" %></th></tr>                      
+        </table>             
+        <% end %>
+      </div>
+    </div>
+
+    <div id="thin-top">           
+      <div class="settings-panel settings-form">        
+        <h2>Credentials</h2>
+        <%= form_for(@user) do |f| %>
+        <table>
+          <tr>
+            <td colspan="2"><%= render 'shared/error_messages', obj: @user %></td>
           </tr>
           <tr>
             <td><%= f.label :name %></td>

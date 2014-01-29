@@ -4,9 +4,13 @@ class StaticPagesController < ApplicationController
   def home 
     if signed_in?
       puts 'The state filter is ' + state_filter?
+
+      @days_properties_hash = Hash.new
+      @property_counts_hash = Hash.new
+      @agent_counts_hash = Hash.new
+
       if state_open?
         puts 'Loading open'
-        @days_properties_hash = Hash.new
         add_overview_panel
         add_overdue_properties
         add_weeks_properties
@@ -15,11 +19,9 @@ class StaticPagesController < ApplicationController
         add_viewings
       elsif state_closed?
         puts 'Loading closed'
-        @days_properties_hash = Hash.new
         add_closed_properties
       elsif state_all?
         puts 'Loading all'
-        @days_properties_hash = Hash.new
         add_closed_properties
         add_overdue_properties
         add_weeks_properties

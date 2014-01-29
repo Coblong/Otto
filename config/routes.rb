@@ -38,6 +38,7 @@ Ottor::Application.routes.draw do
   match '/find_for_plugin',       to: 'properties#find_for_plugin', via: 'get'
   match '/save_via_plugin',       to: 'properties#save_via_plugin', via: 'post'  
   match '/notes',                 to: 'properties#create_note',     via: 'post'
+  match '/viewings',              to: 'static_pages#viewings',      via: 'get'
   match '/viewings',              to: 'properties#create_viewing',  via: 'post'
   match '/viewings',              to: 'properties#delete_viewing',  via: 'delete'
   match '/offers',                to: 'properties#create_offer',    via: 'post'

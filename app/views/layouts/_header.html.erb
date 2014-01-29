@@ -2,97 +2,100 @@
   <div class="navbar-menus menu-left">
     <ul>
 <% if signed_in? %>
-<% if !state_viewings? and !current_user.area_codes.empty? and !current_user.area_codes.nil? %>
-  <% if current_area_code.nil? %>
-    <li><%= link_to "All Areas", root_path(area_code: -1) %>&nbsp;&nbsp;<b class="caret"></b>
-  <% else %>
-    <li class="selected"><%= link_to current_area_code.description, root_path(area_code: current_area_code) %>&nbsp;&nbsp;<b class="caret"></b>
-  <% end %>      
-        <ul>
-  <% if !current_area_code.nil? %>
-            <li><%= link_to "All Areas", root_path(area_code: -1) %></li>                    
-            <li class="separator"></li>
-  <% end %>          
-  <% current_user.area_codes.each do |area_code| %>          
-          <li><%= link_to area_code.description, root_path(area_code: area_code) %></li>
-  <% end %>
-        </ul>
-      </li> 
-<% end %>      
-<% if !state_viewings? and !current_user.estate_agents.empty? and !current_user.estate_agents.nil? %>
-  <% if current_estate_agent.nil? %>
-      <li><%= link_to "All Estate Agents", root_path(estate_agent: -1) %>&nbsp;&nbsp;<b class="caret"></b>
-  <% else %>
-      <li class="selected"><%= link_to current_estate_agent.name, root_path(estate_agent: current_estate_agent) %>&nbsp;&nbsp;<b class="caret"></b>
-  <% end %>      
-        <ul>
-  <% if !current_estate_agent.nil? %>
-            <li><%= link_to "All Estate Agents", root_path(estate_agent: -1) %></li>                    
-            <li class="separator"></li>
-  <% end %>
-  <% current_user.estate_agents.each do |estate_agent| %>          
-          <li><%= link_to estate_agent.name, root_path(estate_agent: estate_agent) %></li>
-  <% end %>
-        </ul>
-      </li> 
-
-  <% if !current_branches.nil? %>
-    <% if current_branch.nil? %>
-      <li><%= link_to "All Branches", root_path(estate_agent: current_estate_agent, branch: -1) %>&nbsp;&nbsp;<b class="caret"></b>
+  <% if !state_viewings? and !current_user.area_codes.empty? and !current_user.area_codes.nil? %>
+    <% if current_area_code.nil? %>
+      <li><%= link_to "All Areas", root_path(area_code: -1) %>&nbsp;&nbsp;<b class="caret"></b>
     <% else %>
-      <li class="selected"><%= link_to current_branch.name, root_path(branch: current_branch) %>&nbsp;&nbsp;<b class="caret"></b>
-    <% end %>
+      <li class="selected"><%= link_to current_area_code.description, root_path(area_code: current_area_code) %>&nbsp;&nbsp;<b class="caret"></b>
+    <% end %>      
         <ul>
-    <% if !current_branch.nil? %>
-          <li><%= link_to "All Branches", root_path(estate_agent: current_estate_agent, branch: -1) %></li>          
+    <% if !current_area_code.nil? %>
+          <li><%= link_to "All Areas", root_path(area_code: -1) %></li>                    
+          <li class="separator"></li>
+    <% end %>          
+    <% current_user.area_codes.each do |area_code| %>          
+          <li><%= link_to area_code.description, root_path(area_code: area_code) %></li>
+    <% end %>
+        </ul>
+      </li> 
+  <% end %>      
+
+
+  <% if !state_viewings? and !current_user.estate_agents.empty? and !current_user.estate_agents.nil? %>
+    <% if current_estate_agent.nil? %>
+      <li><%= link_to "All Estate Agents", root_path(estate_agent: -1) %>&nbsp;&nbsp;<b class="caret"></b>
+    <% else %>
+      <li class="selected"><%= link_to current_estate_agent.name, root_path(estate_agent: current_estate_agent) %>&nbsp;&nbsp;<b class="caret"></b>
+    <% end %>      
+        <ul>
+    <% if !current_estate_agent.nil? %>
+          <li><%= link_to "All Estate Agents", root_path(estate_agent: -1) %></li>                    
           <li class="separator"></li>
     <% end %>
-    <% current_branches.each do |branch| %>          
-          <li><%= link_to branch.name, root_path(branch: branch) %></li>
-    <% end %>          
+    <% current_user.estate_agents.each do |estate_agent| %>          
+          <li><%= link_to estate_agent.name, root_path(estate_agent: estate_agent) %></li>
+    <% end %>
         </ul>
       </li> 
 
-    <% if !current_agents.nil? and !current_agents.empty? %>
-      <% if current_agent.nil? %>
-        <li><%= link_to "All Agents", root_path(branch: current_branch, agent: -1) %>&nbsp;&nbsp;<b class="caret"></b>
+  
+    <% if !current_branches.nil? %>
+      <% if current_branch.nil? %>
+      <li><%= link_to "All Branches", root_path(estate_agent: current_estate_agent, branch: -1) %>&nbsp;&nbsp;<b class="caret"></b>
       <% else %>
-        <li class="selected"><%= link_to current_agent.name, root_path(agent: @agent) %>&nbsp;&nbsp;<b class="caret"></b>
+      <li class="selected"><%= link_to current_branch.name, root_path(branch: current_branch) %>&nbsp;&nbsp;<b class="caret"></b>
       <% end %>
-          <ul>
+        <ul>
+      <% if !current_branch.nil? %>
+          <li><%= link_to "All Branches", root_path(estate_agent: current_estate_agent, branch: -1) %></li>          
+          <li class="separator"></li>
+      <% end %>
+      <% current_branches.each do |branch| %>          
+          <li><%= link_to branch.name, root_path(branch: branch) %></li>
+      <% end %>          
+        </ul>
+      </li> 
+
+
+      <% if !current_agents.nil? and !current_agents.empty? %>
+        <% if current_agent.nil? %>
+      <li><%= link_to "All Agents", root_path(branch: current_branch, agent: -1) %>&nbsp;&nbsp;<b class="caret"></b>
+        <% else %>
+      <li class="selected"><%= link_to current_agent.name, root_path(agent: @agent) %>&nbsp;&nbsp;<b class="caret"></b>
+        <% end %>
+        <ul>
           <li><%= link_to "All Agents", root_path(branch: current_branch, agent: -1) %>&nbsp;&nbsp;<b class="caret"></b>      
-      <% current_agents.each do |agent| %>
+        <% current_agents.each do |agent| %>
             <li class="separator"></li>
             <li><%= link_to agent.name, root_path(agent: agent) %></li>
-      <% end %>
-          </ul>
-        </li> 
-    <% end %>
-
-  <% end %>
-        <% if state_open? %>
-          <li><%= link_to "Open", root_path( state_filter: :open ) %>&nbsp;&nbsp;<b class="caret"></b>&nbsp;
-            <ul>
-              <li><%= link_to "Closed", root_path( state_filter: :closed ) %></li>
-              <li><%= link_to "All", root_path( state_filter: :all) %></li>
-            </ul>
-          </li>
-        <% elsif state_closed? %>
-          <li><%= link_to "Closed", root_path( state_filter: :closed ) %>&nbsp;&nbsp;<b class="caret"></b>&nbsp;
-          <ul>
-            <li><%= link_to "Open", root_path( state_filter: :open ) %></li>
-            <li><%= link_to "All", root_path( state_filter: :all) %></li>
-          </ul>
-        </li>
-        <% elsif state_all? %>
-          <li><%= link_to "All", root_path( state_filter: :all) %>&nbsp;&nbsp;<b class="caret"></b>&nbsp;
-          <ul>
-            <li><%= link_to "Open", root_path( state_filter: :open ) %></li>
-            <li><%= link_to "Closed", root_path( state_filter: :closed ) %></li>
-          </ul>
-        </li>
         <% end %>
-<% end %>
+        </ul>
+      </li> 
+      <% end %>
+    <% end %>
+  <% end %>    
+  <% if state_open? %>  
+      <li><%= link_to "Open", root_path( state_filter: :open ) %>&nbsp;&nbsp;<b class="caret"></b>&nbsp;
+        <ul>
+          <li><%= link_to "Closed", root_path( state_filter: :closed ) %></li>
+          <li><%= link_to "All", root_path( state_filter: :all) %></li>
+        </ul>
+      </li>
+  <% elsif state_closed? %>
+      <li><%= link_to "Closed", root_path( state_filter: :closed ) %>&nbsp;&nbsp;<b class="caret"></b>&nbsp;
+        <ul>
+          <li><%= link_to "Open", root_path( state_filter: :open ) %></li>
+          <li><%= link_to "All", root_path( state_filter: :all) %></li>
+        </ul>
+      </li>
+  <% elsif state_all? %>
+      <li><%= link_to "All", root_path( state_filter: :all) %>&nbsp;&nbsp;<b class="caret"></b>&nbsp;
+        <ul>
+          <li><%= link_to "Open", root_path( state_filter: :open ) %></li>
+          <li><%= link_to "Closed", root_path( state_filter: :closed ) %></li>
+        </ul>
+      </li>
+  <% end %>
 <% end %>
     </ul>
   </div>
@@ -101,7 +104,7 @@
       <% if signed_in? %>
         <li><%= link_to image_tag("home.png", title: "Home"), root_path(area_code: -1, estate_agent: -1, state_filter: :open) %></li>
         <li><%= link_to image_tag("quickadd.png", width: 16, title: "Add property or note"), new_property_path %></li>
-        <li><%= link_to image_tag("viewings.png", width: 16, title: "Viewings"), root_path( state_filter: :viewings ) %></li>
+        <li><%= link_to image_tag("viewings.png", width: 16, title: "Viewings"), root_path(state_filter: :viewings) %></li>
         <li><%= link_to image_tag("alerts.png", width: 16, title: "Alerts"), alerts_path %>
           <% if current_user.active_alerts > 0 %>
             <div class="badge"><%= current_user.active_alerts.to_s %></div>

@@ -14,6 +14,8 @@ class PropertiesController < ApplicationController
   end
 
   def show
+    puts 'Showing property'
+    state_filter("open")
   end
 
   def create

@@ -8,7 +8,7 @@
   <% if defined? @overview_headers %>    
       <div id="main-top">  
         <div id="overview-accordion" class="diary-header">         
-          <h3>Overview</h3>
+          <h3>Overview<span><%= @property_counts_hash["Overview"].to_s + pluralize(" property", @property_counts_hash["Overview"]) %></span></h3>
           <div id="week-ahead">           
             <table class="overview-table">        
     <% @overview_headers.keys.each do |week_number| %>          
@@ -73,8 +73,9 @@
         <div id="accordion" class="diary-header">
   <% if @days_properties_hash.any? %>      
     <% @days_properties_hash.keys.each do |day| %>
-          <h3 class="<%= get_header_class(day) %>"><%= day %></h3>
+          <h3 class="<%= get_header_class(day) %>"><%= day %><span><%= @property_counts_hash[day].to_s + pluralize(" property", @property_counts_hash[day]) %> / <%= @agent_counts_hash[day].to_s + pluralize(" agent", @agent_counts_hash[day]) %></span></h3>
           <div class="diary-panel">   
+            <%= will_paginate @days_properties_hash[day], param_name: day + "_page", class: "pages" %>
       <% @days_properties_hash[day].each do |property| %>
             <%= render "/shared/diary_entry", property: property, expanded: state_viewings? ? false : current_user.expand_notes %>   
       <% end %>
@@ -95,9 +96,19 @@
       <%= render 'shared/button_controls' %>
 
       <script type="text/javascript">
+        var expanded_day = localStorage["expanded_day"] || 0;
         $( "#accordion" ).accordion({
           collapsible: true,
-          heightStyle: "content"
+          heightStyle: "content",
+          active: expanded_day == "false" ? false : parseInt(expanded_day)
+        });
+        $( "#accordion > h3" ).click(function(e){  
+          active = $( "#accordion" ).accordion("option", "active");
+          if (active === false) {
+            localStorage["expanded_day"] = 'false';
+          } else {
+            localStorage["expanded_day"] = active;
+          }
         });
         $( "#show_today_only" ).click(function(e) {  
           updatePreferences(<%= current_user.id %>, $( "#overview-weeks" ).val(), $( "#expand_notes" ).is(':checked'), $( "#show_images" ).is(':checked'), $( "#show_today_only" ).is(':checked') )
@@ -107,7 +118,7 @@
         });
         $( "#show_images" ).click(function(e) {  
           updatePreferences(<%= current_user.id %>, $( "#overview-weeks" ).val(), $( "#expand_notes" ).is(':checked'), $( "#show_images" ).is(':checked'), $( "#show_today_only" ).is(':checked') )
-        });
+        });        
       </script>
 
 <% else %>

@@ -21,6 +21,8 @@ class BranchesController < ApplicationController
   end
 
   def show
+    puts "Showing branch"
+    state_filter("open")
   end
 
   def edit

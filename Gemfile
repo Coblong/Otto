@@ -5,6 +5,7 @@ ruby '2.0.0'
 gem 'rails', '4.0.0'
 gem 'bcrypt-ruby', '3.0.1'
 gem 'nokogiri', '1.6.0'
+gem 'will_paginate', '3.0.5'
 
 group :development, :test do
   gem 'sqlite3', '1.3.8'

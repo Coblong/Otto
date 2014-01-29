@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140125164704) do
+ActiveRecord::Schema.define(version: 20140129205725) do
 
   create_table "agents", force: true do |t|
     t.string   "name"
@@ -135,6 +135,7 @@ ActiveRecord::Schema.define(version: 20140125164704) do
     t.boolean  "show_overview"
     t.integer  "overview_weeks"
     t.boolean  "show_images"
+    t.integer  "properties_per_page"
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true

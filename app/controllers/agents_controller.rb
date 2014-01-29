@@ -15,7 +15,8 @@ class AgentsController < ApplicationController
   end
 
   def show
-    puts 'inside the agent controller show method'
+    puts 'Showing agent'
+    state_filter("open")
   end
   
   def new

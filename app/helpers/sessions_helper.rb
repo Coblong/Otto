@@ -160,7 +160,7 @@ module SessionsHelper
   end
   
   def set_estate_agent(estate_agent)
-    puts 'setting the estate agent and the state filter is ' + state_filter?
+    puts 'setting the estate agent and the state filter is ' + state_filter?.to_s
     if estate_agent.nil?
       session[:estate_agent] = nil
     else

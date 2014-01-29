@@ -14,7 +14,8 @@ class EstateAgentsController < ApplicationController
   end
 
   def show
-    puts 'Calling show'
+    puts 'Showing estate agent'
+    state_filter("open")
   end
 
   def new
