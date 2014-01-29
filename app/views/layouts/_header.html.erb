@@ -2,7 +2,7 @@
   <div class="navbar-menus menu-left">
     <ul>
 <% if signed_in? %>
-<% if @page != 2 and !current_user.area_codes.empty? and !current_user.area_codes.nil? %>
+<% if !state_viewings? and !current_user.area_codes.empty? and !current_user.area_codes.nil? %>
   <% if current_area_code.nil? %>
     <li><%= link_to "All Areas", root_path(area_code: -1) %>&nbsp;&nbsp;<b class="caret"></b>
   <% else %>
@@ -19,7 +19,7 @@
         </ul>
       </li> 
 <% end %>      
-<% if @page != 2 and !current_user.estate_agents.empty? and !current_user.estate_agents.nil? %>
+<% if !state_viewings? and !current_user.estate_agents.empty? and !current_user.estate_agents.nil? %>
   <% if current_estate_agent.nil? %>
       <li><%= link_to "All Estate Agents", root_path(estate_agent: -1) %>&nbsp;&nbsp;<b class="caret"></b>
   <% else %>
@@ -70,25 +70,25 @@
     <% end %>
 
   <% end %>
-        <% if @page == 1 %>
-          <li><%= link_to "Open", root_path( page: 1 ) %>&nbsp;&nbsp;<b class="caret"></b>&nbsp;
+        <% if state_open? %>
+          <li><%= link_to "Open", root_path( state_filter: :open ) %>&nbsp;&nbsp;<b class="caret"></b>&nbsp;
             <ul>
-              <li><%= link_to "Closed", root_path( page: 3 ) %></li>
-              <li><%= link_to "All", root_path( page: 4) %></li>
+              <li><%= link_to "Closed", root_path( state_filter: :closed ) %></li>
+              <li><%= link_to "All", root_path( state_filter: :all) %></li>
             </ul>
           </li>
-        <% elsif @page == 3 %>
-          <li><%= link_to "Closed", root_path( page: 3 ) %>&nbsp;&nbsp;<b class="caret"></b>&nbsp;
+        <% elsif state_closed? %>
+          <li><%= link_to "Closed", root_path( state_filter: :closed ) %>&nbsp;&nbsp;<b class="caret"></b>&nbsp;
           <ul>
-            <li><%= link_to "Open", root_path( page: 1 ) %></li>
-            <li><%= link_to "All", root_path( page: 4) %></li>
+            <li><%= link_to "Open", root_path( state_filter: :open ) %></li>
+            <li><%= link_to "All", root_path( state_filter: :all) %></li>
           </ul>
         </li>
-        <% elsif @page == 4 %>
-          <li><%= link_to "All", root_path( page: 4) %>&nbsp;&nbsp;<b class="caret"></b>&nbsp;
+        <% elsif state_all? %>
+          <li><%= link_to "All", root_path( state_filter: :all) %>&nbsp;&nbsp;<b class="caret"></b>&nbsp;
           <ul>
-            <li><%= link_to "Open", root_path( page: 1 ) %></li>
-            <li><%= link_to "Closed", root_path( page: 3 ) %></li>
+            <li><%= link_to "Open", root_path( state_filter: :open ) %></li>
+            <li><%= link_to "Closed", root_path( state_filter: :closed ) %></li>
           </ul>
         </li>
         <% end %>
@@ -99,9 +99,9 @@
   <div class="navbar-menus menu-right">
     <ul>
       <% if signed_in? %>
-        <li><%= link_to image_tag("home.png", title: "Home"), root_path(area_code: -1, estate_agent: -1) %></li>
+        <li><%= link_to image_tag("home.png", title: "Home"), root_path(area_code: -1, estate_agent: -1, state_filter: :open) %></li>
         <li><%= link_to image_tag("quickadd.png", width: 16, title: "Add property or note"), new_property_path %></li>
-        <li><%= link_to image_tag("viewings.png", width: 16, title: "Viewings"), root_path( page: 2 ) %></li>
+        <li><%= link_to image_tag("viewings.png", width: 16, title: "Viewings"), root_path( state_filter: :viewings ) %></li>
         <li><%= link_to image_tag("alerts.png", width: 16, title: "Alerts"), alerts_path %>
           <% if current_user.active_alerts > 0 %>
             <div class="badge"><%= current_user.active_alerts.to_s %></div>

@@ -1,3 +1,15 @@
+<%
+  w1_id = "w1-" + property.id.to_s
+  w2_id = "w2-" + property.id.to_s
+  m1_id = "m1-" + property.id.to_s
+  call_id = "c-" + property.id.to_s
+  view_id = "v-" + property.id.to_s
+  offer_id = "o-" + property.id.to_s
+  close_id = "c-" + property.id.to_s
+  reopen_id = "r-" + property.id.to_s
+  trash_id = "t-" + property.id.to_s
+  history_id = "h-" + property.id.to_s
+%>
 <div class='diary'>
   <div class="diary-details">
     <div class="diary-left <%= "not-listed" if !property.listed %>">
@@ -25,34 +37,28 @@
     </div>
     <div class="diary-right">
       <div class="diary-buttons">
-<%
-  w1_id = "w1-" + property.id.to_s
-  w2_id = "w2-" + property.id.to_s
-  m1_id = "m1-" + property.id.to_s
-  call_id = "c-" + property.id.to_s
-  view_id = "v-" + property.id.to_s
-  offer_id = "o-" + property.id.to_s
-  close_id = "c-" + property.id.to_s
-  reopen_id = "r-" + property.id.to_s
-  history_id = "h-" + property.id.to_s
-  if property.closed %>
+<% if property.closed %>
         <%= image_tag "reopen.png", class: "toolitem icon reopen", title: "Reopen", id: reopen_id %>
+        <%= image_tag "trash.png", class: "toolitem icon trash", title: "Delete", id: trash_id %>
   <% else %>
-        <div class="toolitem txt quick_change_call_date" id="<%= w1_id %>">+1w</div>
-        <div class="toolitem txt quick_change_call_date" id="<%= w2_id %>">+2w</div>
-        <div class="toolitem txt quick_change_call_date" id="<%= m1_id %>">+1m</div>
-        <%= select_tag ("status-" + property.id.to_s), options_from_collection_for_select(current_user.statuses, "id", "description", property.status.id), class: "property-status" %>
         <%= image_tag "call.png", class: "toolitem icon call", title: "Call", id: call_id %>
         <%= image_tag "view.png", class: "toolitem icon view", title: "Viewing", id: view_id %>
         <%= image_tag "offer.png", class: "toolitem icon make_offer", title: "Offer", id: offer_id  %>        
         <%= image_tag "close.png", class: "toolitem icon close", title: "Close", id: close_id %>
+        <%= image_tag "trash.png", class: "toolitem icon trash", title: "Delete", id: trash_id %>
+        <%= select_tag ("status-" + property.id.to_s), options_from_collection_for_select(current_user.statuses, "id", "description", property.status.id), class: "property-status" %>
 <% end %>
         <%= image_tag "notes.png", class: "toolitem icon history", title: "Notes", id: history_id %>
       </div>
+<% if !property.closed %>      
       <div>
         <input type="text" name="auto" id='dp-<%= property.id %>' class="datepicker" value="<%= property.call_date_formatted(:long) %>">
+        <div class="toolitem txt quick_change_call_date" id="<%= w1_id %>">+1w</div>
+        <div class="toolitem txt quick_change_call_date" id="<%= w2_id %>">+2w</div>
+        <div class="toolitem txt quick_change_call_date" id="<%= m1_id %>">+1m</div>
       </div>
-    </div>
+<% end %>
+    </div>    
   </div>
   <div class="diary-notes">
     <div id="accordion-<%= property.id %>" class="accordian-notes">

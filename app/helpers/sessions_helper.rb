@@ -83,9 +83,6 @@ module SessionsHelper
 
   def current_properties
 
-    puts 'The page is ' + @page.to_s
-    @page = 1 if !defined? @page
-
     if !current_property.nil?
       if current_area_code.nil?
         puts 'Getting properties by current property'
@@ -136,11 +133,14 @@ module SessionsHelper
       end
     end
 
-    if @page == 1
+    if state_open?
+      puts 'Filter for open'
       properties = properties.where(closed: false)
-    elsif @page == 2
+    elsif state_viewings?
+      puts 'Filter for viewings'
       properties = properties.where("view_date > ?", Time.now)
-    elsif @page == 3
+    elsif state_closed?
+      puts 'Filter for closed'
       properties = properties.where(closed: true)
     end
       
@@ -160,6 +160,7 @@ module SessionsHelper
   end
   
   def set_estate_agent(estate_agent)
+    puts 'setting the estate agent and the state filter is ' + state_filter?
     if estate_agent.nil?
       session[:estate_agent] = nil
     else
@@ -202,6 +203,34 @@ module SessionsHelper
     end
   end
 
+  def state_filter(filter) 
+    puts 'Setting the state filter to ' + filter.to_s
+    session[:state_filter] = filter
+  end
+
+  def state_filter?
+    if session[:state_filter].nil?
+      session[:state_filter] = :open
+    end
+    session[:state_filter]
+  end
+
+  def state_open?
+    state_filter? == "open"
+  end
+
+  def state_viewings?
+    state_filter? == "viewings"
+  end
+
+  def state_closed?
+    state_filter? == "closed"
+  end
+
+  def state_all?
+    state_filter? == "all"
+  end
+
   def current_area_code
     AreaCode.find(session[:area_code]) unless session[:area_code].nil?
   end
@@ -220,6 +249,10 @@ module SessionsHelper
 
   def current_property
     Property.find(session[:property]) unless session[:property].nil?
+  rescue
+    puts 'Unable to find the property so it must have been removed'
+    session[:property] = nil
+    current_property
   end
 
   def get_header_class(day)
@@ -230,6 +263,18 @@ module SessionsHelper
     else
       ""
     end
+  end
+
+  def show_today_only(show)
+    puts 'setting show today only to ' + show.to_s
+    session[:show_today_only] = show
+  end
+
+  def show_today_only?
+    if session[:show_today_only].nil?
+      session[:show_today_only] = false
+    end
+    session[:show_today_only].to_s == 'true'
   end
 
   def pluralize(text, number)

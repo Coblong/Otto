@@ -258,6 +258,13 @@ class PropertiesController < ApplicationController
     end
   end
 
+  def destroy
+    puts 'Trying to delete a property'
+    @property = current_user.properties.find(params[:id]);
+    @property.destroy
+    render :json => current_user.to_json, :status => :ok
+  end
+
   def close
     puts 'Close property'
     if !current_user

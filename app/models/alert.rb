@@ -1,7 +1,7 @@
 class Alert < ActiveRecord::Base
   belongs_to :user
   belongs_to :property
-  validates :msg, length: { maximum: 200 }
+  validates :msg, length: { maximum: 500 }
   default_scope -> { order('created_at DESC') }
 
   @TYPE_MANUAL = "manual"

@@ -84,15 +84,15 @@ module StaticPagesHelper
         end
         
         @days_properties_hash[get_key(day, properties.size, agents.size)] = properties unless properties.empty?        
+        if show_today_only?
+          break
+        end
       end
-      #if is_sunday
-      #  if current_user.show_future or @page == 4
-      #    future_properties = current_user.properties.where("call_date >= ?", (Date.today + offset+1).beginning_of_day).where(closed: false)
-      #    future_agents = Branch.where("id in (?)", future_properties.collect(&:branch_id))
-      #    @days_properties_hash[get_key("Future", future_properties.size, future_agents.size)] = future_properties unless future_properties.empty?
-      #  end
-      #  break
-      #end
+      if offset == end_index and current_user.show_future
+        future_properties = current_user.properties.where("call_date >= ?", (Date.today + offset+1).beginning_of_day).where(closed: false)
+        future_agents = Branch.where("id in (?)", future_properties.collect(&:branch_id))
+        @days_properties_hash[get_key("Future", future_properties.size, future_agents.size)] = future_properties unless future_properties.empty?
+      end    
     end
   end
   

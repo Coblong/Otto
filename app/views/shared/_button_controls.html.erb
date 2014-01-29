@@ -74,6 +74,11 @@ $('.reopen').click(function(e) {
   var propertyId = this.id.toString().substring(2)
   reopenProperty(propertyId)
 });
+$('.trash').click(function(e) {
+  e.preventDefault();
+  var propertyId = this.id.toString().substring(2)
+  deleteProperty(propertyId)
+});
 $(".history").click(function(e) {
     e.preventDefault();
     var propertyId = this.id.toString().substring(2)

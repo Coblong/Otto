@@ -14,6 +14,7 @@ class EstateAgentsController < ApplicationController
   end
 
   def show
+    puts 'Calling show'
   end
 
   def new

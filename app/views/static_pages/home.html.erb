@@ -1,5 +1,5 @@
 <% if signed_in? %>        
-  <% if @page != 2 and current_user.show_left_nav %>  
+  <% if !state_viewings? and current_user.show_left_nav %>  
     <div id="left-nav" class="tall">  
       <%= render 'shared/properties', filter: "all" %>
     </div>
@@ -24,7 +24,7 @@
         <% @overviews_for_day[header].each do |overview| %>                              
           <% overview.keys.each do |key| %>                              
             <% if key == "Viewings" %>
-                    <li><span class="viewings"><%= link_to key, root_path(page: 2) %></span><%= overview[key] %></li>
+                    <li><span class="viewings"><%= link_to key, root_path(state_filter: :viewings) %></span><%= overview[key] %></li>
             <% else %>
               <% branch_id = key %>
               <% branch = @branches[branch_id] %>
@@ -63,9 +63,9 @@
     });
     $( "#overview-weeks" ).keyup(function(e) {  
       if (e.which == 13) {    
-        updatePreferences(<%= current_user.id %>, $( "#overview-weeks" ).val(), $( "#expand_notes" ).is(':checked'), $( "#show_images" ).is(':checked') )
+        updatePreferences(<%= current_user.id %>, $( "#overview-weeks" ).val(), $( "#expand_notes" ).is(':checked'), $( "#show_images" ).is(':checked'), $( "#show_today_only" ).is(':checked') )
       }
-    });
+    });    
   </script>
 
 
@@ -76,14 +76,15 @@
           <h3 class="<%= get_header_class(day) %>"><%= day %></h3>
           <div class="diary-panel">   
       <% @days_properties_hash[day].each do |property| %>
-            <%= render "/shared/diary_entry", property: property, expanded: @page == 2 ? false : current_user.expand_notes %>   
+            <%= render "/shared/diary_entry", property: property, expanded: state_viewings? ? false : current_user.expand_notes %>   
       <% end %>
           </div>      
     <% end %>
   <% end %>  
         </div>           
-  <% if @page != 2 %>
-        <div class="change_user_prefs">           
+  <% if !state_viewings? %>
+        <div class="change_user_prefs">                       
+          Show today only <%= check_box_tag "show_today_only", "Show today only", show_today_only? %>&nbsp;
           Expand notes <%= check_box_tag "expand_notes", "Expand notes", current_user.expand_notes %>&nbsp;
           Show images <%= check_box_tag "show_images", "Show Pictures", current_user.show_images %>
         </div>
@@ -98,11 +99,14 @@
           collapsible: true,
           heightStyle: "content"
         });
+        $( "#show_today_only" ).click(function(e) {  
+          updatePreferences(<%= current_user.id %>, $( "#overview-weeks" ).val(), $( "#expand_notes" ).is(':checked'), $( "#show_images" ).is(':checked'), $( "#show_today_only" ).is(':checked') )
+        });
         $( "#expand_notes" ).click(function(e) {  
-          updatePreferences(<%= current_user.id %>, $( "#overview-weeks" ).val(), $( "#expand_notes" ).is(':checked'), $( "#show_images" ).is(':checked') )
+          updatePreferences(<%= current_user.id %>, $( "#overview-weeks" ).val(), $( "#expand_notes" ).is(':checked'), $( "#show_images" ).is(':checked'), $( "#show_today_only" ).is(':checked') )
         });
         $( "#show_images" ).click(function(e) {  
-          updatePreferences(<%= current_user.id %>, $( "#overview-weeks" ).val(), $( "#expand_notes" ).is(':checked'), $( "#show_images" ).is(':checked') )
+          updatePreferences(<%= current_user.id %>, $( "#overview-weeks" ).val(), $( "#expand_notes" ).is(':checked'), $( "#show_images" ).is(':checked'), $( "#show_today_only" ).is(':checked') )
         });
       </script>
 

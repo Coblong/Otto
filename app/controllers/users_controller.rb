@@ -37,8 +37,9 @@ class UsersController < ApplicationController
       user.overview_weeks = params[:overview_weeks].to_i      
     end
     user.expand_notes = params[:expand_notes] == "true"
-    user.show_images = params[:show_images] == "true"
+    user.show_images = params[:show_images] == "true"    
     user.save()
+    show_today_only(params[:show_today_only])
     render :json => user
   end
 

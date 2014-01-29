@@ -93,6 +93,19 @@ function reopenProperty(propertyId) {
       }
   });
 }
+function deleteProperty(propertyId) {
+  $.ajax({
+      type: "DELETE",
+      url: "/properties/" + propertyId,
+      dataType: "json",
+      error: function(xhr, status, error) {
+        alert('Unable to delete property')
+      },
+      success: function (xhr, data) {
+        location.href = "/";
+      }
+  });
+}
 function updateStatus(propertyId, newStatus) {
   $.ajax({
       type: "POST",
@@ -114,11 +127,11 @@ function updateStatus(propertyId, newStatus) {
       }
   });
 }
-function updatePreferences(userId, overviewWeeks, expandNotes, showImages) {
+function updatePreferences(userId, overviewWeeks, expandNotes, showImages, showTodayOnly) {
   $.ajax({
       type: "POST",
       url: "/update_preferences",
-      data: 'user_id=' + userId + '&overview_weeks=' + overviewWeeks + '&expand_notes=' + expandNotes + '&show_images=' + showImages,
+      data: 'user_id=' + userId + '&overview_weeks=' + overviewWeeks + '&expand_notes=' + expandNotes + '&show_images=' + showImages + '&show_today_only=' + showTodayOnly,
       dataType: "json",
       error: function(xhr, status, error) {
         alert("Unable to update preferences - " + error)

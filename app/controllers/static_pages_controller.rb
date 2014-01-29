@@ -1,32 +1,26 @@
 class StaticPagesController < ApplicationController
   before_action :set_lists, only: [:home, :filters, :faq]
 
-  @@PAGE_LIVE = 1
-  @@PAGE_VIEWINGS = 2
-  @@PAGE_CLOSED = 3
-  @@PAGE_ALL = 4
-
   def home 
     if signed_in?
-      @page = @@PAGE_LIVE
-      @page = params[:page].to_i unless params[:page].nil?
-      puts 'Loading data for diary - ' + @page.to_s
-
-      if @page == @@PAGE_LIVE
-        puts 'Loading data for live view'
+      puts 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
+      puts 'the state filter is ' + state_filter?.to_s
+      puts 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
+      if state_filter? == "open"
+        puts 'Loading open'
         @days_properties_hash = Hash.new
         add_overview_panel
         add_overdue_properties
         add_weeks_properties
-      elsif @page == @@PAGE_VIEWINGS
-        puts 'Loading data for viewings view'
+      elsif state_filter? == "viewings"
+        puts 'Loading viewings'
         add_viewings
-      elsif @page == @@PAGE_CLOSED
-        puts 'Loading data for closed view'
+      elsif state_filter? == "closed"
+        puts 'Loading closed'
         @days_properties_hash = Hash.new
         add_closed_properties
-       elsif @page == @@PAGE_ALL
-        puts 'Loading data for all view'
+      elsif state_filter? == "all"
+        puts 'Loading all'
         @days_properties_hash = Hash.new
         add_closed_properties
         add_overdue_properties
@@ -70,6 +64,10 @@ class StaticPagesController < ApplicationController
           else
             set_agent(nil)
           end
+        end
+
+        if !params[:state_filter].nil? and !params[:state_filter].empty?
+          state_filter(params[:state_filter])
         end
       end
     end
