@@ -31,17 +31,13 @@ class UsersController < ApplicationController
 
   def update_preferences
     puts 'Updating preferences'
-    puts params.to_yaml
     user = User.find(params[:user_id])
     if params[:overview_weeks].to_i > 0
-      puts 'Updating overview weeks'
       user.overview_weeks = params[:overview_weeks].to_i      
     end
     user.expand_notes = params[:expand_notes] == "true"
     user.images = params[:images].to_i
     user.save()
-    puts 'Preferences saved'
-    puts user.to_yaml
     show_today_only(params[:show_today_only])
     render :json => user
   end
@@ -50,7 +46,7 @@ class UsersController < ApplicationController
     @user = User.new(user_params)
     if @user.save
       sign_in @user
-      flash[:success] = "Welcome to Otto!"
+      flash[:success] = "Welcome to the Ottor system!"
       redirect_to @user
     else
       render 'new'
