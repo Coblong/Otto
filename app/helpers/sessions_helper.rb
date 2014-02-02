@@ -282,4 +282,18 @@ module SessionsHelper
     return text.pluralize if number != 1
     text
   end
+
+  def date_formatted(date, format)
+    if format == :short
+      if date == Date.today
+        'Today'
+      elsif date == Date.tomorrow
+        'Tomorrow'
+      else
+        date.strftime('%A, %d %b') unless date.nil?
+      end
+    else
+      date.strftime('%A, %d %b %Y') unless date.nil?
+    end
+  end
 end

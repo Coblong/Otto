@@ -18,7 +18,7 @@
             <% end %>      
           </td>
           <td>
-            <input type="text" class="datepicker" value="<%= current_property.call_date_formatted(:long) %>">
+            <input type="text" class="datepicker" value="<%= date_formatted(current_property.call_date, :long) %>">
             <button class="btn" id="addoneweek">+ 1 Week</button>&nbsp;
             <button class="btn" id="addtwoweeks">+ 2 Weeks</button>&nbsp;
             <button class="btn" id="addonemonth">+ 1 Month</button>

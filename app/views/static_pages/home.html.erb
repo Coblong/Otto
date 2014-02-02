@@ -63,7 +63,7 @@
     });
     $( "#overview-weeks" ).keyup(function(e) {  
       if (e.which == 13) {    
-        updatePreferences(<%= current_user.id %>, $( "#overview-weeks" ).val(), $( "#expand_notes" ).is(':checked'), $( "#show_images" ).is(':checked'), $( "#show_today_only" ).is(':checked') )
+        updatePreferences(<%= current_user.id %>, $( "#overview-weeks" ).val(), $( "#expand_notes" ).is(':checked'), $( "#images" ).val(), $( "#show_today_only" ).is(':checked') )
       }
     });    
   </script>
@@ -87,7 +87,7 @@
         <div class="change_user_prefs">                       
           Show today only <%= check_box_tag "show_today_only", "Show today only", show_today_only? %>&nbsp;
           Expand notes <%= check_box_tag "expand_notes", "Expand notes", current_user.expand_notes %>&nbsp;
-          Show images <%= check_box_tag "show_images", "Show Pictures", current_user.show_images %>
+          <%= select_tag "images", options_for_select([ ["No images", 0], ["Small images", 1], ["Large images", 2] ], current_user.images) %>
         </div>
       </div>
   <% end %>
@@ -111,13 +111,13 @@
           }
         });
         $( "#show_today_only" ).click(function(e) {  
-          updatePreferences(<%= current_user.id %>, $( "#overview-weeks" ).val(), $( "#expand_notes" ).is(':checked'), $( "#show_images" ).is(':checked'), $( "#show_today_only" ).is(':checked') )
+          updatePreferences(<%= current_user.id %>, $( "#overview-weeks" ).val(), $( "#expand_notes" ).is(':checked'), $( "#images" ).val(), $( "#show_today_only" ).is(':checked') )
         });
         $( "#expand_notes" ).click(function(e) {  
-          updatePreferences(<%= current_user.id %>, $( "#overview-weeks" ).val(), $( "#expand_notes" ).is(':checked'), $( "#show_images" ).is(':checked'), $( "#show_today_only" ).is(':checked') )
+          updatePreferences(<%= current_user.id %>, $( "#overview-weeks" ).val(), $( "#expand_notes" ).is(':checked'), $( "#images" ).val(), $( "#show_today_only" ).is(':checked') )
         });
-        $( "#show_images" ).click(function(e) {  
-          updatePreferences(<%= current_user.id %>, $( "#overview-weeks" ).val(), $( "#expand_notes" ).is(':checked'), $( "#show_images" ).is(':checked'), $( "#show_today_only" ).is(':checked') )
+        $( "#images" ).change(function(e) {  
+          updatePreferences(<%= current_user.id %>, $( "#overview-weeks" ).val(), $( "#expand_notes" ).is(':checked'), $( "#images" ).val(), $( "#show_today_only" ).is(':checked') )
         });        
       </script>
 

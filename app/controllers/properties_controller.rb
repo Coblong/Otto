@@ -176,9 +176,9 @@ class PropertiesController < ApplicationController
           @property.call_date = params[:call_date]
           @property.save()
           if note.content.empty?
-            note.content = 'Next call on ' + @property.call_date_formatted(:long)
+            note.content = 'Next call on ' + date_formatted(@property.call_date, :long)
           else
-            new_content = 'Next call on ' + @property.call_date_formatted(:long) + ' - ' + note.content
+            new_content = 'Next call on ' + date_formatted(@property.call_date, :long) + ' - ' + note.content
             note.content = new_content
           end            
         end          
@@ -326,7 +326,7 @@ class PropertiesController < ApplicationController
     property.call_date = Date.parse( new_date.gsub(/, */, '-') )    
     property.update_call_date(new_date)
     if property.save()    
-      render :json => {call_date: property.call_date_formatted(:short)}, :status => :created
+      render :json => {call_date: date_formatted(property.call_date, :short)}, :status => :created
     else
       render :nothing => true, :status => :internal_server_error
     end

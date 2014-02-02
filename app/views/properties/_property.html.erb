@@ -5,7 +5,7 @@
       <td>
         <%= render "shared/sstc_badges", property: property %>
       </td>
-      <td align="right" id="call_date_<%= property.id %>"><small><%= property.call_date_formatted(:short) %></small></td></tr>    
+      <td align="right" id="call_date_<%= property.id %>"><small><%= date_formatted(property.call_date , :short) %></small></td></tr>    
       </td></tr>    
   </table>  
 </li>

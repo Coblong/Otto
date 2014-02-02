@@ -16,6 +16,15 @@
 //= require turbolinks
 //= require_tree .
 
+function showSearchBox() {
+  if ($("#searchbox").is(":visible")) {
+    $("#searchbox").hide();
+  } else {
+    $("#searchbox").show();
+    $("#searchbox").focus();
+  }
+};
+
 $(function() {
   $( ".datepicker" ).datepicker({
     yearRange: '2012:2100',
@@ -32,7 +41,7 @@ $(function() {
   });
 });
 
-function addDeleteFunction(id) {
+function addDeleteFunction(id) {  
   $( "#del-" + id ).click(function() {
     $.ajax({
       type: "POST",
@@ -127,11 +136,11 @@ function updateStatus(propertyId, newStatus) {
       }
   });
 }
-function updatePreferences(userId, overviewWeeks, expandNotes, showImages, showTodayOnly) {
+function updatePreferences(userId, overviewWeeks, expandNotes, images, showTodayOnly) {
   $.ajax({
       type: "POST",
       url: "/update_preferences",
-      data: 'user_id=' + userId + '&overview_weeks=' + overviewWeeks + '&expand_notes=' + expandNotes + '&show_images=' + showImages + '&show_today_only=' + showTodayOnly,
+      data: 'user_id=' + userId + '&overview_weeks=' + overviewWeeks + '&expand_notes=' + expandNotes + '&images=' + images + '&show_today_only=' + showTodayOnly,
       dataType: "json",
       error: function(xhr, status, error) {
         alert("Unable to update preferences - " + error)

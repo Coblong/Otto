@@ -28,6 +28,16 @@ class User < ActiveRecord::Base
     self.alerts.where(read: false).size
   end
 
+  def images?
+    if self.images == 0
+      return "No images" 
+    elsif self.images == 1
+      return "Small images" 
+    else
+      return "Large images"
+    end
+  end
+
   private
 
     def create_remember_token

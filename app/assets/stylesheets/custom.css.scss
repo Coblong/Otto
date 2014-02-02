@@ -1,4 +1,4 @@
-$bg1:lightgray;
+$bg1: lightgray;
 $bg2: lightblue;
 $lightline: lightblue;
 $darkline: midnightblue;
@@ -281,7 +281,7 @@ a {
   position: relative;
   box-shadow: 2px 2px 2px $bg1;
   float: right;
-  top: 5px;
+  top: 2px;
   border: solid 1px $highlight-bg;      
   margin-right: 3px;
   padding: 3px;
@@ -707,17 +707,26 @@ a {
 
 .pages {
   text-align: center;
-  padding: 5px;
+  padding: 5px;  
+  a {    
+    font-weight: bold;
+    padding: 2px 6px;
+    background: $well-colour;
+    border-radius: 2px;    
+    border: 1px solid $bg1;
+    box-shadow: 0px 1px 1px $bg1;
+    &:hover {
+      color: inherit;
+      background: inherit;
+    }
+  }
   .current {
     font-weight: bold;
-    padding: 2px 4px;
-    background: $well-colour;
-    border-radius: 10px;    
+    padding: 2px 6px;
+    background: $bg2;
+    border-radius: 2px;    
     border: 1px solid $bg1;
-    box-shadow: 0px 2px 2px $bg1;
-  }
-  a:hover {
-    background: inherit;
+    box-shadow: 0px 1px 1px $bg1;
   }
 }
 .diary-header {
@@ -822,6 +831,11 @@ a {
   }
   .diary-middle {
     padding: 10px;
+    margin-left:auto;
+    margin-right:auto;
+    text-align:center;
+    width:30%;
+    display:table-cell;
   }
   .diary-right {
     padding-top: 5px;
@@ -848,7 +862,6 @@ a {
   }
   td {
     padding: 2px 5px;
-    width: 20%;
     text-align:center;
     border-bottom:1px solid $bg2;      
     border-right:1px solid $bg2;      
@@ -873,6 +886,16 @@ a {
     a {
       color: $bg1;
     }
+  }
+}
+
+.notes-popup {
+  display:none;  
+  ul {
+    padding: 0px;
+  }
+  li {
+    text-align: left;
   }
 }
 
@@ -927,15 +950,18 @@ footer {
   position:fixed;
   left:50%;
   bottom:0px;
-  
+  height: 18px;
   background: $well-colour;
-  padding:5px;
-  border: 1px dotted $bg2;
+  padding:0px;
+  border: 1px dotted $colour;
+  border-radius: 5px;
+  text-align: center;
 
-  width: 600px;
-  margin-top: 45px;
+  width: 600px;  
   margin-left: -300px;
-  @include box_sizing;
+  &:hover {
+    height: 75%;
+  }
 }
 
 .central {

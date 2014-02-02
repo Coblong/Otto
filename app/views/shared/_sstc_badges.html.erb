@@ -1,3 +1,3 @@
 <% for i in 1..property.sstc_count %>
-  <span class="sstc-badge <%= "available" if !property.sstc %> sstc<%=i%>"></span>                      
+  <span title="Sold <%= property.sstc_count %> <%= pluralize("time", property.sstc_count) %>" class="sstc-badge <%= "available" if !property.sstc %> sstc<%=i%>"></span>                      
 <% end %>

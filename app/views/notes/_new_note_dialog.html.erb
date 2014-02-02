@@ -16,7 +16,7 @@
 <% end %>
   </datalist>
   <textarea id="nn-<%= property.id %>" class="new-note" placeholder="Add a comment..."></textarea>
-  <input type="text" name="manual" id='nndp-<%= property.id %>' class="datepicker new-note" value="<%= property.call_date_formatted(:long) %>">
+  <input type="text" name="manual" id='nndp-<%= property.id %>' class="datepicker new-note" value="<%= date_formatted(property.call_date, :long) %>">
   <div class="toolitem txt change_call_date" id="<%= w1_id %>">+1w</div>
   <div class="toolitem txt change_call_date" id="<%= w2_id %>">+2w</div>
   <div class="toolitem txt change_call_date" id="<%= m1_id %>">+1m</div>

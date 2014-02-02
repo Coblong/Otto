@@ -31,8 +31,8 @@
        <%= link_to "View listing", property.full_url, target: "_new" %>         
     </div>
     <div class="diary-middle">      
-<% if state_viewings? ? false : current_user.show_images and !(defined? show) %>
-      <%= image_tag property.image_url, width: 300 %>
+<% if state_viewings? ? false : current_user.images > 0 and !(defined? show) %>
+      <%= image_tag property.image_url, width: current_user.images == 1 ? 100 : 300 %>
 <% end %>
     </div>
     <div class="diary-right">
@@ -52,7 +52,7 @@
       </div>
 <% if !property.closed %>      
       <div>
-        <input type="text" name="auto" id='dp-<%= property.id %>' class="datepicker" value="<%= property.call_date_formatted(:long) %>">
+        <input type="text" name="auto" id='dp-<%= property.id %>' class="datepicker" value="<%= date_formatted(property.call_date,:long) %>">
         <div class="toolitem txt quick_change_call_date" id="<%= w1_id %>">+1w</div>
         <div class="toolitem txt quick_change_call_date" id="<%= w2_id %>">+2w</div>
         <div class="toolitem txt quick_change_call_date" id="<%= m1_id %>">+1m</div>

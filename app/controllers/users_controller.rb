@@ -37,7 +37,7 @@ class UsersController < ApplicationController
       user.overview_weeks = params[:overview_weeks].to_i      
     end
     user.expand_notes = params[:expand_notes] == "true"
-    user.show_images = params[:show_images] == "true"    
+    user.images = params[:images].to_i
     user.save()
     show_today_only(params[:show_today_only])
     render :json => user
@@ -60,7 +60,7 @@ class UsersController < ApplicationController
       puts 'Updating user'
       params[:user].delete(:password) if params[:user][:password].blank?
       params.require(:user).permit(:name, :email, :password,
-                                     :password_confirmation, :expand_notes, :show_left_nav, :show_future, :show_overview, :properties_per_page, :overview_weeks, :show_images)
+                                     :password_confirmation, :expand_notes, :show_left_nav, :show_future, :show_overview, :properties_per_page, :overview_weeks, :images)
     end
 
     # Before filters

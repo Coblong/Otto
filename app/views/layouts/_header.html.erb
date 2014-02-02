@@ -103,6 +103,7 @@
     <ul>
       <% if signed_in? %>
         <li><%= link_to image_tag("home.png", title: "Home"), root_path(area_code: -1, estate_agent: -1, state_filter: :open) %></li>
+        <li><%= link_to_function image_tag("search.png", title: "Search"), "showSearchBox()" %><input id="searchbox"/></li>
         <li><%= link_to image_tag("quickadd.png", width: 16, title: "Add property or note"), new_property_path %></li>
         <li><%= link_to image_tag("viewings.png", width: 16, title: "Viewings"), root_path(state_filter: :viewings) %></li>
         <li><%= link_to image_tag("alerts.png", width: 16, title: "Alerts"), alerts_path %>

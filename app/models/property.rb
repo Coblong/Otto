@@ -27,20 +27,20 @@ class Property < ActiveRecord::Base
   end
 
   def statuses
-    Status.all
+    Status.where(user_id: self.user_id)
   end
 
-  def call_date_formatted(text)
-    if text == :short
-      if self.call_date == Date.today
+  def date_formatted(date, format)
+    if format == :short
+      if date == Date.today
         'Today'
-      elsif self.call_date == Date.tomorrow
+      elsif date == Date.tomorrow
         'Tomorrow'
       else
-        self.call_date.strftime('%A, %d %b') unless self.call_date.nil?
+        date.strftime('%A, %d %b') unless date.nil?
       end
     else
-      self.call_date.strftime('%A, %d %b %Y') unless self.call_date.nil?
+      date.strftime('%A, %d %b %Y') unless date.nil?
     end
   end
 
@@ -98,7 +98,7 @@ class Property < ActiveRecord::Base
       end
       if !self.sstc.nil? and self.sstc.to_s != new_sstc
         # SSTC changed so changed that and leave everything else
-        if new_sstc
+        if new_sstc.to_s == "true"
           msg = 'Sold STC'
           self.sstc_count = self.sstc_count + 1
         else
@@ -140,7 +140,7 @@ class Property < ActiveRecord::Base
     if new_call_date != self.call_date
       note = self.notes.build
       self.call_date = new_call_date
-      note.content = 'Next call on ' + self.call_date_formatted(:long)
+      note.content = 'Next call on ' + date_formatted(self.call_date, :long)
       note.note_type = Note.TYPE_MANUAL
       note.save
     end

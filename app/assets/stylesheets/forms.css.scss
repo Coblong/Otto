@@ -9,6 +9,14 @@ $colour: midnightblue;
 $well-colour: mintcream;
 $dark-well-colour: snow;
 
+#searchbox {
+  display: none; 
+  background: inherit;
+  margin: 0px 0px 0px 5px;
+  padding: 0px;
+  outline-width: 0;
+}
+
 input {
   font-size: 12px;
   width: 120px;
@@ -63,7 +71,7 @@ textarea {
 }
 
 .settings-input {
-  width: 150px;
+  width: 100%;
 }
 
 .datepicker {
@@ -89,4 +97,10 @@ select {
     display: inline-block;
     -webkit-appearance:none; 
     cursor:pointer;
+}
+
+.settings-form {
+  select {
+    width: 100%;
+  }
 }
