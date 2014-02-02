@@ -729,6 +729,15 @@ a {
     box-shadow: 0px 1px 1px $bg1;
   }
 }
+
+.previous_page.disabled {
+  display: none;
+}
+
+.next_page.disabled {
+  display: none;
+}
+
 .diary-header {
   padding: 5px;      
   h3 {
