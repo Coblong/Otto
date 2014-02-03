@@ -2,149 +2,54 @@
 <div id="main">
   <div id="container">     
     <div id="thin-top">           
-      <div id="accordion">
-        <h3>Installing the plugin</h3>
-        <div class="faq">
-          <ul>
-            <li>Add the Ottor plugin to your chrome installation <a href="https://chrome.google.com/webstore/detail/ottor-system/kjlkhonljfnmgkamiefkahloigbiojnc">here</a>.</li>
-            <li>If you are not logged in to Ottor you will notice a login form on each rightmove property page. You can either log in from here directly or via the main Ottor site.<br>
-              <img src="faq_login.gif"/></li>
-            <li>Once logged in you will be presented with some status buttons on any rightmove property page. These buttons are used to save the current property in Ottor. You can add the property with a chosen status or add the property in the closed state.<br>
-              <img src="faq_status_btns.gif"/></li>              
-            <li>After adding the property to Ottor the selected status button will be highlighted and all note history will be displayed.<br>
-              <img src="faq_note_history.gif"/></li>              
-            </li>
-            <li>You can update the property status or add notes directly from rightmove.</li>
-          </ul>
-        </div>
-        <h3>Display</h3>
-        <div class="faq">
-          <ul>
-            <li>Home screen<br>
-              <img src="#"/>
-              <ol>
-                <li>Filters - When properties are added to Ottor via the plugin the listing agent and postcode area is added to Ottor filtering. The listing agent details can be modified/corrected.
-                  <ul>
-                    <li>Area Codes - The postcode district of the property.</li>
-                    <li>Estate Agents - The estate agent listing the property.</li>
-                    <li>Branches - The estate agent branch listing the property.</li>
-                    <li>Agents - The agent spoken to about the property.</li>
-                    <li>Open/Closed - This filter is used to show open, closed or all properties.</li>
-                  </ul>
-                </li>
-                <li>Nav bar
-                  <ul>
-                    <li>Home - Reset all filters and return to the main home screen</li>
-                    <li>Search - Search estate agents, branches, agents and properties</li>
-                    <li>Add Property - Add a property</li>
-                    <li>Alerts - View your alerts</li>
-                    <li>User menu
-                      <ul>
-                        <li>Username - Acces your profile</li>
-                        <li>Filters - View all filters and statistics</li>
-                        <li>FAQ - Acces this faq</li>
-                        <li>Sign out - Log out of Ottor</li>
-                      </ul>
-                    </li>
-                  </ul>
-                </li>
-                <li>Quick list - This list shows all of your relevant properties as per the current filters<br>
-                  <img src="#"/>
-                  <ol>
-                    <li>Property address</li>
-                    <li>Status icon</li>
-                    <li>Sold STC indicator</li>
-                    <li>Next call date</li>
-                  </ol>
-                </li>
-                <li>Overview - A diary view of all upcoming calls grouped by estate agent. This is useful for grouping multiple calls to one agent rather than calling the same agent every day<br>
-                  <img src="#"/>
-                  <ol>
-                    <li>Hover over the estate agent name to see which branch it is</li>
-                    <li>Viewings are also displayed</li>
-                  </ol>
-                </li>
-                <li>Diary - This is the main section of the Ottor system. Here you can manage all of your opportunities<br>
-                  <img src="#"/>
-                  <ol>
-                    <li>Property details</li>
-                    <li>Image</li>  
-                    <li>Call buttons<br>
-                      <img src="#"/>                    
-                      <ol>
-                        <li><%= image_tag "call.png", width: 24 %> Call - Add a new new call and update the next call date</li>
-                        <li><%= image_tag "view.png", width: 24 %> Viewing - Arrange and new viewing or modify an existing one</li>
-                        <li><%= image_tag "offer.png", width: 24 %> Offer - Record your offers on each property</li>
-                        <li><%= image_tag "reopen.png", width: 24 %> Reopen - This will reopen closed properties</li>
-                        <li><%= image_tag "close.png", width: 24 %> Close - Closing a property excludes it from your main diary. The Ottor Robot will still check for updates on closed properties</li>
-                        <li><%= image_tag "trash.png", width: 24 %> Delete - This will completely remove the property from the Ottor system</li>                        
-                        <li><%= image_tag "notes.png", width: 24 %> Toggle history - This icon is used to show and hide the history for the property</li>
-                      </ol>
-                    </li>                    
-                    <li>Status drop down - This is used to highlight opportunities</li>
-                    <li>Quick calendar update buttons - These buttons allow you to quickly move a property back 1 week, 2 weeks or 1 month</li>
-                    <li>Next call date - This field show the next call date and clicking on it allows you to specify a specific date to follow up</li>
-                    <li>Note history - This section displays all of the call history for the property. Any changes made by the robot are highlighted</li>
-                  </ol>
-                </li>
-              </ol>
-            </li>
-            <li>Filters<br>
-              Clicking on an estate agent, branch or agent name anywhere in the Ottor system will display the details for that filter.
-              <img src="#"/>
-              <ol>
-                <li>Statuses - This panel shows the number of open properties for each status (only displayed via the filters link under the user menu).</li>
-                <li>Filter details - This panel allows you to modify the name and add a comment for the given filter</li>
-                <li>Estate Agents - This table shows the breakdown of estate agents (only displayed via the filters link under the user menu).</li>
-                <li>Branches - This table shows the breakdown of all branches (only displayed on estate agents page)</li>
-                <li>Agents - This table shows the breakdown of all agents (only displayed on branches page)</li>
-                <li>Properties - This table shows all of the open properties in the Ottor system</li>
-              </ol>
-            </li>
-          </ul>
-        </div>
-        <h3>User Preferences</h3>
-        <div class="faq">
-          <ul>
-            <li>Expand notes - Setting this to true will default all property notes to expanded. This can be changed for each property.</li>
-            <li>Show quick list - The quick list is a filtered list of properties displayed on the left side of many Ottor screens. This list displayed all properties based upon the current filters selected.</li>
-            <li>Show future - This is used to show all properties scheduled far into the future (after the current 'show weeks' period).</li>
-            <li>Show overview - The overview is displayed on the main diary screen. It shows all scheduled viewings and how many calls are scheduled for the coming days/weeks. The estate agents for each call are displayed along with the number of properties to talk about. The branch name is also displayed by hovering over the estate agent name.</li>
-            <li>Show weeks - This is used to specify how many weeks are displayed in the diary screen.</li>
-            <li>Show pictures - This setting is used to turn off the picture display for each property.</li>
-            <li>Statuses - By default Ottor has 4 statuses
-              <ol>
-                <li>New - This is for all properties that have been added to Ottor but before speaking to the agent</li>
-                <li>Hot - This is for highlighting exciting opportunities</li>
-                <li>Warm - This is for opportunities that may be of more interest at a later point in time</li>
-                <li>Cold - This is for properties where there is little chance of a deal but should still be monitored</li>
-              </ol>
-            </li>
-          </ul>
-        </div>
-        <h3>Tracking Properties</h3>
-        <div class="faq">
-          Each property has controls for tracking.
-          <ul>
-            <li>Quick update calendar buttons
-              <ol>
-                <li>+1w - Move the property back 1 week</li>
-                <li>+2w - Move the property back 2 weeks</li>
-                <li>+1m - Move the property back 1 month</li>
-              </ol>
-            </li>
-            <li>Status - Change the status of the property</li>
-            <li>Call - This icon brings up a dialog where you can add a note and update the next call date</li>
-            <li>Arrange Viewing - This icon brings up a dialog where you can arrange a viewing</li>
-            <li>Offer - This icon brings up a dialog where you can add an offer</li>
-            <li>Close - This icon closes the property so it no longer displayed in your main diary. Note: Closed properties are still tracked by Ottor</li>
-            <li>Reopen - This icon reopens the property.</li>
-            <li>Notes toggle - This icon expands and collapses the note history for the property. Note: this can also be done by clicking just above the history section</li>
-            <li>Update calendar - By clicking the next call date a calendar is displayed allowing you to change the next call date to any date</li>
-          </ul>
-        </div>
+      <div class="settings-panel">        
+        <h3>FAQ</h3>
+        <%= link_to "You can get to know the system by having a look here", getting_started_path %><p>
       </div>
-    </div>
+      <div id="faq-toc">        
+        <ol>
+          <li><h3><%= link_to "How do I install the rightmove plugin?", "#1" %></h3></li>
+          <li><h3><%= link_to "How do I login?", "#2" %></h3></li>
+          <li><h3><%= link_to "How do I add new properties from rightmove?", "#3" %></h3></li>
+          <li><h3><%= link_to "How do I update a property from rightmove?", "#4" %></h3></li>
+          <li><h3><%= link_to "How do I add new agents?", "#5" %></h3></li>
+          <li><h3><%= link_to "Why are some filters wrong?", "#6" %></h3></li>
+        </ol>
+      </div>
+      <p>
+      <div id="faq">
+        <ol>
+          <li id="1">
+            <h3>How do I install the rightmove plugin?</h3>
+            You can add the Ottor plugin to your chrome installation <a target="_new" href="<%= Ottor::Application::PLUGIN_URL %>">here</a>
+          </li>
+          <li id="2">
+            <h3>How do I login?</h3>
+            You can login directly on the Ottor website or from rightmove. To log in from rightmove the login form will be shown below the agents details on the right hand side of each property screen.
+            <div><%= image_tag "faq_login.png", class: "central" %></div>            
+          </li>
+          <li id="3">
+            <h3>How do I add new properties from rightmove?</h3>
+            Once logged in to Ottor, the login form will be replaced with your status buttons. These buttons are used to save the current property. You can add the property with a chosen status or add the property in the closed state.
+            <div><%= image_tag "faq_pre_saved.png", class: "central" %></div>
+          </li>              
+          <li id="4">
+            <h3>How do I update a property from rightmove?</h3>
+            You can change the status of the property, close or reopen a saved property or add notes.
+            <div><%= image_tag "faq_saved.png", class: "central" %></div>
+          </li>              
+          <li id="5">
+            <h3>How do add new agents?</h3>
+            Every time you save a property to Ottor the estate agent and branch is automatically saved. Specific agents are saved by entering the agent name into the agent field above the note field. Ottor will remember the agent for next time.            
+          </li>              
+          <li id="6">
+            <h3>Why are some filters and property addresses wrong?</h3>
+            The ottor system obtains all of this information from rightmove so it is very reliant on the information being correct on rightmove. If the property is uploaded incorrectly then these mistakes are shown in the Ottor system. You can correct any filter names by ckicking on the name in the relevant screen. i.e. Clicking the state agent name in the estate agent screen (<%= link_to "see here", getting_started_path + "#7.1" %>)<p>
+            To correct the address of a property you have to click on the address from the property screen (<%= link_to "see here", getting_started_path + "#8" %>). This will allow you to cahnge the address and other pieces of information about the property.
+          </li>              
+        </ol>
+      </div>
+
     <br><br><br>
   </div>
 </div>

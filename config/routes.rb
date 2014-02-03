@@ -30,6 +30,7 @@ Ottor::Application.routes.draw do
   match '/',                      to: 'static_pages#home',          via: 'get'
   match '/filters',               to: 'static_pages#filters',       via: 'get'
   match '/faq',                   to: 'static_pages#faq',           via: 'get'
+  match '/getting_started',       to: 'static_pages#getting_started',via: 'get'
   match '/signup',                to: 'users#new',                  via: 'get'
   match '/signin',                to: 'sessions#new',               via: 'get'
   match '/quietsession',          to: 'sessions#quietly',           via: 'post'

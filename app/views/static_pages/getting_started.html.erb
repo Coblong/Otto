@@ -1,0 +1,177 @@
+<% provide(:title, "FAQ") %>
+<div id="main">
+  <div id="container">     
+    <div id="thin-top">           
+      <div class="settings-panel">        
+        <h3>Getting Started</h3>
+      </div>
+      <div id="faq-toc">
+        <ol>
+          <li><h3><%= link_to "The home screen", "#6" %></h3>
+            <ol>
+              <li><h3><%= link_to "Filters", "#6.1" %></h3></li>
+              <li><h3><%= link_to "Nav bar", "#6.2" %></h3></li>
+              <li><h3><%= link_to "Quick list", "#6.3" %></h3></li>
+              <li><h3><%= link_to "Overview", "#6.4" %></h3></li>
+              <li><h3><%= link_to "Dairy", "#6.5" %></h3></li>
+              <li><h3><%= link_to "Call buttons", "#6.6" %></h3></li>
+              <li><h3><%= link_to "Calendar buttons", "#6.7" %></h3></li>
+            </ol>
+          </li>
+          <li><h3><%= link_to "Filter screens", "#7" %></h3>
+            <ol>
+              <li><h3><%= link_to "Estate agent screeen", "#7.1" %></h3></li>
+              <li><h3><%= link_to "Branch screeen", "#7.2" %></h3></li>
+              <li><h3><%= link_to "Agent screeen", "#7.3" %></h3></li>              
+            </ol>
+          </li>
+          <li><h3><%= link_to "The property screen", "#8" %></h3>
+          <li><h3><%= link_to "The Ottor robot", "#9" %></h3>
+            <li><h3><%= link_to "Alerts", "#10" %></h3>
+        </ol>
+      </div>
+      <p>
+      <div id="faq">
+        <ol>
+          <li id="6">
+            <h3>Getting to know the home screen</h3>
+            <div><%= image_tag "faq_home.png", width: "100%" %></div>
+            <ul>
+              <li id="6.1">
+                <h3>Filters</h3>
+                Every time you save a property from rightmove the relevant estate agent, branch and post code district is saved. These can be used to filter the properties in the main display.<p>
+                The selected filter is highlighted.
+                <div><%= image_tag "faq_filters.png", width: "100%" %></div>
+                <ol>
+                  <li>Area Codes - The postcode district of the property.</li>
+                  <li>Estate Agents - The estate agent listing the property.</li>
+                  <li>Branches - The estate agent branch listing the property.</li>
+                  <li>Agents - The agent spoken to about the property.</li>
+                  <li>Open/Closed - This filter is used to show open, closed or all properties.</li>
+                </ol>
+              </li>
+              <li id="6.2">
+                <h3>Nav bar</h3>
+                <div><%= image_tag "faq_nav_bar.png", width: "50%" %></div>
+                <ol>
+                  <li>Home - Reset all filters and return to the main home screen</li>
+                  <li>Search - Search estate agents, branches, agents and properties</li>
+                  <li>Add Property - Manually add a property</li>
+                  <li>Alerts - View your alerts (Unread alerts are highlighted with a badge)</li>
+                  <li>User menu
+                    <ol>
+                      <li>Username - Acces your profile</li>
+                      <li>Filters - View all filters and statistics</li>
+                      <li>FAQ - Acces this faq</li>
+                      <li>Sign out - Log out of Ottor</li>
+                    </ol>
+                  </li>
+                </ol>
+              </li>
+              <li id="6.3">
+                <h3>Quick list</h3>
+                This list shows all of your relevant properties as per the filters selected. The text will be gray when the property is no longer listed on rightmove. Clicking one of these entries will show the property page.
+                <div><%= image_tag "faq_quick_list.png", width: "50%" %></div>
+                <ol>
+                  <li>Property address</li>
+                  <li>Status icon</li>
+                  <li>Sold STC indicator - This shows how many times the property has been sold. If the property is currently not Sold STC the icons are a brighter green</li>
+                  <li>Next call date</li>
+                </ol>
+              </li>
+              <li id="6.4">
+                <h3>Overview</h3>
+                This optional diary section is used to show what calls you have scheduled for the coming weeks. It also shows all upcoming viewings you have scheduled.<p>
+                The current day is highlighted and the number of weeks displayed can be cahnged in the bottom right corner.
+                <div><%= image_tag "faq_overview.png", width: "100%" %></div>
+              </li>
+              <li id="6.5">
+                <h3>Diary</h3>
+                This is the main part of the ottor home screen. Here you can see all of your actions for the coming day(s).
+                <div><%= image_tag "faq_diary.png", width: "100%" %></div>                              
+                It shows the property details on the left. Clicking on the address will take you to the property screen. There are also links to the estate agent, branch and the main listing on rightmove.
+              </li>
+              <li id="6.6">
+                <h3>Call Buttons</h3>
+                <div><%= image_tag "faq_buttons.png", width: "60%" %></div>                              
+                <ol>
+                  <li><%= image_tag "call.png", width: 24 %> Call - Record any communication or notes.</li>
+                  <li><%= image_tag "view.png", width: 24 %> Viewing - Add or modify viewings.</li>
+                  <li><%= image_tag "offer.png", width: 24 %> Offer - Record any offers made on the property.</li>
+                  <li><%= image_tag "close.png", width: 24 %> Close - Close the property to remove it from your main diary. The robot will continue to check the property on rightmove.</li>
+                  <li><%= image_tag "reopen.png", width: 24 %> Reopen - Reopen a closed property.</li>
+                  <li><%= image_tag "trash.png", width: 24 %> Delete - Totally remove the property from Ottor.</li>
+                  <li><%= image_tag "notes.png", width: 24 %> Show/Hide the note history.<li>                                      
+                </ol>
+                <div><%= image_tag "faq_notes.png", width: "100%" %></div>
+              </li>
+              <li id="6.7">
+                <h3>Calendar Buttons</h3>
+                <div><%= image_tag "faq_cal_buttons.png", width: "60%" %></div>                              
+                <ol>
+                  <li>You can change the next call date by clicking on the next call date.</li>
+                  <li>Or you can use the quick buttons to quickly move the date back 1 week, 2 weeks or 1 month.</li>
+                </ol>                
+              </li>
+            </ul>
+            <div><a href="#">Back to top</a></div>
+          </li>                                  
+          <li id="7">
+            <h3>Filter screens</h3>
+            When you click on an estate agent, branch or agent anywhere in the site you will be shown the details for that filter.<p>
+            You can view everything via the filters link under the user menu which will the stats for all statuses and estate agents. It will also show all of the properties in the system.
+            <div><%= image_tag "faq_filter_screen.png", width: "100%" %></div>
+            <ul>
+              <li id="7.1">
+                <h3>Estate agent screen</h3>
+                This screen shows notes about the estate agent, all branches and properties
+                <div><%= image_tag "faq_estate_agent.png", width: "100%" %></div>
+              </li>
+              <li id="7.2">
+                <h3>Branch screen</h3>
+                This screen shows notes about the branch, all agents in that branch and all properties
+                <div><%= image_tag "faq_branch.png", width: "100%" %></div>
+              </li>
+              <li id="7.3">
+                <h3>Agent screen</h3>
+                This screen shows notes about the agent and all properties that you have discussed with this agent. 
+                <div><%= image_tag "faq_agent.png", width: "100%" %></div>
+                Note that the note history can be viewed by clicking on the last call field in the properties table.
+              </li>
+            </ul>
+            <div><a href="#">Back to top</a></div>
+          </li>                                  
+          <li id="8">
+            <h3>The property screen</h3>
+            This screen shows the same controls available on the diary screen but for a particular property. The actual listing is also displayed in the main section of the screen.<p>
+            Clicking on the address in this scren will allow you to modify various details about the property. 
+            <div><%= image_tag "faq_property.png", width: "100%" %></div>                
+          </li>
+          <li id="9">
+            <h3>The Ottor robot</h3>
+            Every night the Ottor system checks every property against rightmove. These changes include:
+            <ol>
+              <li>Changes to the Sold STC status</li>
+              <li>Changes to the asking price</li>
+              <li>Property no longer listed</li>
+            </ol>
+          </li>
+          <li id="10">
+            <h3>Alerts</h3>
+            Every update found by the Ottor robot generates an alert and adds a note to the properties note history. The alerts are displayed in the alert screen. Unread alerts are highlighted by a green badge.<p>
+            Alerts can be read and/or deleted.
+            <div><%= image_tag "faq_alerts.png", width: "100%" %></div>                
+          </li>
+        </ol>
+      </div>
+
+    <br><br><br>
+  </div>
+</div>
+<script type="text/javascript">
+  $( "#accordion" ).accordion({
+    collapsible: true,
+    heightStyle: "content",
+    active: 0
+  });
+</script>
