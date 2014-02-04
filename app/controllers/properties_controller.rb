@@ -1,5 +1,6 @@
 class PropertiesController < ApplicationController
   include ActionView::Helpers::NumberHelper
+  before_action :signed_in_user, only: [:new, :show, :create, :update, :save_via_plugin]
   before_action :set_property_in_controller, only: [:show, :edit]  
   skip_before_filter  :verify_authenticity_token
 
@@ -71,48 +72,52 @@ class PropertiesController < ApplicationController
 
   def save_via_plugin
     puts 'Save called by the plugin for url ' + params[:url].to_s
-    @property = current_user.properties.find_by(url: params[:url])        
-    update = true
-
-    if @property.nil?
-      puts 'This is a new property so create it'
-      
-      estate_agent_ref = params[:estate_agent].partition(',').first
-      estate_agent = find_or_create_estate_agent(estate_agent_ref)    
-      branch = find_or_create_branch(estate_agent, params[:branch]);
-      
-      area_code = params[:post_code].partition('_').first
-      post_code = params[:post_code].gsub('_', ' ')
-      area_code = find_or_create_area_code(area_code)
-      
-      @property = current_user.properties.build
-      @property.estate_agent = estate_agent
-      @property.branch = branch
-      @property.address = params[:address].partition(',').first
-      @property.area_code = area_code
-      @property.post_code = post_code
-      @property.url = params[:url]
-      @property.price_qualifier = params[:price_qualifier]
-      @property.sstc_count = 0
-      @property.call_date = Date.today      
-      
-      @property.add_note('Created', Note.TYPE_AUTO)
-      update = false
-    end
-
-    @property.image_url = params[:image_url]
-    @property.update_status(params[:status_id], update)
-    @property.update_closed_yn(params[:closed], update)      
-    @property.update_important_attributes(params[:sstc], params[:asking_price], params[:price_qualifier], true, false)
-    
-    if @property.save()      
-      puts 'Property saved'
-      response = build_response
-      puts response.to_s
-      render :json => response
+    if !current_user
+      render :nothing => true, :status => :unauthorized
     else
-      puts 'Property not saved'
-      render :nothing => true, :status => :service_unavailable
+      @property = current_user.properties.find_by(url: params[:url])        
+      update = true
+
+      if @property.nil?
+        puts 'This is a new property so create it'
+        
+        estate_agent_ref = params[:estate_agent].partition(',').first
+        estate_agent = find_or_create_estate_agent(estate_agent_ref)    
+        branch = find_or_create_branch(estate_agent, params[:branch]);
+        
+        area_code = params[:post_code].partition('_').first
+        post_code = params[:post_code].gsub('_', ' ')
+        area_code = find_or_create_area_code(area_code)
+        
+        @property = current_user.properties.build
+        @property.estate_agent = estate_agent
+        @property.branch = branch
+        @property.address = params[:address].partition(',').first
+        @property.area_code = area_code
+        @property.post_code = post_code
+        @property.url = params[:url]
+        @property.price_qualifier = params[:price_qualifier]
+        @property.sstc_count = 0
+        @property.call_date = Date.today      
+        
+        @property.add_note('Created', Note.TYPE_AUTO)
+        update = false
+      end
+
+      @property.image_url = params[:image_url]
+      @property.update_status(params[:status_id], update)
+      @property.update_closed_yn(params[:closed], update)      
+      @property.update_important_attributes(params[:sstc], params[:asking_price], params[:price_qualifier], true, false)
+      
+      if @property.save()      
+        puts 'Property saved'
+        response = build_response
+        puts response.to_s
+        render :json => response
+      else
+        puts 'Property not saved'
+        render :nothing => true, :status => :service_unavailable
+      end
     end
   end
   
@@ -421,7 +426,9 @@ class PropertiesController < ApplicationController
     end
 
     def set_property_in_controller
-      set_property(current_user.properties.find(params[:id]))
+      if signed_in_user
+        set_property(current_user.properties.find(params[:id])) 
+      end
     end
 
     def property_params

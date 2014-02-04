@@ -62,14 +62,6 @@ class UsersController < ApplicationController
                                      :password_confirmation, :expand_notes, :show_left_nav, :show_future, :show_overview, :properties_per_page, :overview_weeks, :images)
     end
 
-    # Before filters
-    def signed_in_user
-      unless signed_in?
-        store_location
-        redirect_to signin_url, notice: "Please sign in."
-      end
-    end
-
     def correct_user
       @user = User.find(params[:id])
       redirect_to(root_url) unless current_user?(@user)
