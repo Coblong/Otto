@@ -60,7 +60,7 @@ module Ottor
 
     if Rails.env.development?
         PLUGIN_URL = "http://www.google.com"
-    elsif Rails.env.stage?
+    elsif Rails.env.staging?
         PLUGIN_URL = "https://chrome.google.com/webstore/detail/ottor-system/hicaempeojohccakjaapncedjepbajno"
     elsif Rails.env.production?
         PLUGIN_URL = "https://chrome.google.com/webstore/detail/ottor-system/kjlkhonljfnmgkamiefkahloigbiojnc"
