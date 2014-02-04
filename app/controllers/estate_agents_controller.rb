@@ -34,7 +34,7 @@ class EstateAgentsController < ApplicationController
       puts 'Estate agent saved'
       render 'show'
     else
-      puts 'Estate agent not saved... this is why its fucking up'
+      puts 'Estate agent not saved...'
     end
   end
 
@@ -51,7 +51,9 @@ class EstateAgentsController < ApplicationController
   private
 
     def set_estate_agent_in_controller
+      puts 'Setting the estate agent'
       set_estate_agent(EstateAgent.find(params[:id]))
+      puts 'done'
     end
 
     def estate_agent_params

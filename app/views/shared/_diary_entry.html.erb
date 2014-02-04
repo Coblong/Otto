@@ -15,7 +15,7 @@
     <div class="diary-left <%= "not-listed" if !property.listed %>">
       <h2>
 <% if defined? show %>
-        <%= link_to_function property.address + ' - ' + property.post_code, "#", class: "show_hide" %>
+        <%= link_to property.address + ' - ' + property.post_code, "#", class: "show_hide" %>
 <% else %>
         <%= link_to property.address + ' - ' + property.post_code, property %>
 <% end %>

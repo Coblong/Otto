@@ -15,7 +15,7 @@ class PropertiesController < ApplicationController
   end
 
   def show
-    puts 'Showing property'
+    puts 'Showing property ------------------------------------------------------------------------------------'    
     state_filter("open")
   end
 
@@ -426,9 +426,7 @@ class PropertiesController < ApplicationController
     end
 
     def set_property_in_controller
-      if signed_in_user
-        set_property(current_user.properties.find(params[:id])) 
-      end
+      set_property(current_user.properties.find(params[:id])) 
     end
 
     def property_params
@@ -441,4 +439,5 @@ class PropertiesController < ApplicationController
         "agents" => @property.branch.agents.to_json(only: [:id, :name] ),
         "notes" => @property.notes.to_json(only: [:content, :note_type], methods: [:formatted_date, :agent_name] ) }
     end
-end
+
+ end

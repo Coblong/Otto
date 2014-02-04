@@ -22,15 +22,15 @@
   </div>
 </div>
 <script type="text/javascript">
-$("textarea").height($("textarea")[0].scrollHeight);
-$("input").blur(function(){
+$("#estate_agent_name").blur(function(){
   $("form").first().submit();
 });
-$("textarea").blur(function(){
+$("#estate_agent_comment").height($("#estate_agent_comment")[0].scrollHeight);
+$("#estate_agent_comment").blur(function(){
   $("form").first().submit();
 });
 $( ".accordion-table" ).accordion({
-      collapsible: true,
-      heightStyle: "content"
-    });
+  collapsible: true,
+  heightStyle: "content"
+});
 </script>

@@ -19,7 +19,7 @@
           <td><%= date_formatted(property.call_date, :short) %></td>
           <td>
             <% if !property.notes.empty? %>
-              <%= link_to_function date_formatted(property.notes.last.created_at, :short), "showNotes(" + property.id.to_s + ")" %>
+              <%= link_to date_formatted(property.notes.last.created_at, :short), "showNotes(" + property.id.to_s + ")" %>
             <% end %>
           </td>
         </tr>

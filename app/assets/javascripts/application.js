@@ -16,6 +16,7 @@
 //= require turbolinks
 //= require_tree .
 
+
 function showSearchBox() {
   if ($("#searchbox").is(":visible")) {
     $("#searchbox").hide();

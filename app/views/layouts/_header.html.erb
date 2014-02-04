@@ -103,7 +103,12 @@
     <ul>
       <% if signed_in? %>
         <li><%= link_to image_tag("home.png", title: "Home"), root_path(area_code: -1, estate_agent: -1, state_filter: :open) %></li>
-        <li><%= link_to_function image_tag("search.png", title: "Search"), "showSearchBox()" %><input id="searchbox"/></li>
+        <li>
+          <%= link_to image_tag("search.png", title: "Search"), "javascript:showSearchBox()" %>
+          <input id="searchbox"/>
+          <ul id="searchresults">            
+          </ul>
+        </li>
         <li><%= link_to image_tag("quickadd.png", width: 16, title: "Add property or note"), new_property_path %></li>
         <li><%= link_to image_tag("viewings.png", width: 16, title: "Viewings"), root_path(state_filter: :viewings) %></li>
         <li><%= link_to image_tag("alerts.png", width: 16, title: "Alerts"), alerts_path %>
@@ -121,6 +126,119 @@
       <% else %>
         <li><%= link_to "Sign in", signin_path %></li>
       <% end %>
-    </ul> 
-  </div>
+    </ul>     
+  </div>  
 </div>
+<script type="text/javascript">
+var searchItem = -1;
+$( "#searchbox" ).keyup(function(e) {
+  var code = e.keyCode || e.which;
+  console.log("There are " + $("#searchresults li").size() + " li tags")
+  console.log(code + " was pressed")
+  if (code == 27) {
+    $("#searchresults").html("");
+    $("#searchresults").hide();
+    $("#searchbox").val("");
+    $("#searchbox").hide();
+    searchItem = -1;
+  } else if (code == 38) {
+    console.log("Up arrow")
+    if (searchItem < 1) {
+      searchItem = $("#searchresults li").size() - 1;
+    } else {
+      searchItem--;
+    }
+    $("#searchresults li").css("background-color", "inherit");
+    $("#searchresults li:eq(" + searchItem + ")").css("background-color", "lightblue");
+  } else if (code == 13) {
+    console.log("Enter")
+    if (searchItem == -1) {
+      $("#searchresults").html("");
+      $("#searchresults").hide();
+      $("#searchbox").val("");
+      $("#searchbox").hide();
+    } else {
+      console.log("Submitting " + $("#searchresults li:eq(" + searchItem + ") a").first().attr("href"));
+      url = $("#searchresults li:eq(" + searchItem + ") a").first().attr("href");
+      if (url != "undefined") {
+        window.location = url;
+      }
+    }
+    searchItem = -1;
+  } else if (code == 40) {
+    console.log("Down arrow")
+    if (searchItem == -1 || searchItem == $("#searchresults li").size() - 1) {
+      searchItem = 0;
+    } else {
+      searchItem++;
+    }
+    $("#searchresults li").css("background-color", "inherit");
+    $("#searchresults li:eq(" + searchItem + ")").css("background-color", "lightblue");    
+  } else {
+    searchItem = -1;
+    var searchString = $(this).val();
+    if (searchString.length > 1) {
+      $.ajax({
+        type: "GET",
+        url: "/search",
+        data: 'search_string=' + searchString,
+        dataType: "json",
+        success: function (data, status) {
+          estateAgentsJson = $.parseJSON(data.estate_agents)
+          console.log("Found " + estateAgentsJson.length + " estate agents")
+
+          branchesJson = $.parseJSON(data.branches)
+          console.log("Found " + branchesJson.length + " branches")
+
+          agentsJson = $.parseJSON(data.agents)
+          console.log("Found " + agentsJson.length + " agents")
+
+          propertiesJson = $.parseJSON(data.properties)
+          console.log("Found " + propertiesJson.length + " properties")
+
+          html = ""
+          if (estateAgentsJson.length > 0) {
+            html += "<h4>Estate Agents</h4>"
+            $.each(estateAgentsJson, function(i, item) {          
+              console.log(item.name);
+              html += "<li><a href='/estate_agents/" + item.id + "'>" + item.name + "</a></li>"
+            });            
+          } 
+          if (branchesJson.length > 0) {
+            html += "<h4>Branches</h4>"
+            $.each(branchesJson, function(i, item) {          
+              console.log(item.name);
+              html += "<li><small>" + item.estate_agent_name + "<br></small><a href='/branches/" + item.id + "'>" + item.name + "</a></li>"
+            });
+          } 
+          if (agentsJson.length > 0) {
+            html += "<h4>Agents</h4>"
+            $.each(agentsJson, function(i, item) {          
+              console.log(item.name);
+              html += "<li><small>" + item.estate_agent_name + " / " + item.branch_name + "<br></small><a href='/branches/" + item.id + "'>" + item.name + "</a></li>"
+            });            
+          } 
+          if (propertiesJson.length > 0) {
+            html += "<h4>Properties</h4>"
+            $.each(propertiesJson, function(i, item) {          
+              console.log(item.address);
+              html += "<li><small>" + item.estate_agent_name + " / " + item.branch_name + "<br></small><a href='/properties/" + item.id + "'>" + item.address + "</a></li>"
+            });
+          }
+
+          if (html.length > 0) {
+            $("#searchresults").html(html);
+            $("#searchresults").show();
+          } else {
+            $("#searchresults").html("");
+            $("#searchresults").hide();
+          }                  
+        }
+      });
+    } else {
+      $("#searchresults").html("");
+      $("#searchresults").hide();
+    }
+  }
+});
+</script>

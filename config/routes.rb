@@ -54,6 +54,7 @@ Ottor::Application.routes.draw do
   match '/alerts/unreadall',      to: 'alerts#unread_all',          via: 'post'
   match '/alerts/deleteread',     to: 'alerts#delete_read',         via: 'post'
   match '/alerts/deleteunread',   to: 'alerts#delete_unread',       via: 'post'
+  match '/search',                to: 'static_pages#search',        via: 'get'
   
   # The priority is based upon order of creation:
   # first created -> highest priority.

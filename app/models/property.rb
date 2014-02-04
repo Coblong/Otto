@@ -184,6 +184,13 @@ class Property < ActiveRecord::Base
     note
   end
 
+  def estate_agent_name
+    self.estate_agent.name
+  end
+
+  def branch_name
+    self.branch.name
+  end
 end
 
 

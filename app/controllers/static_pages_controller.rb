@@ -10,18 +10,14 @@ class StaticPagesController < ApplicationController
       @agent_counts_hash = Hash.new
 
       if state_open?
-        puts 'Loading open'
         add_overview_panel
         add_overdue_properties
         add_weeks_properties
       elsif state_viewings?
-        puts 'Loading viewings'
         add_viewings
       elsif state_closed?
-        puts 'Loading closed'
         add_closed_properties
       elsif state_all?
-        puts 'Loading all'
         add_closed_properties
         add_overdue_properties
         add_weeks_properties
@@ -29,6 +25,19 @@ class StaticPagesController < ApplicationController
     end
   end
   
+  def search
+    puts params[:search_string]
+    search_string = '%' + params[:search_string].upcase + '%'
+    @estate_agents = current_user.estate_agents.where("upper(name) like ?", search_string)
+    @branches = Branch.where("estate_agent_id in (?)", current_user.estate_agents.pluck(:id)).where("upper(name) like ?", search_string)
+    @agents = Agent.where("estate_agent_id in (?)", current_user.estate_agents.pluck(:id)).where("upper(name) like ?", search_string)
+    @properties = current_user.properties.where("upper(address) like ?", search_string)
+
+    response = { "estate_agents" => @estate_agents.to_json(only: [:id, :name] ), "branches" => @branches.to_json(only: [:id, :name], methods: [:estate_agent_name] ), "agents" => @agents.to_json(only: [:id, :name], methods: [:estate_agent_name, :branch_name] ), "properties" => @properties.to_json(only: [:id, :address], methods: [:estate_agent_name, :branch_name] ) }
+    puts response
+    render json: response
+  end
+
   private
 
     def set_lists
