@@ -45,9 +45,14 @@ class UsersController < ApplicationController
   def create
     @user = User.new(new_user_params)
     if @user.save
+      @user.statuses.create(description: "New", colour: "FFFFFF")
+      @user.statuses.create(description: "Hot", colour: "FFA399")
+      @user.statuses.create(description: "Warm", colour: "FFEEA8")
+      @user.statuses.create(description: "Cold", colour: "C7EAFF")    
+
       sign_in @user
       flash[:success] = "Welcome to the Ottor system!"
-      redirect_to @user
+      redirect_to faq_path
     else
       render 'new'
     end
