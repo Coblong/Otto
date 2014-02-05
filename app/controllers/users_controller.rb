@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  before_action :signed_in_user, only: [:index, :show, :new, :edit, :update]
+  before_action :signed_in_user, only: [:index, :show, :edit, :update]
   before_action :correct_user,   only: [:edit, :update]
 
   def index
@@ -43,7 +43,7 @@ class UsersController < ApplicationController
   end
 
   def create
-    @user = User.new(user_params)
+    @user = User.new(new_user_params)
     if @user.save
       sign_in @user
       flash[:success] = "Welcome to the Ottor system!"
@@ -54,6 +54,18 @@ class UsersController < ApplicationController
   end
   
   private
+
+    def new_user_params
+      puts 'Crteating user'
+      params[:user][:expand_notes] = false
+      params[:user][:show_left_nav] = true
+      params[:user][:show_future] = false
+      params[:user][:show_overview] = true
+      params[:user][:properties_per_page] = 10
+      params[:user][:overview_weeks] = 2
+      params[:user][:images] = 0
+      user_params
+    end
 
     def user_params
       puts 'Updating user'
