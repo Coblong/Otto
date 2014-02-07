@@ -7,7 +7,7 @@ class Branch < ActiveRecord::Base
   validates :name, presence: true, length: { maximum: 100 }
   validates :comment, length: { maximum: 500 }
   default_scope -> { order('created_at DESC') }
-
+      
   def estate_agent_name
     self.estate_agent.name
   end

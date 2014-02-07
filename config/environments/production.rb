@@ -51,7 +51,7 @@ Ottor::Application.configure do
   # Disable delivery errors, bad email addresses will be ignored
   # config.action_mailer.raise_delivery_errors = false
 
-  # Enable threaded mode
+  # Enable threaded m§ode
   # config.threadsafe!
 
   # Enable locale fallbacks for I18n (makes lookups for any locale fall back to

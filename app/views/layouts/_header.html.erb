@@ -64,11 +64,13 @@
       <li class="selected"><%= link_to current_agent.name, root_path(agent: @agent) %>&nbsp;&nbsp;<b class="caret"></b>
         <% end %>
         <ul>
-          <li><%= link_to "All Agents", root_path(branch: current_branch, agent: -1) %>&nbsp;&nbsp;<b class="caret"></b>      
-        <% current_agents.each do |agent| %>
-            <li class="separator"></li>
-            <li><%= link_to agent.name, root_path(agent: agent) %></li>
-        <% end %>
+      <% if !current_agent.nil? %>
+          <li><%= link_to "All Agents", root_path(branch: current_branch, agent: -1) %></li>
+          <li class="separator"></li>
+      <% end %>
+      <% current_agents.each do |agent| %>            
+          <li><%= link_to agent.name, root_path(agent: agent) %></li>
+      <% end %>
         </ul>
       </li> 
       <% end %>
@@ -148,8 +150,8 @@ $( "#searchbox" ).keyup(function(e) {
     } else {
       searchItem--;
     }
-    $("#searchresults li").css("background-color", "inherit");
-    $("#searchresults li:eq(" + searchItem + ")").css("background-color", "lightblue");
+    $("#searchresults li").css("background", "inherit");    
+    $("#searchresults li:eq(" + searchItem + ")").css("background", "-webkit-gradient(linear, right top, left top, from(mintcream), to(lightblue))");          
   } else if (code == 13) {
     console.log("Enter")
     if (searchItem == -1) {
@@ -172,8 +174,8 @@ $( "#searchbox" ).keyup(function(e) {
     } else {
       searchItem++;
     }
-    $("#searchresults li").css("background-color", "inherit");
-    $("#searchresults li:eq(" + searchItem + ")").css("background-color", "lightblue");    
+    $("#searchresults li").css("background", "inherit");
+    $("#searchresults li:eq(" + searchItem + ")").css("background", "-webkit-gradient(linear, right top, left top, from(mintcream), to(lightblue))");              
   } else {
     searchItem = -1;
     var searchString = $(this).val();
@@ -201,28 +203,28 @@ $( "#searchbox" ).keyup(function(e) {
             html += "<h4>Estate Agents</h4>"
             $.each(estateAgentsJson, function(i, item) {          
               console.log(item.name);
-              html += "<li><a href='/estate_agents/" + item.id + "'>" + item.name + "</a></li>"
+              html += '<li onclick="location.href=\'/estate_agents/' + item.id + '\'">' + item.name + '</li>'              
             });            
           } 
           if (branchesJson.length > 0) {
             html += "<h4>Branches</h4>"
             $.each(branchesJson, function(i, item) {          
               console.log(item.name);
-              html += "<li><small>" + item.estate_agent_name + "<br></small><a href='/branches/" + item.id + "'>" + item.name + "</a></li>"
+              html += '<li onclick="location.href=\'/branches/' + item.id + '\'">' + item.name + '<br><small>' + item.estate_agent_name + '</small></li>'
             });
           } 
           if (agentsJson.length > 0) {
             html += "<h4>Agents</h4>"
             $.each(agentsJson, function(i, item) {          
               console.log(item.name);
-              html += "<li><small>" + item.estate_agent_name + " / " + item.branch_name + "<br></small><a href='/branches/" + item.id + "'>" + item.name + "</a></li>"
+              html += '<li onclick="location.href=\'/agents/' + item.id + '\'">' + item.name + '<br><small>' + item.estate_agent_name + ' / ' + item.branch_name + '</small></li>'
             });            
           } 
           if (propertiesJson.length > 0) {
             html += "<h4>Properties</h4>"
             $.each(propertiesJson, function(i, item) {          
               console.log(item.address);
-              html += "<li><small>" + item.estate_agent_name + " / " + item.branch_name + "<br></small><a href='/properties/" + item.id + "'>" + item.address + "</a></li>"
+              html += '<li onclick="location.href=\'/properties/' + item.id + '\'">' + item.address + '<br><small>' + item.estate_agent_name + ' / ' + item.branch_name + '</small></li>'
             });
           }
 

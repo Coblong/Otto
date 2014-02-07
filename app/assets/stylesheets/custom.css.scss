@@ -159,7 +159,7 @@ a {
       -o-transition: all 0.2s;
       transition: all 0.2s;                  
       .separator {
-        background: $darkline; 
+        background: $bg1; 
         padding: 0.5px;
       }
       &:hover {
@@ -167,8 +167,7 @@ a {
         ul {
           display: block;
           opacity: 2;
-          visibility: visible;
-          border: 1px solid $darkline;
+          visibility: visible;          
         }
       }
       ul {
@@ -176,34 +175,40 @@ a {
         position: absolute;
         top: 32px;
         left: 0;
-        width: 150px;
+        min-width: 100%;
         display: none;
-        opacity: 0;
-        visibility: hidden;        
+        opacity: 0;        
+        border: 1px solid $darkline;
+        background: $main-bg;          
+        z-index: 999;     
         -webkit-transiton: opacity 0.2s;
         -moz-transition: opacity 0.2s;
         -ms-transition: opacity 0.2s;
         -o-transition: opacity 0.2s;
-        -transition: opacity 0.2s;
-        z-index: 999;        
+        -transition: opacity 0.2s;            
 
         li { 
-          font-weight: normal;
+          font-size: 0.9em;
           padding: 5px;
           margin-right:1px;
           background: $main-bg;          
           display: block; 
-          &:hover {           
-            background: $main-bg;          
+          border-bottom: 1px solid $bg1;
+          white-space:nowrap;          
+          &:hover {     
+            background: -webkit-gradient(linear, right top, left top, from($well-colour), to($dark-well-colour));      
           }
           a {
             &:hover {
-              background: $main-bg;
+              background: none;          
               colour: $highlight-bg;
             }
-          }
+          }          
         }
       }      
+      ul#searchresults {
+        opacity: 2;
+      }
     }
     li.selected {
       a {
@@ -257,10 +262,6 @@ a {
     a {
       text-decoration: none;
       background: none;
-      &:hover {
-        background: none;
-        color: black;
-      }
     }
     li {
       padding: 5px 5px 0px 5px;
@@ -398,7 +399,7 @@ a {
 #week-ahead {
   padding:0px;
   background: $main-bg;
-  display: none;
+  display: none;  
   table {    
     width: 100%;
     th {
@@ -416,7 +417,7 @@ a {
       border-bottom: 1px solid $lightline;
       vertical-align: top;
       text-align: right;
-      padding: 5px;
+      padding: 5px;      
       &:last-child {
         border-right: none;
       }      
@@ -429,6 +430,7 @@ a {
     list-style:none;
     padding: 0px;
     margin: 0px;
+    font-size: 0.9em;
     span {
       float:left;
       width: 90%;
@@ -593,17 +595,16 @@ a {
 }
 
 #overview-accordion {
-  margin: 10px;
+  margin: 10px;    
   .ui-accordion-header.ui-state-active{
       color: $colour;
       background: $bg1;
-      background-image: none;
+      background-image: none;            
    }
-  .ui-accordion-header.ui-state-default{
-    font-size: 12px;
+  .ui-accordion-header.ui-state-default{    
   }
   .viewings {
-    color: $viewing-colour;
+    color: $viewing-colour;    
   }
 }
 

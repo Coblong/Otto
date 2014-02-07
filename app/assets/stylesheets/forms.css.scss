@@ -7,7 +7,7 @@ $highlight-bg: #9CC2CF;
 $dropdown-bg: white;
 $colour: midnightblue;
 $well-colour: mintcream;
-$dark-well-colour: snow;
+$dark-well-colour: lightblue;
 $main-bg: white;
 
 #searchbox {
@@ -22,18 +22,24 @@ $main-bg: white;
   display: none;
   background: $main-bg;
   z-index:999;
-  width: 100%;
+  min-width: 100%;
   h4 {
     padding: 5px;
     margin: 0px;
-    border-top: 1px solid $bg1;
     border-bottom: 1px solid $bg1;
     background: $well-colour;
   }
   padding: 0px;
   li {
-    padding: 2px 5px;    
+    padding: 5px;    
     margin: 0px;
+    &:hover {
+      background: -webkit-gradient(linear, right top, left top, from($well-colour), to($dark-well-colour));      
+      cursor: pointer;        
+    }
+    a:hover {
+      background:none;
+    }
   }
 }
 

@@ -12,7 +12,7 @@ class Property < ActiveRecord::Base
   has_many :alerts, dependent: :destroy
   validates :address, presence: true, length: { maximum: 100 }
   validates :url, length: { maximum: 200 }
-  default_scope -> { order('call_date asc, branch_id asc, status_id asc, address asc') }  
+  default_scope -> { order('call_date asc, status_id asc, address asc') }  
 
   def full_url
     '//' + url
