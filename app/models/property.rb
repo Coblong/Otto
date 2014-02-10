@@ -180,6 +180,7 @@ class Property < ActiveRecord::Base
         note.save      
       end
       self.closed = new_closed_yn
+      self.call_date = Date.today
     end
     note
   end
