@@ -154,44 +154,52 @@ class PropertiesController < ApplicationController
       else      
         old_call_date = @property.call_date
 
-        / Build the note /
-        note = @property.add_note(params[:note], Note.TYPE_MANUAL)
+        begin
+          / Build the note /
+          note = @property.add_note(params[:note], Note.TYPE_MANUAL)
 
-        agent_name = params[:agent]
-        branch = Branch.find(@property.branch_id)
-        agent = branch.agents.find {|a| a.name == agent_name }
-        if agent.nil?
-          agent = @property.agents.build
-          agent.name = agent_name
-          agent.branch_id = @property.branch.id
-          agent.estate_agent_id = @property.estate_agent.id
-          agent.properties << @property
-          agent.save()          
-        else
-          / Check to see if this property is already linked to this agent /
-          if !agent.properties.include? @property
+          agent_name = params[:agent]
+          branch = Branch.find(@property.branch_id)
+          agent = branch.agents.find {|a| a.name == agent_name }
+          if agent.nil?
+            agent = @property.agents.build
+            agent.name = agent_name
+            agent.branch_id = @property.branch.id
+            agent.estate_agent_id = @property.estate_agent.id
             agent.properties << @property
-            agent.save()
-          end
-        end
-        
-        note.agent_id = agent.id
-        
-        if !params[:call_date].nil?            
-          @property.call_date = params[:call_date]
-          @property.save()
-          if note.content.empty?
-            note.content = 'Next call on ' + date_formatted(@property.call_date, :long)
+            agent.save()          
           else
-            new_content = 'Next call on ' + date_formatted(@property.call_date, :long) + ' - ' + note.content
-            note.content = new_content
-          end            
-        end          
-        
-        note.save!
+            / Check to see if this property is already linked to this agent /
+            if !agent.properties.include? @property
+              agent.properties << @property
+              agent.save()
+            end
+          end
+          
+          note.agent_id = agent.id
+          
+          if !params[:call_date].nil?
+            @property.call_date = params[:call_date]
+          end
+          date_changed = old_call_date.strftime('%j') != @property.call_date.strftime('%j')
 
-        date_changed = old_call_date.strftime('%j') != @property.call_date.strftime('%j')
-        render :json => note.to_json(methods: [:formatted_date, :agent_name] ), :status => (date_changed ? :accepted : :ok)
+          if date_changed
+            @property.save()
+            if note.content.empty?
+              note.content = 'Next call on ' + date_formatted(@property.call_date, :long)
+            else
+              new_content = 'Next call on ' + date_formatted(@property.call_date, :long) + ' - ' + note.content
+              note.content = new_content
+            end            
+          end          
+          
+          note.save!
+          render :json => note.to_json(methods: [:formatted_date, :agent_name] ), :status => (date_changed ? :accepted : :ok)
+        rescue
+          response = {"msg" => note.errors.full_messages.first.to_s}
+          puts 'The response is ' + response.to_s
+          render :json => response, :status => :bad_request
+        end
       end
     end
   end

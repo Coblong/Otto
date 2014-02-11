@@ -123,8 +123,8 @@ class Property < ActiveRecord::Base
     note.note_type = note_type
     note.branch_id = self.branch_id
     note.estate_agent_id = self.estate_agent.id
-    note.save 
-    note     
+    note.save
+    note
   end
 
   def add_alert(msg, alert_type)

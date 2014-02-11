@@ -42,8 +42,10 @@ $(function() {
             url: "/notes",
             data: 'property_id=' + <%= property.id %> +'&agent=' + agent + '&note=' + note + '&call_date=' + call_date,
             dataType: "json",
-            error: function(xhr, status, error) {
-                console.log('Unable to save property');
+            error: function(data, status, response) {
+              json = JSON.parse(data.responseText)
+              alert(json.msg);
+              console.log('Unable to save property - ' + json.msg);
             },
             success: function (data, status, response) {
               console.log(status);    
