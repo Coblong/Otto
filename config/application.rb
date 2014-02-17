@@ -56,7 +56,7 @@ module Ottor
     config.assets.precompile += %w(*.png *.jpg *.jpeg *.gif)
 
     OTTOR_VERSION = 1.3
-    PLUGIN_VERSION = 2.3    
+    PLUGIN_VERSION = 2.3.1   
 
     if Rails.env.development?
         PLUGIN_URL = "http://www.google.com"
