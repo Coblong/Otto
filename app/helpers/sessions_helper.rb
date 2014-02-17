@@ -132,7 +132,7 @@ module SessionsHelper
       properties = properties.where(closed: true)
     end
       
-    properties.joins(:estate_agent).order("call_date, status_id, estate_agents.name")
+    properties.joins(:estate_agent).order("call_date, estate_agents.name, status_id")
   end
 
   def current_branches

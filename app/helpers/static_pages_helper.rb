@@ -56,7 +56,7 @@ module StaticPagesHelper
   end
 
   def add_overdue_properties
-    overdue_properties = current_user.properties.where("call_date < ?", Date.today.beginning_of_day).where(closed: false).joins(:estate_agent).order("call_date, status_id, estate_agents.name")    
+    overdue_properties = current_user.properties.where("call_date < ?", Date.today.beginning_of_day).where(closed: false).joins(:estate_agent).order("call_date, estate_agents.name, status_id")    
     overdue_properties = apply_filters(overdue_properties)
     overdue_agents = Branch.where("id in (?)", overdue_properties.collect(&:branch_id))
     @property_counts_hash["Overdue"] = overdue_properties.size
@@ -77,13 +77,13 @@ module StaticPagesHelper
       this_day = start_date + offset
       puts 'Getting agenda for ' + this_day.to_s
       if this_day >= Date.today
-        properties = current_user.properties.where("call_date >= ? and call_date < ?", this_day.beginning_of_day, this_day.end_of_day).where(closed: false).joins(:estate_agent).order("status_id, estate_agents.name")            
+        properties = current_user.properties.where("call_date >= ? and call_date < ?", this_day.beginning_of_day, this_day.end_of_day).where(closed: false).joins(:estate_agent).order("estate_agents.name, status_id")            
         properties = apply_filters(properties)
         agents = Branch.where("id in (?)", properties.collect(&:branch_id))
         day = this_day.strftime('%A %d/%m')
         is_sunday = day == 'Sunday'          
         if @show_overview
-          days_viewings = current_user.properties.where("view_date >= ? and view_date < ?", this_day.beginning_of_day, this_day.end_of_day).where(closed: false).joins(:estate_agent).order("status_id, estate_agents.name")            
+          days_viewings = current_user.properties.where("view_date >= ? and view_date < ?", this_day.beginning_of_day, this_day.end_of_day).where(closed: false).joins(:estate_agent).order("estate_agents.name, status_id")            
           @week_ahead_hash[day] = build_overview_hash(properties, days_viewings)
         end
 
@@ -106,7 +106,7 @@ module StaticPagesHelper
       end
     end
     if current_user.show_future and !show_today_only?
-      future_properties = current_user.properties.where("call_date >= ?", (this_day+1).beginning_of_day).where(closed: false).joins(:estate_agent).order("status_id, estate_agents.name")    
+      future_properties = current_user.properties.where("call_date >= ?", (this_day+1).beginning_of_day).where(closed: false).joins(:estate_agent).order("estate_agents.name, status_id")    
       future_properties = apply_filters(future_properties)
       future_agents = Branch.where("id in (?)", future_properties.collect(&:branch_id))
       @property_counts_hash["Future"] = future_properties.size
@@ -120,7 +120,7 @@ module StaticPagesHelper
   end
   
   def add_viewings
-    properties = current_user.properties.where("view_date >= ?", Date.today.beginning_of_day).where(closed: false).joins(:estate_agent).order("view_date, status_id, estate_agents.name")
+    properties = current_user.properties.where("view_date >= ?", Date.today.beginning_of_day).where(closed: false).joins(:estate_agent).order("view_date, estate_agents.name, status_id")
     properties = apply_filters(properties)
     agents = Branch.where("id in (?)", properties.collect(&:branch_id))
     @property_counts_hash["Viewings"] = properties.size

@@ -1,5 +1,5 @@
 class EstateAgentsController < ApplicationController
-  before_action :set_estate_agent_in_controller, only: [:new, :show, :edit, :update, :destroy]
+  before_action :set_estate_agent_in_controller, only: [:show, :edit, :update, :destroy]
 
   def index
     if !current_user

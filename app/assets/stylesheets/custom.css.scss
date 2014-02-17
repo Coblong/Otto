@@ -96,6 +96,13 @@ a {
 
 .alert {
   padding: 5px;
+  ul {
+    list-style: none;
+    padding: 0px;
+  }
+  li {
+    padding: 0px;
+  }
 }
 
 .alert-error {

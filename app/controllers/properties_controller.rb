@@ -57,7 +57,7 @@ class PropertiesController < ApplicationController
       @property.add_note(params[:note], Note.TYPE_MANUAL)
     end
 
-    if @property.save!()      
+    if @property.save
       puts 'Temp property saved'
       response = build_response
       puts response.to_s
@@ -66,7 +66,7 @@ class PropertiesController < ApplicationController
     else
       puts 'Temp property not saved'
       flash[:error] = "Unable to create property"
-      render :nothing => true, :status => :service_unavailable
+      render "new"
     end
   end
 
@@ -438,7 +438,7 @@ class PropertiesController < ApplicationController
     end
 
     def property_params
-      params.require(:property).permit(:address, :post_code, :asking_price, :url, :status_id, :sstc, :sstc_count, :closed, :estate_agent_id, :branch_id, :agent_id, :call_date)
+      params.require(:property).permit(:address, :post_code, :asking_price, :url, :status_id, :sstc, :sstc_count, :closed, :estate_agent_id, :branch_id, :agent_id, :call_date, :temp)
     end
 
     def build_response

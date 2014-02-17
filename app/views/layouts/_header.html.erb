@@ -203,28 +203,28 @@ $( "#searchbox" ).keyup(function(e) {
             html += "<h4>Estate Agents</h4>"
             $.each(estateAgentsJson, function(i, item) {          
               console.log(item.name);
-              html += '<li onclick="location.href=\'/estate_agents/' + item.id + '\'">' + item.name + '</li>'              
+              html += '<li onclick="location.href=\'/estate_agents/' + item.id + '\'"><a href="/estate_agents/' + item.id + '">' + item.name + '</a></li>'              
             });            
           } 
           if (branchesJson.length > 0) {
             html += "<h4>Branches</h4>"
             $.each(branchesJson, function(i, item) {          
               console.log(item.name);
-              html += '<li onclick="location.href=\'/branches/' + item.id + '\'">' + item.name + '<br><small>' + item.estate_agent_name + '</small></li>'
+              html += '<li onclick="location.href=\'/branches/' + item.id + '\'"><a href="/branches/' + item.id + '">' + item.name + '</a><br><small>' + item.estate_agent_name + '</small></li>'
             });
           } 
           if (agentsJson.length > 0) {
             html += "<h4>Agents</h4>"
             $.each(agentsJson, function(i, item) {          
               console.log(item.name);
-              html += '<li onclick="location.href=\'/agents/' + item.id + '\'">' + item.name + '<br><small>' + item.estate_agent_name + ' / ' + item.branch_name + '</small></li>'
+              html += '<li onclick="location.href=\'/agents/' + item.id + '\'"><a href="/agents/' + item.id + '">' + item.name + '</a><br><small>' + item.estate_agent_name + ' / ' + item.branch_name + '</small></li>'
             });            
           } 
           if (propertiesJson.length > 0) {
             html += "<h4>Properties</h4>"
             $.each(propertiesJson, function(i, item) {          
               console.log(item.address);
-              html += '<li onclick="location.href=\'/properties/' + item.id + '\'">' + item.address + '<br><small>' + item.estate_agent_name + ' / ' + item.branch_name + '</small></li>'
+              html += '<li onclick="location.href=\'/properties/' + item.id + '\'"><a href="/properties/' + item.id + '">' + item.address + '</a><br><small>' + item.estate_agent_name + ' / ' + item.branch_name + '</small></li>'
             });
           }
 
