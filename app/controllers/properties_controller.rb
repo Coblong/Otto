@@ -5,7 +5,15 @@ class PropertiesController < ApplicationController
   skip_before_filter  :verify_authenticity_token
 
   def index
-    render json: Property.where(temp: false, listed: true).to_json(only: [:user_id, :id, :address, :sstc, :asking_price, :price_qualifier, :listed, :url])
+    if params[:format] == "short"
+      if !current_user
+        render :nothing => true, :status => :unauthorized
+      else
+        render json: { properties: Property.where(temp: false, listed: true).to_json(only: [:id, :closed], methods: [:summary_id, :status_name]) }      
+      end
+    else
+      render json: Property.where(temp: false, listed: true).to_json(only: [:user_id, :id, :address, :sstc, :asking_price, :listed.to_s, :price_qualifier, :url])
+    end
   end
 
   def new
@@ -108,7 +116,7 @@ class PropertiesController < ApplicationController
       @property.update_status(params[:status_id], update)
       @property.update_closed_yn(params[:closed], update)      
       @property.update_important_attributes(params[:sstc], params[:asking_price], params[:price_qualifier], true, false)
-      
+
       if @property.save()      
         puts 'Property saved'
         response = build_response
@@ -379,12 +387,17 @@ class PropertiesController < ApplicationController
   end
 
   def robot_update
-    puts 'Robot updating property'
-    puts params.to_yaml
-    puts '---------------------------------'
     user = User.find(params[:user_id])    
     @property = user.properties.find_by(url: params[:url])        
-    @property.update_important_attributes(params[:sstc], params[:asking_price], params[:price_qualifier], params[:listed], true)    
+
+    if params[:error].to_s == "true"
+      msg = "I couldn't find this property on rightmove. Please have a look yourself. It may have been totally removed"
+      @property.add_note(msg, Note.TYPE_AUTO)
+      @property.add_alert(msg, Alert.TYPE_MANUAL)
+    else
+      @property.update_important_attributes(params[:sstc], params[:asking_price], params[:price_qualifier], params[:listed], true)    
+    end
+    
     render json: build_response
   end
 

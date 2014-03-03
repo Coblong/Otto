@@ -17,6 +17,10 @@ class Property < ActiveRecord::Base
     '//' + url
   end
 
+  def summary_id
+    url.partition('property-for-sale/').last.gsub('property-','summary').gsub('.html', '')
+  end
+
   def full_asking_price
     if sstc or price_qualifier.nil? or price_qualifier.length == 0
       asking_price unless asking_price.nil?
@@ -82,7 +86,7 @@ class Property < ActiveRecord::Base
   end
 
   def update_important_attributes(new_sstc, new_asking_price, new_price_qualifier, new_listed, add_alert)
-    puts 'Updating important attributes'
+    puts 'Updating important attributes for ' + self.address + '[' + self.id.to_s + ']'
     puts 'SSTC from [' + self.sstc.to_s + '] to [' + new_sstc.to_s + ']'
     puts 'Asking price from [' + self.asking_price.to_s + '] to [' + new_asking_price.to_s + ']'
     puts 'Price qualifier from [' + self.price_qualifier.to_s + '] to [' + new_price_qualifier + ']'
@@ -190,6 +194,10 @@ class Property < ActiveRecord::Base
 
   def branch_name
     self.branch.name
+  end
+
+  def status_name
+    self.status.description
   end
 end
 
